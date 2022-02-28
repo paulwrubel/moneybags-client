@@ -1,12 +1,12 @@
+import Moneybags from "Moneybags";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
-import App from "./App";
-import reportWebVitals from "./reportWebVitals";
+import reportWebVitals from "./misc/reportWebVitals";
 
 ReactDOM.render(
     <React.StrictMode>
-        <App />
+        <Moneybags />
     </React.StrictMode>,
     document.getElementById("root"),
 );
