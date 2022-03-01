@@ -1,7 +1,15 @@
+import APIProvider from "api/APIProvider";
+import AuthProvider from "auth/AuthProvider";
 import Router from "./Router";
 
 const Moneybags: React.FC = () => {
-    return <Router />;
+    return (
+        <APIProvider>
+            <AuthProvider>
+                <Router />
+            </AuthProvider>
+        </APIProvider>
+    );
 };
 
 export default Moneybags;

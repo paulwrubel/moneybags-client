@@ -1,8 +1,21 @@
+import { Link } from "react-router-dom";
+
 const Home: React.FC = () => {
     return (
-        <p>
-            <code>src/moneybags/pages/Home.tsx</code>
-        </p>
+        <div>
+            <p>This is the Home page.</p>
+            <ul>
+                <li>
+                    <Link to="/about">About</Link>
+                </li>
+                <li>
+                    <Link to="/login">Login</Link>
+                </li>
+                <li>
+                    <Link to="/app">App</Link>
+                </li>
+            </ul>
+        </div>
     );
 };
 

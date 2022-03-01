@@ -21,11 +21,10 @@
     },
     "plugins": ["react", "@typescript-eslint", "prettier", "sonarjs"],
     "rules": {
-        // "no-empty-function": "off",
-        // "react/react-in-jsx-scope": "off",
-        // "react/prop-types": [
-        //     "off"
-        // ],
+        "no-empty-function": "off",
+        "react/prop-types": [
+            "off"
+        ],
         "sonarjs/cognitive-complexity": ["error", 10]
     }
 }
