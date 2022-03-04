@@ -1,20 +1,30 @@
-import User from "models/User";
+import { KyInstance } from "ky/distribution/types/ky";
+import ErrorResponse from "models/ErrorResponse";
 import { createContext, useContext } from "react";
 
 export interface AuthContextType {
-    isAuthenticated: boolean;
-    user: User | null;
-    accessToken: string;
+    accessToken: string | null;
+    refreshToken: () => Promise<void>;
     login: (
         username: string,
         password: string,
-        callback?: VoidFunction,
+        callbacks?: {
+            onSuccess?: VoidFunction;
+            onError?: (error: ErrorResponse) => void;
+        },
     ) => void;
     logout: (callback?: VoidFunction) => void;
+    protectedAPI: KyInstance;
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType | undefined>(
+    undefined,
+);
 
 export const useAuth = () => {
     return useContext(AuthContext);
+};
+
+export const useProtectedAPI = () => {
+    return useAuth()?.protectedAPI;
 };

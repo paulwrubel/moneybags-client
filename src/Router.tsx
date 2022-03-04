@@ -5,6 +5,8 @@ import NotFound from "./pages/NotFound";
 import Login from "./pages/Login";
 import App from "pages/App";
 import About from "pages/About";
+import CreateAccount from "pages/CreateAccount";
+import RequireAuth from "auth/RequireAuth";
 
 const Router: React.FC = () => {
     return (
@@ -13,8 +15,15 @@ const Router: React.FC = () => {
                 <Route path="/" element={<Home />} />
                 <Route path="/about" element={<About />} />
                 <Route path="/login" element={<Login />} />
-                <Route path="/app" element={<App />} />
-                {/* <Route path="" element={<Navigate to="/" />} /> */}
+                <Route path="/create-account" element={<CreateAccount />} />
+                <Route
+                    path="/app"
+                    element={
+                        <RequireAuth>
+                            <App />
+                        </RequireAuth>
+                    }
+                />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>

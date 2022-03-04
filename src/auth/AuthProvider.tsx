@@ -1,65 +1,103 @@
-import User from "models/User";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAPI } from "api/APIContext";
 import { AuthContext } from "./AuthContext";
 import PropTypes from "prop-types";
 import { KyInstance } from "ky/distribution/types/ky";
 import Token from "models/Token";
+import { HTTPError } from "ky";
+import ErrorResponse from "models/ErrorResponse";
 
-const AuthProvider: React.FC = ({ children }) => {
+const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
+    children,
+}) => {
     const api = useAPI() as KyInstance;
 
-    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-    const [user, setUser] = useState<User | null>(null);
-    const [accessToken, setAccessToken] = useState<string>("");
+    const [accessToken, setAccessToken] = useState<string | null>(null);
 
-    const login = (
-        username: string,
-        password: string,
-        callback?: VoidFunction,
-    ) => {
-        api.post("auth/token", { json: { username, password } })
+    const refreshToken: () => Promise<void> = () => {
+        return api
+            .post("auth/refresh-token", { credentials: "include" })
             .json<Token>()
             .then(({ access_token }) => {
                 setAccessToken(access_token);
-                setUser({
-                    id: "__unknown__",
-                    username: username,
-                    email: "__unknown__",
+            })
+            .catch((err: HTTPError) => {
+                err.response.json().then((errorResponse: ErrorResponse) => {
+                    setAccessToken(null);
+                    console.error(
+                        errorResponse.errors.map((e) => e.message).join("\n"),
+                    );
                 });
-                setIsAuthenticated(true);
-                if (callback !== undefined) {
-                    callback();
-                }
+                throw err;
+            });
+    };
+
+    const login: (
+        username: string,
+        password: string,
+        callbacks?: {
+            onSuccess?: VoidFunction;
+            onError?: (errorResponse: ErrorResponse) => void;
+        },
+    ) => void = (username, password, callbacks) => {
+        api.post("auth/login", {
+            json: { username, password },
+            credentials: "include",
+        })
+            .json<Token>()
+            .then(({ access_token }) => {
+                setAccessToken(access_token);
+                callbacks?.onSuccess?.();
+            })
+            .catch((err: HTTPError) => {
+                // console.error(err);
+                err.response.json().then((errorResponse: ErrorResponse) => {
+                    setAccessToken(null);
+                    callbacks?.onError?.(errorResponse);
+                });
             });
     };
 
     const logout = (callback?: VoidFunction) => {
-        setUser(null);
-        setIsAuthenticated(false);
-        setAccessToken("");
+        setAccessToken(null);
         if (callback !== undefined) {
             callback();
         }
     };
 
+    const protectedAPI: KyInstance = api.extend({
+        credentials: "include",
+        hooks: {
+            beforeRequest: [
+                (request) => {
+                    request.headers.set(
+                        "Authorization",
+                        `Bearer ${accessToken}`,
+                    );
+                },
+            ],
+        },
+    });
+
+    useEffect(() => {
+        setInterval(() => {
+            refreshToken();
+        }, 10 * 60 * 1000);
+    });
+
     return (
         <AuthContext.Provider
             value={{
-                user,
-                isAuthenticated,
                 accessToken,
+                refreshToken,
                 login,
                 logout,
+                protectedAPI,
             }}
         >
             {children}
         </AuthContext.Provider>
     );
-};
-
-AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired,
 };
 
 export default AuthProvider;

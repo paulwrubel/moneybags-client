@@ -1,38 +1,39 @@
-import { Button, TextField } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { useAuth, AuthContextType } from "auth/AuthContext";
-import User from "models/User";
+import { isReferral } from "auth/RequireAuth";
 import { useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
     const auth = useAuth() as AuthContextType;
 
+    const location = useLocation();
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
+    const [errorMessage, setErrorMessage] = useState<string>("");
+
+    const fromLocation = isReferral(location.state)
+        ? location.state.from.pathname
+        : "/";
 
     return (
         <>
-            {auth.isAuthenticated ? (
-                <>
-                    <p>
-                        You are logged in! Welcome to Moneybags,{" "}
-                        {(auth.user as User).username}
-                    </p>
-                    <p>
-                        Here is your access token:{" "}
-                        <code>{auth.accessToken}</code>
-                    </p>
-                </>
-            ) : (
-                <p>You are NOT logged in... :(</p>
-            )}
+            <Typography variant="body1" color="error">
+                {errorMessage}
+            </Typography>
             <TextField
                 label="Username"
+                value={username}
                 onChange={(e) => {
                     setUsername(e.target.value);
                 }}
             />
             <TextField
                 type="password"
+                label="Password"
+                value={password}
                 onChange={(e) => {
                     setPassword(e.target.value);
                 }}
@@ -40,7 +41,16 @@ const Login: React.FC = () => {
             <Button
                 variant="text"
                 onClick={() => {
-                    auth.login(username, password);
+                    auth.login(username, password, {
+                        onSuccess: () => {
+                            navigate(fromLocation, { replace: true });
+                        },
+                        onError: ({ errors }) => {
+                            setErrorMessage(
+                                errors.map((e) => e.message).join("\n"),
+                            );
+                        },
+                    });
                 }}
             >
                 Submit
