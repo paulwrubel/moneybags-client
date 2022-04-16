@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useAuth } from "auth/AuthProvider";
+// import { useAuth } from "auth/AuthProvider";
 import { Stack, Typography, Grid } from "@mui/material";
-import { useProtectedAPI } from "api/API";
+// import { useProtectedAPI } from "api/API";
 import { useQuery } from "react-query";
 import { processAPIError } from "Utils";
 import UserAccount from "models/UserAccount";
@@ -12,41 +12,41 @@ import CenterPanel from "components/CenterPanel";
 
 const App: React.FC = () => {
     // const api = useAuth().protectedAPI();
-    const auth = useAuth();
-    const api = useProtectedAPI();
+    // const auth = useAuth();
+    // const api = useProtectedAPI();
 
-    const { isLoading, isError, data, error } = useQuery<UserAccount, Error>(
-        ["user-account"],
-        () => {
-            // console.log("In App making API call: " + accessToken);
-            return api.getUserAccount();
-        },
-    );
+    // const { isLoading, isError, data, error } = useQuery<UserAccount, Error>(
+    //     ["user-account"],
+    //     () => {
+    //         // console.log("In App making API call: " + accessToken);
+    //         // return api.getUserAccount();
+    //     },
+    // );
 
-    const [errString, setErrString] = useState<string>("");
+    //     const [errString, setErrString] = useState<string>("");
+    //
+    //     if (isLoading) {
+    //         return <Loading reason="Gathering User Info" />;
+    //     }
+    //
+    //     if (isError) {
+    //         processAPIError(error, (errString) => {
+    //             console.error(errString);
+    //             setErrString(errString);
+    //         });
+    //         return (
+    //             <Typography variant="h2" color="error">
+    //                 Error: {errString}
+    //             </Typography>
+    //         );
+    //     }
 
-    if (isLoading) {
-        return <Loading reason="Gathering User Info" />;
-    }
-
-    if (isError) {
-        processAPIError(error, (errString) => {
-            console.error(errString);
-            setErrString(errString);
-        });
-        return (
-            <Typography variant="h2" color="error">
-                Error: {errString}
-            </Typography>
-        );
-    }
-
-    const username = data?.username || "";
+    // const username = data?.username || "";
 
     return (
         <>
             <Stack spacing={0} sx={{ height: "100vh" }}>
-                <MenuPanel username={username} />
+                <MenuPanel username={"testing"} />
                 <Grid container sx={{ height: 1 }}>
                     <Grid item xs={10}>
                         <CenterPanel />
