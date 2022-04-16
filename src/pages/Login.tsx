@@ -1,11 +1,12 @@
 import { Button, TextField, Typography } from "@mui/material";
-import { useAuth, AuthContextType } from "auth/AuthContext";
+import { useAuth } from "auth/AuthProvider";
 import { isReferral } from "auth/RequireAuth";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { processAPIError } from "Utils";
 
 const Login: React.FC = () => {
-    const auth = useAuth() as AuthContextType;
+    const auth = useAuth();
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -41,16 +42,13 @@ const Login: React.FC = () => {
             <Button
                 variant="text"
                 onClick={() => {
-                    auth.login(username, password, {
-                        onSuccess: () => {
+                    auth.login(username, password)
+                        .then(() => {
                             navigate(fromLocation, { replace: true });
-                        },
-                        onError: ({ errors }) => {
-                            setErrorMessage(
-                                errors.map((e) => e.message).join("\n"),
-                            );
-                        },
-                    });
+                        })
+                        .catch((err) => {
+                            processAPIError(err, setErrorMessage);
+                        });
                 }}
             >
                 Submit

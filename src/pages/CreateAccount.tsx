@@ -1,14 +1,15 @@
 import { useState } from "react";
 import { Button, TextField, Typography } from "@mui/material";
-import { useAPI } from "api/APIContext";
+// import { useAPI } from "api/APIContext";
 import UserAccount from "models/UserAccount";
 import ErrorResponse from "models/ErrorResponse";
 import { HTTPError } from "ky";
 import { KyInstance } from "ky/distribution/types/ky";
 import { Link } from "react-router-dom";
+import { postUserAccount } from "api/API";
 
 const CreateAccount: React.FC = () => {
-    const api = useAPI() as KyInstance;
+    // const api = useAPI() as KyInstance;
 
     const [username, setUsername] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -79,8 +80,11 @@ const CreateAccount: React.FC = () => {
                 variant="text"
                 disabled={!isValid}
                 onClick={() => {
-                    api.post("user-accounts", { json: { username, password } })
-                        .json<UserAccount>()
+                    postUserAccount(
+                        username,
+                        password,
+                        email ? email : undefined,
+                    )
                         .then((userAccount) => {
                             setErrorMessage("");
                             setIsSuccessful(true);
