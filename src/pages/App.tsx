@@ -46,13 +46,13 @@ const App: React.FC = () => {
     return (
         <>
             <Stack spacing={0} sx={{ height: "100vh" }}>
-                <MenuPanel username={"testing"} />
+                <MenuPanel />
                 <Grid container sx={{ height: 1 }}>
-                    <Grid item xs={10}>
-                        <CenterPanel />
-                    </Grid>
                     <Grid item xs={2}>
                         <SidePanel />
+                    </Grid>
+                    <Grid item xs={10}>
+                        <CenterPanel />
                     </Grid>
                 </Grid>
             </Stack>

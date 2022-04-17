@@ -5,17 +5,23 @@ import {
     AccordionDetails,
     Stack,
 } from "@mui/material";
-import Envelope from "./Envelope";
+import Category from "components/Category";
 import { useState } from "react";
 
-const EnvelopeStack: React.FC<{
-    envelopeStack: {
+const CategoryGroup: React.FC<{
+    categoryGroup: {
         id: string;
         name: string;
-        envelopes: { id: string; name: string; amount: number }[];
+        categories: {
+            id: string;
+            name: string;
+            previousBalance: number;
+            allocated: number;
+            activity: number;
+        }[];
     };
-}> = ({ envelopeStack: { id, name, envelopes } }) => {
-    const [isExpanded, setIsExpanded] = useState(false);
+}> = ({ categoryGroup: { id, name, categories } }) => {
+    const [isExpanded, setIsExpanded] = useState(true);
 
     return (
         <>
@@ -31,13 +37,13 @@ const EnvelopeStack: React.FC<{
                         spacing={1}
                         divider={<Typography color="gray">|</Typography>}
                     >
-                        <Typography color="gray">Envelope Stack</Typography>
+                        <Typography color="gray">Category Group</Typography>
                         <Typography>{name}</Typography>
                     </Stack>
                 </AccordionSummary>
                 <AccordionDetails sx={{ padding: 0 }}>
-                    {envelopes.map((env) => (
-                        <Envelope key={env.id} envelope={env} />
+                    {categories.map((cat) => (
+                        <Category key={cat.id} category={cat} />
                     ))}
                 </AccordionDetails>
             </Accordion>
@@ -45,4 +51,4 @@ const EnvelopeStack: React.FC<{
     );
 };
 
-export default EnvelopeStack;
+export default CategoryGroup;

@@ -1,8 +1,11 @@
 import { AppBar, Box, Toolbar, Typography, IconButton } from "@mui/material";
 // import { Menu as MenuIcon } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useData } from "data/DataProvider";
 
-const MenuPanel: React.FC<{ username: string }> = ({ username }) => {
+const MenuPanel: React.FC = () => {
+    const budget = useData().data;
+
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar
@@ -23,9 +26,7 @@ const MenuPanel: React.FC<{ username: string }> = ({ username }) => {
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>
                         Moneybags
                     </Typography>
-                    <Typography variant="h6">
-                        This is your budget, Mr. {username}
-                    </Typography>
+                    <Typography variant="h6">{budget.name}</Typography>
                 </Toolbar>
             </AppBar>
         </Box>

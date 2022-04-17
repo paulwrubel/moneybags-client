@@ -1,13 +1,17 @@
 import { Typography, Stack, Paper, Box, Divider } from "@mui/material";
 // import Envelope from "./Envelope";
 
-const Envelope: React.FC<{
-    envelope: {
+const Category: React.FC<{
+    category: {
         id: string;
         name: string;
-        amount: number;
+        previousBalance: number;
+        allocated: number;
+        activity: number;
     };
-}> = ({ envelope: { id, name, amount } }) => {
+}> = ({ category: { id, name, previousBalance, allocated, activity } }) => {
+    const balance = previousBalance + allocated + activity;
+
     return (
         // <>
         //     {envelopeStacks.envelopes.map((envelope) => (
@@ -23,12 +27,22 @@ const Envelope: React.FC<{
                     width={1}
                     // justifyContent="center"
                 >
-                    <Box width={"100%"} padding={2}>
+                    <Box width={"55%"} padding={2}>
                         <Typography noWrap>{name}</Typography>
                     </Box>
-                    <Box width={"100%"} padding={2}>
+                    <Box width={"15%"} padding={2}>
                         <Typography sx={{ textAlign: "right" }}>
-                            {amount}
+                            {allocated}
+                        </Typography>
+                    </Box>
+                    <Box width={"15%"} padding={2}>
+                        <Typography sx={{ textAlign: "right" }}>
+                            {activity}
+                        </Typography>
+                    </Box>
+                    <Box width={"15%"} padding={2}>
+                        <Typography sx={{ textAlign: "right" }}>
+                            {balance}
                         </Typography>
                     </Box>
                 </Stack>
@@ -37,4 +51,4 @@ const Envelope: React.FC<{
     );
 };
 
-export default Envelope;
+export default Category;

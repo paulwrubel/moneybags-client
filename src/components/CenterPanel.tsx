@@ -1,5 +1,5 @@
 import { Typography, Paper, Divider, Stack, Box } from "@mui/material";
-import EnvelopeStackList from "./EnvelopeStackList";
+import CategoryGroupList from "./CategoryGroupList";
 
 const CenterPanel: React.FC = () => {
     return (
@@ -16,17 +16,25 @@ const CenterPanel: React.FC = () => {
                 width={1}
                 // justifyContent="center"
             >
-                <Box width={"100%"} padding={2}>
-                    <Typography noWrap>Envelope</Typography>
+                <Box width={"55%"} padding={2}>
+                    <Typography noWrap>Category</Typography>
                 </Box>
-                <Box width={"100%"} padding={2}>
+                <Box width={"15%"} padding={2}>
                     <Typography sx={{ textAlign: "right" }}>
-                        Available
+                        Allocated
                     </Typography>
+                </Box>
+                <Box width={"15%"} padding={2}>
+                    <Typography sx={{ textAlign: "right" }}>
+                        Activity
+                    </Typography>
+                </Box>
+                <Box width={"15%"} padding={2}>
+                    <Typography sx={{ textAlign: "right" }}>Balance</Typography>
                 </Box>
             </Stack>
 
-            <EnvelopeStackList />
+            <CategoryGroupList />
         </Paper>
     );
 };

@@ -4,6 +4,7 @@
 import Router from "./Router";
 import { ThemeProvider } from "@mui/material/styles";
 import Theme from "./Theme";
+import { DataProvider } from "data/DataProvider";
 // import { ProtectedAPIProvider } from "api/API";
 
 // const queryClient = new QueryClient();
@@ -14,7 +15,9 @@ const Moneybags: React.FC = () => {
             {/* <QueryClientProvider client={queryClient}> */}
             {/* <AuthProvider> */}
             {/* <ProtectedAPIProvider> */}
-            <Router />
+            <DataProvider>
+                <Router />
+            </DataProvider>
             {/* </ProtectedAPIProvider> */}
             {/* </AuthProvider> */}
             {/* </QueryClientProvider> */}

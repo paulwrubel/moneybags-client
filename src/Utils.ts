@@ -1,5 +1,5 @@
 import { HTTPError } from "ky";
-import ErrorResponse from "models/ErrorResponse";
+import ErrorResponse from "legacy/models/ErrorResponse";
 
 export function def<T>(value: T | undefined, def: T): T {
     return value === undefined ? def : value;
