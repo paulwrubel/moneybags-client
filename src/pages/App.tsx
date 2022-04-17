@@ -4,7 +4,7 @@ import { Stack, Typography, Grid } from "@mui/material";
 // import { useProtectedAPI } from "api/API";
 import { useQuery } from "react-query";
 import { processAPIError } from "Utils";
-import UserAccount from "models/UserAccount";
+// import UserAccount from "models/UserAccount";
 import MenuPanel from "components/MenuPanel";
 import SidePanel from "components/SidePanel";
 import Loading from "pages/Loading";
@@ -58,7 +58,7 @@ const App: React.FC = () => {
             </Stack>
         </>
         // <Typography variant="h2">
-        //     Welcome to Moneybags, {data?.username}!
+        //     Welcome to Solid Budget, {data?.username}!
         // </Typography>
     );
 };

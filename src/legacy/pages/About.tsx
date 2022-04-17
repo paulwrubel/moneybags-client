@@ -1,5 +1,5 @@
 const About: React.FC = () => {
-    return <p>This is Moneybags.</p>;
+    return <p>This is Solid Budget.</p>;
 };
 
 export default About;

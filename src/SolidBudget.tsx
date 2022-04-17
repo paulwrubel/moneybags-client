@@ -9,7 +9,7 @@ import { DataProvider } from "data/DataProvider";
 
 // const queryClient = new QueryClient();
 
-const Moneybags: React.FC = () => {
+const SolidBudget: React.FC = () => {
     return (
         <ThemeProvider theme={Theme}>
             {/* <QueryClientProvider client={queryClient}> */}
@@ -25,4 +25,4 @@ const Moneybags: React.FC = () => {
     );
 };
 
-export default Moneybags;
+export default SolidBudget;

@@ -24,7 +24,7 @@ const MenuPanel: React.FC = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                        Moneybags
+                        Solid Budget
                     </Typography>
                     <Typography variant="h6">{budget.name}</Typography>
                 </Toolbar>

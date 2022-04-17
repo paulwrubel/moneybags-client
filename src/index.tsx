@@ -1,4 +1,4 @@
-import Moneybags from "Moneybags";
+import SolidBudget from "SolidBudget";
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
@@ -6,7 +6,7 @@ import reportWebVitals from "./misc/reportWebVitals";
 
 ReactDOM.render(
     <React.StrictMode>
-        <Moneybags />
+        <SolidBudget />
     </React.StrictMode>,
     document.getElementById("root"),
 );

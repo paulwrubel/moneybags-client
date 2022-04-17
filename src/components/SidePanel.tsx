@@ -10,7 +10,7 @@ const SidePanel: React.FC = () => {
             sx={{ height: 1, bgcolor: "primary.light" }}
             color="blue"
         >
-            <Typography>MONEYBAGS SIDE PANEL</Typography>
+            <Typography>SOLID BUDGET SIDE PANEL</Typography>
         </Paper>
     );
 };

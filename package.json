@@ -1,5 +1,5 @@
 {
-    "name": "moneybags-client",
+    "name": "solid-budget-client",
     "version": "0.1.0",
     "private": true,
     "dependencies": {
