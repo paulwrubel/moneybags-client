@@ -1,9 +1,11 @@
 import { createTheme } from "@mui/material/styles";
 
+const SKY_AQUA = "#b0e0e6";
+
 const Theme = createTheme({
     palette: {
         primary: {
-            main: "#b0e0e6",
+            main: SKY_AQUA,
         },
     },
 });

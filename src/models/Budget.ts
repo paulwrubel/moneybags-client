@@ -1,18 +1,45 @@
-interface Category {
+export interface Category {
     id: string;
+    groupID: string;
     name: string;
+    sort: number;
+
     previousBalance: number;
     allocated: number;
     activity: number;
 }
 
-interface CategoryGroup {
+export interface CategoryGroup {
     id: string;
     name: string;
-    categories: Category[];
+    sort: number;
 }
 
-export default interface Budget {
+export interface Account {
+    id: string;
     name: string;
-    categoryGroups: CategoryGroup[];
+}
+
+export interface Transaction {
+    id: string;
+    accountID: string;
+    categoryID: string;
+    date: number;
+    description?: string;
+    amount: number;
+}
+
+export interface BudgetHeader {
+    id: string;
+    name: string;
+    createdAt: number;
+    modifiedAt: number;
+    accessedAt: number;
+}
+
+export interface Budget extends BudgetHeader {
+    categoryGroups?: CategoryGroup[];
+    categories?: Category[];
+    accounts?: Account[];
+    transactions?: Transaction[];
 }

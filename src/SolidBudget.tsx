@@ -4,23 +4,19 @@
 import Router from "./Router";
 import { ThemeProvider } from "@mui/material/styles";
 import Theme from "./Theme";
-import { DataProvider } from "data/DataProvider";
+// import { DataProvider } from "data/DataProvider";
 // import { ProtectedAPIProvider } from "api/API";
+import { store as reduxStore } from "./data/Store";
+import { Provider as ReduxStoreProvider } from "react-redux";
 
 // const queryClient = new QueryClient();
 
 const SolidBudget: React.FC = () => {
     return (
         <ThemeProvider theme={Theme}>
-            {/* <QueryClientProvider client={queryClient}> */}
-            {/* <AuthProvider> */}
-            {/* <ProtectedAPIProvider> */}
-            <DataProvider>
+            <ReduxStoreProvider store={reduxStore}>
                 <Router />
-            </DataProvider>
-            {/* </ProtectedAPIProvider> */}
-            {/* </AuthProvider> */}
-            {/* </QueryClientProvider> */}
+            </ReduxStoreProvider>
         </ThemeProvider>
     );
 };

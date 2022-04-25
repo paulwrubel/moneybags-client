@@ -1,10 +1,12 @@
 import { AppBar, Box, Toolbar, Typography, IconButton } from "@mui/material";
 // import { Menu as MenuIcon } from "@mui/icons-material";
 import MenuIcon from "@mui/icons-material/Menu";
-import { useData } from "data/DataProvider";
+import { useActiveBudgetHeader } from "data/Hooks";
+import { BudgetHeader } from "models/Budget";
+// import { useData } from "data/DataProvider";
 
 const MenuPanel: React.FC = () => {
-    const budget = useData().data;
+    const header = useActiveBudgetHeader() as BudgetHeader;
 
     return (
         <Box sx={{ flexGrow: 1 }}>
@@ -24,9 +26,8 @@ const MenuPanel: React.FC = () => {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                        Solid Budget
+                        {header.name}
                     </Typography>
-                    <Typography variant="h6">{budget.name}</Typography>
                 </Toolbar>
             </AppBar>
         </Box>

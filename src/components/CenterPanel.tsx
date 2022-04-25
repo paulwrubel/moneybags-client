@@ -7,7 +7,7 @@ const CenterPanel: React.FC = () => {
             square
             elevation={0}
             sx={{ height: 1, bgcolor: "white" }}
-            color="blue"
+            // color="blue"
         >
             <Stack
                 direction="row"

@@ -4,24 +4,25 @@ import {
     AccordionSummary,
     AccordionDetails,
     Stack,
+    IconButton,
 } from "@mui/material";
-import Category from "components/Category";
+import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
+import CategoryRow from "components/CategoryRow";
 import { useState } from "react";
+import { CategoryGroup } from "models/Budget";
+import {
+    useAppSelector,
+    useAppDispatch,
+    useCategoriesByGroupID,
+} from "data/Hooks";
 
-const CategoryGroup: React.FC<{
-    categoryGroup: {
-        id: string;
-        name: string;
-        categories: {
-            id: string;
-            name: string;
-            previousBalance: number;
-            allocated: number;
-            activity: number;
-        }[];
-    };
-}> = ({ categoryGroup: { id, name, categories } }) => {
+const CategoryGroupRow: React.FC<{
+    categoryGroup: CategoryGroup;
+}> = ({ categoryGroup: { id, name, sort } }) => {
     const [isExpanded, setIsExpanded] = useState(true);
+
+    const categories = useCategoriesByGroupID(id);
+    const dispatch = useAppDispatch();
 
     return (
         <>
@@ -39,11 +40,14 @@ const CategoryGroup: React.FC<{
                     >
                         <Typography color="gray">Category Group</Typography>
                         <Typography>{name}</Typography>
+                        <IconButton onClick={() => {}}>
+                            <AddCircleSharpIcon />
+                        </IconButton>
                     </Stack>
                 </AccordionSummary>
                 <AccordionDetails sx={{ padding: 0 }}>
                     {categories.map((cat) => (
-                        <Category key={cat.id} category={cat} />
+                        <CategoryRow key={cat.id} category={cat} />
                     ))}
                 </AccordionDetails>
             </Accordion>
@@ -51,4 +55,4 @@ const CategoryGroup: React.FC<{
     );
 };
 
-export default CategoryGroup;
+export default CategoryGroupRow;

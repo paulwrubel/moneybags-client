@@ -1,16 +1,32 @@
-import { Typography, Stack, Paper, Box, Divider } from "@mui/material";
+import {
+    Typography,
+    Stack,
+    Paper,
+    Box,
+    Divider,
+    TextField,
+} from "@mui/material";
+import { useState } from "react";
 // import Envelope from "./Envelope";
+import { CategoryGroup, Category, Account, Transaction } from "models/Budget";
+import {
+    useAppSelector,
+    useAppDispatch,
+    useAccount,
+    useTransactionsByAccountID,
+} from "data/Hooks";
+import { setAllocated } from "data/BudgetSlice";
 
-const Category: React.FC<{
-    category: {
-        id: string;
-        name: string;
-        previousBalance: number;
-        allocated: number;
-        activity: number;
-    };
-}> = ({ category: { id, name, previousBalance, allocated, activity } }) => {
-    const balance = previousBalance + allocated + activity;
+const AccountRow: React.FC<{ id: string }> = ({ id }) => {
+    const account = useAccount(id);
+
+    const transactions = useTransactionsByAccountID(id);
+    const dispatch = useAppDispatch();
+
+    const currentBalance = transactions.reduce(
+        (balance, transaction) => balance + transaction.amount,
+        0,
+    );
 
     return (
         // <>
@@ -27,22 +43,14 @@ const Category: React.FC<{
                     width={1}
                     // justifyContent="center"
                 >
-                    <Box width={"55%"} padding={2}>
-                        <Typography noWrap>{name}</Typography>
-                    </Box>
                     <Box width={"15%"} padding={2}>
                         <Typography sx={{ textAlign: "right" }}>
-                            {allocated}
+                            {account.name}
                         </Typography>
                     </Box>
                     <Box width={"15%"} padding={2}>
                         <Typography sx={{ textAlign: "right" }}>
-                            {activity}
-                        </Typography>
-                    </Box>
-                    <Box width={"15%"} padding={2}>
-                        <Typography sx={{ textAlign: "right" }}>
-                            {balance}
+                            {currentBalance}
                         </Typography>
                     </Box>
                 </Stack>
@@ -51,4 +59,4 @@ const Category: React.FC<{
     );
 };
 
-export default Category;
+export default AccountRow;
