@@ -1,9 +1,6 @@
-import { useState } from "react";
 import { Paper, Typography } from "@mui/material";
-import AccountList from "./AccountList";
-import AddAccountButton from "./AddAccountButton";
-import NewAccountDialog from "./NewAccountDialog";
-import { useAppSelector, useCategories, useTransactions } from "data/Hooks";
+
+import { useCategories, useTransactions } from "data/Hooks";
 
 const ContextPanel: React.FC = () => {
     const categories = useCategories();

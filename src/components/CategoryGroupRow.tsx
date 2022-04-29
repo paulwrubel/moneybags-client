@@ -1,28 +1,25 @@
-import {
-    Typography,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    Stack,
-    IconButton,
-} from "@mui/material";
-import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
-import CategoryRow from "components/CategoryRow";
 import { useState } from "react";
-import { CategoryGroup } from "models/Budget";
+
+import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
 import {
-    useAppSelector,
-    useAppDispatch,
-    useCategoriesByGroupID,
-} from "data/Hooks";
+    Accordion,
+    AccordionDetails,
+    AccordionSummary,
+    IconButton,
+    Stack,
+    Typography,
+} from "@mui/material";
+
+import CategoryRow from "components/CategoryRow";
+import { useAppDispatch, useCategoriesByGroupID } from "data/Hooks";
+import { CategoryGroup } from "models/Budget";
 
 const CategoryGroupRow: React.FC<{
     categoryGroup: CategoryGroup;
-}> = ({ categoryGroup: { id, name, sort } }) => {
+}> = ({ categoryGroup: { id, name } }) => {
     const [isExpanded, setIsExpanded] = useState(true);
 
     const categories = useCategoriesByGroupID(id);
-    const dispatch = useAppDispatch();
 
     return (
         <>

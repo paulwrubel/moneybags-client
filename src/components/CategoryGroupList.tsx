@@ -1,8 +1,6 @@
-import { Typography } from "@mui/material";
-import { useState } from "react";
+import { useCategoryGroups } from "data/Hooks";
+
 import CategoryGroupRow from "./CategoryGroupRow";
-import { useAppSelector, useAppDispatch, useCategoryGroups } from "data/Hooks";
-import { setName } from "data/BudgetSlice";
 
 const CategoryGroupList: React.FC = () => {
     const categoryGroups = useCategoryGroups();

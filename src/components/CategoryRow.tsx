@@ -1,24 +1,19 @@
 import {
-    Typography,
-    Stack,
-    Paper,
     Box,
     Divider,
+    Paper,
+    Stack,
     TextField,
+    Typography,
 } from "@mui/material";
-import { useState } from "react";
-// import Envelope from "./Envelope";
-import { CategoryGroup, Category } from "models/Budget";
-import {
-    useAppSelector,
-    useAppDispatch,
-    useAllocatedByCategoryID,
-} from "data/Hooks";
+
 import { setAllocated } from "data/BudgetSlice";
+import { useAllocatedByCategoryID, useAppDispatch } from "data/Hooks";
+import { Category } from "models/Budget";
 
 const CategoryRow: React.FC<{
     category: Category;
-}> = ({ category: { id, groupID, name, sort, previousBalance, activity } }) => {
+}> = ({ category: { id, name, previousBalance, activity } }) => {
     const allocated = useAllocatedByCategoryID(id);
     const dispatch = useAppDispatch();
 

@@ -1,4 +1,5 @@
-import { Typography, Paper, Divider, Stack, Box } from "@mui/material";
+import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
+
 import CategoryGroupList from "./CategoryGroupList";
 
 const CenterPanel: React.FC = () => {
