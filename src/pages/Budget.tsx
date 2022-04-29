@@ -1,13 +1,12 @@
 import { useEffect, useState } from "react";
 
-import { Grid, Stack, Typography } from "@mui/material";
+import { Grid, Stack } from "@mui/material";
 
 import { Helmet } from "react-helmet-async";
 import {
     Navigate,
     Route,
     Routes,
-    useLocation,
     useNavigate,
     useParams,
 } from "react-router-dom";

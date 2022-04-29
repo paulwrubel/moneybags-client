@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { Budget, BudgetHeader } from "models/Budget";
+import { Budget } from "models/Budget";
 
 const TestBudgetData: Budget = {
     id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
@@ -74,38 +74,38 @@ const TestBudgetData: Budget = {
     // ],
 };
 
-const saveTestBudgetDataToLocalStorage = () => {
-    if (localStorage.getItem(TestBudgetData.id) === null) {
-        const testBudgetDataString = JSON.stringify(TestBudgetData);
-        // console.log(testBudgetDataString);
-        try {
-            localStorage.setItem(TestBudgetData.id, testBudgetDataString);
-            const pullData = localStorage.getItem(TestBudgetData.id);
-            // console.log(pullData);
-        } catch (error) {
-            console.error(error);
-        }
-    }
-};
-
-const addTestBudgetDataToBudgetHeaders = () => {
-    const headersString = localStorage.getItem("budgetHeaders");
-    const headers: BudgetHeader[] = headersString
-        ? JSON.parse(headersString)
-        : [];
-    const index = headers.findIndex(
-        (header) => header.id === TestBudgetData.id,
-    );
-    const header: BudgetHeader = {
-        id: TestBudgetData.id,
-        name: TestBudgetData.name,
-        createdAt: TestBudgetData.createdAt,
-        modifiedAt: TestBudgetData.modifiedAt,
-        accessedAt: TestBudgetData.accessedAt,
-    };
-    index === -1 ? headers.push(header) : (headers[index] = header);
-    localStorage.setItem("budgetHeaders", JSON.stringify(headers));
-};
+// const saveTestBudgetDataToLocalStorage = () => {
+//     if (localStorage.getItem(TestBudgetData.id) === null) {
+//         const testBudgetDataString = JSON.stringify(TestBudgetData);
+//         // console.log(testBudgetDataString);
+//         try {
+//             localStorage.setItem(TestBudgetData.id, testBudgetDataString);
+//             const pullData = localStorage.getItem(TestBudgetData.id);
+//             // console.log(pullData);
+//         } catch (error) {
+//             console.error(error);
+//         }
+//     }
+// };
+//
+// const addTestBudgetDataToBudgetHeaders = () => {
+//     const headersString = localStorage.getItem("budgetHeaders");
+//     const headers: BudgetHeader[] = headersString
+//         ? JSON.parse(headersString)
+//         : [];
+//     const index = headers.findIndex(
+//         (header) => header.id === TestBudgetData.id,
+//     );
+//     const header: BudgetHeader = {
+//         id: TestBudgetData.id,
+//         name: TestBudgetData.name,
+//         createdAt: TestBudgetData.createdAt,
+//         modifiedAt: TestBudgetData.modifiedAt,
+//         accessedAt: TestBudgetData.accessedAt,
+//     };
+//     index === -1 ? headers.push(header) : (headers[index] = header);
+//     localStorage.setItem("budgetHeaders", JSON.stringify(headers));
+// };
 
 // saveTestBudgetDataToLocalStorage();
 // addTestBudgetDataToBudgetHeaders();

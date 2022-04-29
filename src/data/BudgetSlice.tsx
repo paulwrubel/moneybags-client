@@ -1,9 +1,7 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
 
-import { Budget, Category, CategoryGroup } from "models/Budget";
-
-import { TestBudgetData } from "./TestBudgetData";
+import { Budget } from "models/Budget";
 
 const initialState: Budget | null = null;
 

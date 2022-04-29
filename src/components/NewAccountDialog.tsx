@@ -7,7 +7,6 @@ import {
     DialogContent,
     DialogTitle,
     TextField,
-    Typography,
 } from "@mui/material";
 
 import { addAccount } from "data/BudgetSlice";

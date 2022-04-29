@@ -1,13 +1,4 @@
-import { useState } from "react";
-
-import { Button, Stack, Typography } from "@mui/material";
-
-import { setName } from "data/BudgetSlice";
-import { useAppDispatch, useAppSelector } from "data/Hooks";
-import { Account } from "models/Budget";
-
-import AccountRow from "./AccountRow";
-import CategoryGroup from "./CategoryGroupRow";
+import { Button, Stack } from "@mui/material";
 
 const ViewsList: React.FC = () => {
     // const accountIDs = useAppSelector((state) =>

@@ -1,12 +1,12 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { render } from "react-dom";
 
 import SolidBudget from "SolidBudget";
 
 import "./index.css";
 import reportWebVitals from "./misc/reportWebVitals";
 
-ReactDOM.render(
+render(
     <React.StrictMode>
         <SolidBudget />
     </React.StrictMode>,
