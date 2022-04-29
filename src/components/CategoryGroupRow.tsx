@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 
 import CategoryRow from "components/CategoryRow";
-import { useAppDispatch, useCategoriesByGroupID } from "data/Hooks";
+import { useCategoriesByGroupID } from "data/Hooks";
 import { CategoryGroup } from "models/Budget";
 
 const CategoryGroupRow: React.FC<{
@@ -37,7 +37,7 @@ const CategoryGroupRow: React.FC<{
                     >
                         <Typography color="gray">Category Group</Typography>
                         <Typography>{name}</Typography>
-                        <IconButton onClick={() => {}}>
+                        <IconButton>
                             <AddCircleSharpIcon />
                         </IconButton>
                     </Stack>
