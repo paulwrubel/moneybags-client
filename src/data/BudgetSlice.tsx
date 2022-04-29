@@ -1,7 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { TestBudgetData } from "./TestBudgetData";
-import { CategoryGroup, Category, Budget } from "models/Budget";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
+
+import { Budget, Category, CategoryGroup } from "models/Budget";
+
+import { TestBudgetData } from "./TestBudgetData";
 
 const initialState: Budget | null = null;
 
@@ -10,7 +12,7 @@ export const budgetSlice = createSlice({
     initialState: initialState as Budget | null,
     reducers: {
         setBudget: (state: Budget | null, action: PayloadAction<Budget>) => {
-            console.log("SETTING BUDGET | " + action.payload);
+            // console.log("SETTING BUDGET | " + action.payload);
             return action.payload;
         },
         setName: (state: Budget | null, action: PayloadAction<string>) => {
@@ -43,12 +45,14 @@ export const budgetSlice = createSlice({
             reducer: (
                 state: Budget | null,
                 action: PayloadAction<{
-                    id: string;
+                    accountID: string;
+                    transactionID: string;
                     name: string;
                     initialBalance: number;
                     createdDate: number;
                 }>,
             ) => {
+                console.log(action.payload);
                 if (!state) {
                     return;
                 }
@@ -56,9 +60,8 @@ export const budgetSlice = createSlice({
                 if (!state.accounts) {
                     state.accounts = [];
                 }
-                const newAccountID = uuid();
                 state.accounts.push({
-                    id: newAccountID,
+                    id: action.payload.accountID,
                     name: action.payload.name,
                 });
                 // then, create a transaction to represent the initial balance
@@ -66,8 +69,8 @@ export const budgetSlice = createSlice({
                     state.transactions = [];
                 }
                 state.transactions.push({
-                    id: action.payload.id,
-                    accountID: newAccountID,
+                    id: action.payload.transactionID,
+                    accountID: action.payload.accountID,
                     categoryID: "0",
                     date: action.payload.createdDate,
                     amount: action.payload.initialBalance,
@@ -80,12 +83,14 @@ export const budgetSlice = createSlice({
                 name: string;
                 initialBalance: number;
             }) => {
+                console.log(initialBalance);
                 return {
                     payload: {
                         name,
                         initialBalance,
-                        id: uuid(),
-                        createdDate: new Date().getTime(),
+                        accountID: uuid(),
+                        transactionID: uuid(),
+                        createdDate: Date.now(),
                     },
                 };
             },

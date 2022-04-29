@@ -1,16 +1,18 @@
 import { configureStore } from "@reduxjs/toolkit";
+
 import budgetReducer from "data/BudgetSlice";
 import metadataReducer from "data/MetadataSlice";
+
 import { TestBudgetData } from "./TestBudgetData";
 
-export const store = configureStore({
+const store = configureStore({
     reducer: {
         metadata: metadataReducer,
         budget: budgetReducer,
     },
 });
 
-export const saveTestBudgetDataToLocalStorage = () => {
+const saveTestBudgetDataToLocalStorage = () => {
     localStorage.setItem(
         "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
         JSON.stringify(TestBudgetData),
@@ -27,16 +29,18 @@ store.subscribe(() => {
             );
         }
         if (state.metadata.activeBudgetID) {
-            console.log(state);
+            // console.log(state);
             const budgetString = JSON.stringify(state.budget);
-            console.log(
-                `STORING BUDGET STRING FOR ${state.metadata.activeBudgetID} | ` +
-                    budgetString,
-            );
+            // console.log(
+            //     `STORING BUDGET STRING FOR ${state.metadata.activeBudgetID} | ` +
+            //         budgetString,
+            // );
             localStorage.setItem(state.metadata.activeBudgetID, budgetString);
         }
     }
 });
+
+export { store, saveTestBudgetDataToLocalStorage };
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;

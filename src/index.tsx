@@ -1,6 +1,8 @@
-import SolidBudget from "SolidBudget";
 import React from "react";
 import ReactDOM from "react-dom";
+
+import SolidBudget from "SolidBudget";
+
 import "./index.css";
 import reportWebVitals from "./misc/reportWebVitals";
 

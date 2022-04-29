@@ -1,15 +1,17 @@
 import { useState } from "react";
+
 import {
-    Typography,
-    TextField,
     Button,
     Dialog,
-    DialogTitle,
-    DialogContent,
     DialogActions,
+    DialogContent,
+    DialogTitle,
+    TextField,
+    Typography,
 } from "@mui/material";
-import { useAppDispatch } from "data/Hooks";
+
 import { addAccount } from "data/BudgetSlice";
+import { useAppDispatch } from "data/Hooks";
 
 const NewAccountDialog: React.FC<{
     isOpen: boolean;
@@ -42,9 +44,9 @@ const NewAccountDialog: React.FC<{
     };
 
     const handleAddAccount = () => {
-        console.log(
-            `Adding account ${accountName} with initial balance ${accountInitialBalance}`,
-        );
+        // console.log(
+        //     `Adding account ${accountName} with initial balance ${accountInitialBalance}`,
+        // );
         dispatch(
             addAccount({
                 name: accountName,

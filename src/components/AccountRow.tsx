@@ -1,32 +1,45 @@
+import { useEffect, useState } from "react";
+
 import {
-    Typography,
-    Stack,
-    Paper,
     Box,
     Divider,
+    Paper,
+    Stack,
     TextField,
+    Typography,
 } from "@mui/material";
-import { useState } from "react";
+
 // import Envelope from "./Envelope";
-import { CategoryGroup, Category, Account, Transaction } from "models/Budget";
+import { setAllocated } from "data/BudgetSlice";
 import {
-    useAppSelector,
-    useAppDispatch,
     useAccount,
+    useAppDispatch,
+    useAppSelector,
+    useTransactions,
     useTransactionsByAccountID,
 } from "data/Hooks";
-import { setAllocated } from "data/BudgetSlice";
+import { Account, Category, CategoryGroup, Transaction } from "models/Budget";
 
 const AccountRow: React.FC<{ id: string }> = ({ id }) => {
     const account = useAccount(id);
 
+    const allTransactions = useTransactions();
     const transactions = useTransactionsByAccountID(id);
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
 
-    const currentBalance = transactions.reduce(
-        (balance, transaction) => balance + transaction.amount,
-        0,
-    );
+    console.log(`AccountRow: ${id}`);
+    console.log(allTransactions);
+    console.log(transactions);
+
+    const [balance, setBalance] = useState(0);
+
+    useEffect(() => {
+        const accBalance = transactions.reduce(
+            (balance, transaction) => balance + transaction.amount,
+            0,
+        );
+        setBalance(accBalance);
+    });
 
     return (
         // <>
@@ -50,7 +63,7 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
                     </Box>
                     <Box width={"15%"} padding={2}>
                         <Typography sx={{ textAlign: "right" }}>
-                            {currentBalance}
+                            {balance}
                         </Typography>
                     </Box>
                 </Stack>

@@ -1,8 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { BudgetHeader } from "models/Budget";
-import { TestBudgetData } from "./TestBudgetData";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { v4 as uuid } from "uuid";
 
-export interface MetadataState {
+import { BudgetHeader } from "models/Budget";
+
+interface MetadataState {
     saveLock: boolean;
     activeBudgetID?: string;
     budgetHeaders?: BudgetHeader[];
@@ -10,7 +11,9 @@ export interface MetadataState {
 
 const loadMetadataStateFromLocalStorage = (): MetadataState => {
     const budgetHeaders = localStorage.getItem("budgetHeaders");
-    const initState: MetadataState = { saveLock: false };
+    const initState: MetadataState = {
+        saveLock: false,
+    };
     if (budgetHeaders) {
         initState.budgetHeaders = JSON.parse(budgetHeaders);
     }
@@ -22,25 +25,40 @@ export const metadataSlice = createSlice({
     initialState: loadMetadataStateFromLocalStorage(),
     reducers: {
         saveLock: (state) => {
-            console.log("SAVE LOCK");
             state.saveLock = true;
         },
         saveUnlock: (state) => {
-            console.log("SAVE UNLOCK");
             state.saveLock = false;
         },
         setActiveBudgetID: (state, action: PayloadAction<string>) => {
-            console.log("SETTING ACTIVE BUDGET ID | " + action.payload);
             state.activeBudgetID = action.payload;
         },
-        addBudgetHeader: (state, action: PayloadAction<BudgetHeader>) => {
-            if (!state.budgetHeaders) {
-                state.budgetHeaders = [];
-            }
-            state.budgetHeaders.push(action.payload);
+        addBudgetHeader: {
+            reducer: (state, action: PayloadAction<BudgetHeader>) => {
+                if (!state.budgetHeaders) {
+                    state.budgetHeaders = [];
+                }
+                state.budgetHeaders.push(action.payload);
+            },
+            prepare: ({ id, name }: { id?: string; name: string }) => {
+                if (!id) {
+                    id = uuid();
+                }
+                return {
+                    payload: {
+                        id: id,
+                        name: name,
+                        createdAt: Date.now(),
+                        modifiedAt: Date.now(),
+                        accessedAt: Date.now(),
+                    },
+                };
+            },
         },
     },
 });
+
+export type { MetadataState };
 
 // Action creators are generated for each case reducer function
 export const { saveLock, saveUnlock, setActiveBudgetID, addBudgetHeader } =

@@ -1,20 +1,22 @@
 import { useState } from "react";
+
 import { Paper, Typography } from "@mui/material";
+
 import AccountList from "./AccountList";
-import ViewsList from "./ViewsList";
 import AddAccountButton from "./AddAccountButton";
 import NewAccountDialog from "./NewAccountDialog";
+import ViewsList from "./ViewsList";
 
 const ViewsPanel: React.FC = () => {
-    const [isOpen, setIsOpen] = useState(false);
+    const [addAccountDialogIsOpen, setAddAccountDialogIsOpen] = useState(false);
 
-    const handleOpen = () => {
-        setIsOpen(true);
-    };
-
-    const handleClose = () => {
-        setIsOpen(false);
-    };
+    //     const handleOpen = () => {
+    //         setIsOpen(true);
+    //     };
+    //
+    //     const handleClose = () => {
+    //         setIsOpen(false);
+    //     };
 
     return (
         <>
@@ -27,8 +29,17 @@ const ViewsPanel: React.FC = () => {
                 <ViewsList />
                 <Typography>Accounts</Typography>
                 <AccountList />
-                <AddAccountButton onClick={handleOpen} />
-                <NewAccountDialog isOpen={isOpen} handleClose={handleClose} />
+                <AddAccountButton
+                    onClick={() => {
+                        setAddAccountDialogIsOpen(true);
+                    }}
+                />
+                <NewAccountDialog
+                    isOpen={addAccountDialogIsOpen}
+                    handleClose={() => {
+                        setAddAccountDialogIsOpen(false);
+                    }}
+                />
             </Paper>
         </>
     );

@@ -1,12 +1,12 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Budget, BudgetHeader } from "models/Budget";
 
-export const TestBudgetData: Budget = {
+const TestBudgetData: Budget = {
     id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
     name: "Test",
-    createdAt: new Date().getTime(),
-    modifiedAt: new Date().getTime(),
-    accessedAt: new Date().getTime(),
+    createdAt: Date.now(),
+    modifiedAt: Date.now(),
+    accessedAt: Date.now(),
     categoryGroups: [
         {
             id: "ecfba38a-b180-42d2-b3d2-f5ebd09a2586",
@@ -68,7 +68,7 @@ export const TestBudgetData: Budget = {
     //         id: "8ca1f91f-e9fd-4f32-841e-5e17dba3252f",
     //         accountID: "ed897443-3e26-4fdf-a293-0bd2ce10502d",
     //         categoryID: "0",
-    //         date: new Date().getTime(),
+    //         date: Date.now(),
     //         amount: 500,
     //     },
     // ],
@@ -77,11 +77,11 @@ export const TestBudgetData: Budget = {
 const saveTestBudgetDataToLocalStorage = () => {
     if (localStorage.getItem(TestBudgetData.id) === null) {
         const testBudgetDataString = JSON.stringify(TestBudgetData);
-        console.log(testBudgetDataString);
+        // console.log(testBudgetDataString);
         try {
             localStorage.setItem(TestBudgetData.id, testBudgetDataString);
             const pullData = localStorage.getItem(TestBudgetData.id);
-            console.log(pullData);
+            // console.log(pullData);
         } catch (error) {
             console.error(error);
         }
@@ -107,5 +107,7 @@ const addTestBudgetDataToBudgetHeaders = () => {
     localStorage.setItem("budgetHeaders", JSON.stringify(headers));
 };
 
-saveTestBudgetDataToLocalStorage();
-addTestBudgetDataToBudgetHeaders();
+// saveTestBudgetDataToLocalStorage();
+// addTestBudgetDataToBudgetHeaders();
+
+export { TestBudgetData };

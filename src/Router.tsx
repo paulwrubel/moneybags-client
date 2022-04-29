@@ -1,19 +1,15 @@
+import { Navigate, Route, Routes } from "react-router";
 import { BrowserRouter } from "react-router-dom";
-import { Routes, Route, Navigate } from "react-router";
-// import Home from "./pages/Home";
-import NotFound from "./pages/NotFound";
-// import Login from "./pages/Login";
-import Home from "pages/Home";
-import Budget from "pages/Budget";
-import CreateBudget from "pages/CreateBudget";
+
 import { useActiveBudgetID, useBudgetHeaders } from "data/Hooks";
-// import About from "pages/About";
-// import CreateAccount from "pages/CreateAccount";
-// import RequireAuth from "auth/RequireAuth";
+import Budget from "pages/Budget";
+
+import NotFound from "./pages/NotFound";
 
 const Router: React.FC = () => {
     const activeBudgetID = useActiveBudgetID();
     const budgetHeaders = useBudgetHeaders();
+
     return (
         <BrowserRouter>
             <Routes>
@@ -22,7 +18,7 @@ const Router: React.FC = () => {
                     element={
                         activeBudgetID ? (
                             <Navigate to={`/${activeBudgetID}`} />
-                        ) : budgetHeaders ? (
+                        ) : budgetHeaders && budgetHeaders.length !== 0 ? (
                             <Navigate
                                 to={`/${
                                     budgetHeaders.reduce((a, b) =>
@@ -31,12 +27,11 @@ const Router: React.FC = () => {
                                 }`}
                             />
                         ) : (
-                            <Navigate to="/create-budget" />
+                            <Budget shouldInitialize />
                         )
                     }
                 ></Route>
-                <Route path="/:budgetID" element={<Budget />} />
-                <Route path="/create-budget" element={<CreateBudget />} />
+                <Route path="/:budgetID/*" element={<Budget />} />
                 <Route path="*" element={<NotFound />} />
             </Routes>
         </BrowserRouter>
