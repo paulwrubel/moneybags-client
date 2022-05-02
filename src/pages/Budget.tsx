@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Grid, Stack } from "@mui/material";
+import { Grid } from "@mui/material";
 
 import { Helmet } from "react-helmet-async";
 import {
@@ -12,7 +12,6 @@ import {
 } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
-import MenuPanel from "components/MenuPanel";
 import ViewsPanel from "components/ViewsPanel";
 import { setBudget } from "data/BudgetSlice";
 import {

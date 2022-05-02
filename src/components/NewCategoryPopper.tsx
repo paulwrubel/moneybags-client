@@ -1,15 +1,6 @@
 import { useState } from "react";
 
-import {
-    Box,
-    Button,
-    ClickAwayListener,
-    Paper,
-    Popper,
-    TextField,
-    Typography,
-} from "@mui/material";
-import { Theme } from "@mui/material/styles";
+import { Box, Button, Paper, TextField } from "@mui/material";
 
 import SolidPopper from "components/SolidPopper";
 import { addCategory } from "data/BudgetSlice";

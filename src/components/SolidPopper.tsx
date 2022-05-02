@@ -1,15 +1,6 @@
-import { useState } from "react";
-
-import {
-    Box,
-    ClickAwayListener,
-    Paper,
-    Popper,
-    TextField,
-    Typography,
-} from "@mui/material";
+import { Box, ClickAwayListener, Popper } from "@mui/material";
 import { PopperPlacementType } from "@mui/material/Popper";
-import { Theme } from "@mui/material/styles";
+
 const SolidPopper: React.FC<{
     isOpen: boolean;
     anchorEl: Element | null;

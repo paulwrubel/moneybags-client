@@ -3,7 +3,7 @@ import { useState } from "react";
 import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp";
 import { Divider, Menu, MenuItem, Typography } from "@mui/material";
 
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import NewBudgetDialog from "components/NewBudgetDialog";
 import { useBudgetHeaders } from "data/Hooks";

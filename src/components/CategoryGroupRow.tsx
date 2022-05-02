@@ -9,7 +9,6 @@ import {
     AccordionSummary,
     Box,
     IconButton,
-    Stack,
     SxProps,
     Typography,
 } from "@mui/material";
@@ -89,9 +88,7 @@ const CategoryGroupRow: React.FC<{
                         </Item>
                         <Item sx={{ alignSelf: "flex-end" }}>
                             <IconButton
-                                onClick={(
-                                    event: React.MouseEvent<HTMLButtonElement>,
-                                ) => {
+                                onClick={() => {
                                     setIsExpanded(!isExpanded);
                                 }}
                             >
