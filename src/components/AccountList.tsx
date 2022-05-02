@@ -1,6 +1,5 @@
+import AccountRow from "components/AccountRow";
 import { useAccountIDs } from "data/Hooks";
-
-import AccountRow from "./AccountRow";
 
 const AccountList: React.FC = () => {
     const accountIDs = useAccountIDs();

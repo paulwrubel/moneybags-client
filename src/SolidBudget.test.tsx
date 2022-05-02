@@ -1,6 +1,6 @@
 import { render, screen } from "@testing-library/react";
 
-import SolidBudget from "./SolidBudget";
+import SolidBudget from "SolidBudget";
 
 test("renders learn react link", () => {
     render(<SolidBudget />);

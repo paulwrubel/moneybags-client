@@ -2,8 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 
 import budgetReducer from "data/BudgetSlice";
 import metadataReducer from "data/MetadataSlice";
-
-import { TestBudgetData } from "./TestBudgetData";
+import { TestBudgetData } from "data/TestBudgetData";
 
 const store = configureStore({
     reducer: {

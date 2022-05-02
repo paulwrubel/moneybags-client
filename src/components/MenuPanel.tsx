@@ -4,10 +4,9 @@ import MenuIcon from "@mui/icons-material/Menu";
 import { AppBar, Box, IconButton, Toolbar, Typography } from "@mui/material";
 
 // import { Menu as MenuIcon } from "@mui/icons-material";
+import BudgetMenu from "components/BudgetMenu";
 import { useActiveBudgetHeader } from "data/Hooks";
 import { BudgetHeader } from "models/Budget";
-
-import BudgetMenu from "./BudgetMenu";
 
 // import { useData } from "data/DataProvider";
 

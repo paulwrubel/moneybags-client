@@ -1,10 +1,10 @@
 import React from "react";
 import { render } from "react-dom";
 
+import reportWebVitals from "misc/reportWebVitals";
 import SolidBudget from "SolidBudget";
 
-import "./index.css";
-import reportWebVitals from "./misc/reportWebVitals";
+import "index.css";
 
 render(
     <React.StrictMode>

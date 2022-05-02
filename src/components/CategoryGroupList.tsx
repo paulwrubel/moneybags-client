@@ -1,6 +1,5 @@
+import CategoryGroupRow from "components/CategoryGroupRow";
 import { useCategoryGroups } from "data/Hooks";
-
-import CategoryGroupRow from "./CategoryGroupRow";
 
 const CategoryGroupList: React.FC = () => {
     const categoryGroups = useCategoryGroups();

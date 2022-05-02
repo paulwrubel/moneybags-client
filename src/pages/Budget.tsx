@@ -12,8 +12,6 @@ import {
 } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
-import CenterPanel from "components/CenterPanel";
-import ContextPanel from "components/ContextPanel";
 import MenuPanel from "components/MenuPanel";
 import ViewsPanel from "components/ViewsPanel";
 import { setBudget } from "data/BudgetSlice";
@@ -30,9 +28,11 @@ import {
 } from "data/MetadataSlice";
 import type { AppDispatch } from "data/Store";
 import { BudgetHeader } from "models/Budget";
-
-import Loading from "./Loading";
-import NotFound from "./NotFound";
+import Loading from "pages/Loading";
+import NotFound from "pages/NotFound";
+import AccountsView from "pages/views/AccountsView";
+import AllocationsView from "pages/views/AllocationsView";
+import InsightsView from "pages/views/InsightsView";
 
 function switchToBudget(header: BudgetHeader, dispatch: AppDispatch) {
     const budgetString = localStorage.getItem(header.id);
@@ -103,31 +103,45 @@ const Budget: React.FC<{
             <Helmet>
                 <title>{activeHeader?.name} | SolidBudget</title>
             </Helmet>
-            <Stack spacing={0} sx={{ height: "100vh" }}>
-                <MenuPanel />
-                <Grid container sx={{ height: 1 }}>
-                    <Grid item xs={2}>
-                        <ViewsPanel />
-                    </Grid>
-                    <Routes>
-                        <Route index element={<Navigate to="budget" />} />
-                        <Route
-                            path="budget"
-                            element={
-                                <>
-                                    <Grid item xs={8}>
-                                        <CenterPanel />
-                                    </Grid>
-                                    <Grid item xs={2}>
-                                        <ContextPanel />
-                                    </Grid>
-                                </>
-                            }
-                        />
-                        <Route path="*" element={<NotFound />} />
-                    </Routes>
-                </Grid>
-            </Stack>
+            {/* <Stack spacing={0} sx={{ height: "100vh" }}> */}
+            <Routes>
+                <Route index element={<Navigate to="allocations" />} />
+                <Route
+                    path="allocations"
+                    element={
+                        <Grid container sx={{ height: "100vh" }}>
+                            <Grid item xs={2}>
+                                <ViewsPanel />
+                            </Grid>
+                            <AllocationsView />
+                        </Grid>
+                    }
+                />
+                <Route
+                    path="insights"
+                    element={
+                        <Grid container sx={{ height: "100vh" }}>
+                            <Grid item xs={2}>
+                                <ViewsPanel />
+                            </Grid>
+                            <InsightsView />
+                        </Grid>
+                    }
+                />
+                <Route
+                    path="accounts"
+                    element={
+                        <Grid container sx={{ height: "100vh" }}>
+                            <Grid item xs={2}>
+                                <ViewsPanel />
+                            </Grid>
+                            <AccountsView />
+                        </Grid>
+                    }
+                />
+                <Route path="*" element={<NotFound />} />
+            </Routes>
+            {/* </Stack> */}
         </>
     );
 };

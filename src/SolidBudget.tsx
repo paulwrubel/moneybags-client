@@ -6,9 +6,9 @@ import { ThemeProvider } from "@mui/material/styles";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Provider as ReduxStoreProvider } from "react-redux";
 
-import { store as reduxStore } from "./data/Store";
-import Router from "./Router";
-import Theme from "./Theme";
+import { store as reduxStore } from "data/Store";
+import Router from "Router";
+import Theme from "Theme";
 // import { DataProvider } from "data/DataProvider";
 // import { ProtectedAPIProvider } from "api/API";
 

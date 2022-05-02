@@ -39,6 +39,91 @@ export const budgetSlice = createSlice({
                 category.allocated = action.payload.value;
             }
         },
+        addCategoryGroup: {
+            reducer: (
+                state: Budget | null,
+                action: PayloadAction<{
+                    id: string;
+                    name: string;
+                    sort: number;
+                }>,
+            ) => {
+                if (!state) {
+                    return;
+                }
+                if (!state.categoryGroups) {
+                    state.categoryGroups = [];
+                }
+                state.categoryGroups.push({
+                    id: action.payload.id,
+                    name: action.payload.name,
+                    sort: action.payload.sort,
+                });
+            },
+            prepare: ({ name, sort }: { name: string; sort: number }) => {
+                return {
+                    payload: {
+                        id: uuid(),
+                        name,
+                        sort,
+                    },
+                };
+            },
+        },
+        addCategory: {
+            reducer: (
+                state: Budget | null,
+                action: PayloadAction<{
+                    id: string;
+                    groupID: string;
+                    name: string;
+                    sort: number;
+
+                    previousBalance: number;
+                    allocated: number;
+                    activity: number;
+                }>,
+            ) => {
+                if (!state || !state.categoryGroups) {
+                    return;
+                }
+                if (!state.categories) {
+                    state.categories = [];
+                }
+                state.categories.push({
+                    id: action.payload.id,
+                    groupID: action.payload.groupID,
+                    name: action.payload.name,
+                    sort: action.payload.sort,
+
+                    previousBalance: action.payload.previousBalance,
+                    allocated: action.payload.allocated,
+                    activity: action.payload.activity,
+                });
+            },
+            prepare: ({
+                groupID,
+                name,
+                sort,
+            }: {
+                groupID: string;
+                name: string;
+                sort: number;
+            }) => {
+                return {
+                    payload: {
+                        id: uuid(),
+                        groupID,
+                        name,
+                        sort,
+
+                        previousBalance: 0,
+                        allocated: 0,
+                        activity: 0,
+                    },
+                };
+            },
+        },
         addAccount: {
             reducer: (
                 state: Budget | null,
@@ -101,7 +186,13 @@ export const budgetSlice = createSlice({
 // };
 
 // Action creators are generated for each case reducer function
-export const { setBudget, setName, setAllocated, addAccount } =
-    budgetSlice.actions;
+export const {
+    setBudget,
+    setName,
+    setAllocated,
+    addCategory,
+    addCategoryGroup,
+    addAccount,
+} = budgetSlice.actions;
 
 export default budgetSlice.reducer;

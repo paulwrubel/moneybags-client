@@ -3,11 +3,10 @@ import { useState } from "react";
 import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp";
 import { Divider, Menu, MenuItem, Typography } from "@mui/material";
 
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
+import NewBudgetDialog from "components/NewBudgetDialog";
 import { useBudgetHeaders } from "data/Hooks";
-
-import NewBudgetDialog from "./NewBudgetDialog";
 
 const BudgetMenu: React.FC<{
     anchorElement: HTMLElement | null;
@@ -19,7 +18,7 @@ const BudgetMenu: React.FC<{
 
     const budgetHeaders = useBudgetHeaders();
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     return (
         <>
@@ -34,9 +33,11 @@ const BudgetMenu: React.FC<{
                     <MenuItem
                         onClick={() => {
                             //switch to budget
-                            navigate(`/${id}`);
+                            // navigate(`/${id}`);
                             setIsOpen(false);
                         }}
+                        to={`/${id}`}
+                        component={Link}
                         key={id}
                     >
                         <Typography>{name}</Typography>

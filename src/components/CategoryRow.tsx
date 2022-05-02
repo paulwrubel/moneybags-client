@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import {
     Box,
     Divider,
@@ -17,14 +19,23 @@ const CategoryRow: React.FC<{
     const allocated = useAllocatedByCategoryID(id);
     const dispatch = useAppDispatch();
 
-    const handleAllocatedValueChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        let value = parseFloat(event.target.value);
+    const [allocatedInput, setAllocatedInput] = useState<string>(
+        allocated.toString(),
+    );
+
+    const handleAllocatedValueBlur = () => {
+        let value = parseFloat(allocatedInput);
         if (isNaN(value)) {
             value = 0;
         }
         dispatch(setAllocated({ id, value }));
+        setAllocatedInput(value.toString());
+    };
+
+    const handleAllocatedValueChange = (
+        event: React.ChangeEvent<HTMLInputElement>,
+    ) => {
+        setAllocatedInput(event.target.value);
     };
 
     const balance = previousBalance + allocated + activity;
@@ -49,8 +60,9 @@ const CategoryRow: React.FC<{
                     </Box>
                     <Box width={"15%"} padding={2}>
                         <TextField
-                            value={allocated}
                             onChange={handleAllocatedValueChange}
+                            onBlur={handleAllocatedValueBlur}
+                            value={allocatedInput}
                             sx={{ textAlign: "right" }}
                         />
                     </Box>

@@ -3,8 +3,7 @@ import { BrowserRouter } from "react-router-dom";
 
 import { useActiveBudgetID, useBudgetHeaders } from "data/Hooks";
 import Budget from "pages/Budget";
-
-import NotFound from "./pages/NotFound";
+import NotFound from "pages/NotFound";
 
 const Router: React.FC = () => {
     const activeBudgetID = useActiveBudgetID();
