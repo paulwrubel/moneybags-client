@@ -16,12 +16,14 @@ const NewCategoryPopper = ({
     anchorEl,
     setIsOpen,
     setAnchorEl,
+    setIsExpanded,
 }: {
     categoryGroupID: string;
     isOpen: boolean;
     anchorEl: Element | null;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setAnchorEl: React.Dispatch<React.SetStateAction<Element | null>>;
+    setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const dispatch = useAppDispatch();
 
@@ -44,12 +46,7 @@ const NewCategoryPopper = ({
     };
 
     return (
-        <SolidPopper
-            isOpen={isOpen}
-            anchorEl={anchorEl}
-            setIsOpen={setIsOpen}
-            setAnchorEl={setAnchorEl}
-        >
+        <SolidPopper isOpen={isOpen} anchorEl={anchorEl} close={close}>
             <Paper elevation={10}>
                 <Box
                     sx={{
@@ -61,6 +58,7 @@ const NewCategoryPopper = ({
                 >
                     <Item>
                         <TextField
+                            autoFocus
                             label="Category Name"
                             value={categoryName}
                             onChange={(
@@ -79,9 +77,7 @@ const NewCategoryPopper = ({
                             }}
                         >
                             <Button
-                                onClick={() => {
-                                    close();
-                                }}
+                                onClick={close}
                                 variant="outlined"
                                 sx={{
                                     color: "black",
@@ -93,6 +89,7 @@ const NewCategoryPopper = ({
                                 onClick={() => {
                                     handleAddCategory();
                                     close();
+                                    setIsExpanded(true);
                                 }}
                                 variant="outlined"
                                 sx={{

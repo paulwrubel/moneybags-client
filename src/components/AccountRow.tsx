@@ -1,23 +1,29 @@
 import { useEffect, useState } from "react";
 
-import { Box, Divider, Paper, Stack, Typography } from "@mui/material";
+import { Box, Paper, SxProps, Typography } from "@mui/material";
 
-import {
-    useAccount,
-    useTransactions,
-    useTransactionsByAccountID,
-} from "data/Hooks";
+import { useAccount, useTransactionsByAccountID } from "data/Hooks";
+
+const Item = ({
+    children,
+    sx,
+}: {
+    children: React.ReactNode;
+    sx?: SxProps;
+}) => {
+    return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
+};
 
 const AccountRow: React.FC<{ id: string }> = ({ id }) => {
     const account = useAccount(id);
 
-    const allTransactions = useTransactions();
+    // const allTransactions = useTransactions();
     const transactions = useTransactionsByAccountID(id);
     // const dispatch = useAppDispatch();
 
-    console.log(`AccountRow: ${id}`);
-    console.log(allTransactions);
-    console.log(transactions);
+    // console.log(`AccountRow: ${id}`);
+    // console.log(allTransactions);
+    // console.log(transactions);
 
     const [balance, setBalance] = useState(0);
 
@@ -36,25 +42,26 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
         //     ))}
         // </>
         <>
-            <Paper>
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    divider={<Divider orientation="vertical" flexItem />}
-                    width={1}
-                    // justifyContent="center"
+            <Paper square elevation={0}>
+                <Box
+                    sx={{
+                        width: 1,
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                    }}
                 >
-                    <Box width={"15%"} padding={2}>
-                        <Typography sx={{ textAlign: "right" }}>
+                    <Item sx={{ width: 0.15, flexGrow: 1 }}>
+                        <Typography sx={{ textAlign: "left" }}>
                             {account.name}
                         </Typography>
-                    </Box>
-                    <Box width={"15%"} padding={2}>
+                    </Item>
+                    <Item sx={{ width: 0.15 }}>
                         <Typography sx={{ textAlign: "right" }}>
                             {balance}
                         </Typography>
-                    </Box>
-                </Stack>
+                    </Item>
+                </Box>
             </Paper>
         </>
     );

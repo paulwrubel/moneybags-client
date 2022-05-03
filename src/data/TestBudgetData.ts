@@ -1,12 +1,14 @@
 /* eslint-disable sonarjs/no-duplicate-string */
+import dayjs from "dayjs";
+
 import { Budget } from "models/Budget";
 
 const TestBudgetData: Budget = {
     id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
     name: "Test",
-    createdAt: Date.now(),
-    modifiedAt: Date.now(),
-    accessedAt: Date.now(),
+    createdAt: dayjs().valueOf(),
+    modifiedAt: dayjs().valueOf(),
+    accessedAt: dayjs().valueOf(),
     categoryGroups: [
         {
             id: "ecfba38a-b180-42d2-b3d2-f5ebd09a2586",
@@ -68,7 +70,7 @@ const TestBudgetData: Budget = {
     //         id: "8ca1f91f-e9fd-4f32-841e-5e17dba3252f",
     //         accountID: "ed897443-3e26-4fdf-a293-0bd2ce10502d",
     //         categoryID: "0",
-    //         date: Date.now(),
+    //         date: dayjs().valueOf(),
     //         amount: 500,
     //     },
     // ],

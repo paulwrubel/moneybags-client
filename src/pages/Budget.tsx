@@ -26,12 +26,39 @@ import {
     setActiveBudgetID,
 } from "data/MetadataSlice";
 import type { AppDispatch } from "data/Store";
-import { BudgetHeader } from "models/Budget";
+import { BudgetHeader, Budget as BudgetModel } from "models/Budget";
 import Loading from "pages/Loading";
 import NotFound from "pages/NotFound";
 import AccountsView from "pages/views/AccountsView";
 import AllocationsView from "pages/views/AllocationsView";
 import InsightsView from "pages/views/InsightsView";
+
+const DefaultBudgetName = "Main";
+
+function InitDefaultBudget(header: BudgetHeader): BudgetModel {
+    return {
+        ...header,
+        categoryGroups: [
+            {
+                id: "__cg_id_0__",
+                name: "__system__",
+                sort: 0,
+            },
+        ],
+        categories: [
+            {
+                id: "__c_id_0__",
+                groupID: "__cg_id_0__",
+                name: "Initial Balance",
+                sort: 0,
+
+                previousBalance: 0,
+                allocated: 0,
+                activity: 0,
+            },
+        ],
+    };
+}
 
 function switchToBudget(header: BudgetHeader, dispatch: AppDispatch) {
     const budgetString = localStorage.getItem(header.id);
@@ -42,7 +69,7 @@ function switchToBudget(header: BudgetHeader, dispatch: AppDispatch) {
         const budget = JSON.parse(budgetString);
         dispatch(setBudget(budget));
     } else {
-        dispatch(setBudget({ ...header }));
+        dispatch(setBudget(InitDefaultBudget(header)));
     }
     dispatch(saveUnlock());
 }
@@ -69,7 +96,7 @@ const Budget: React.FC<{
             dispatch(
                 addBudgetHeader({
                     id: newBudgetID,
-                    name: "Main",
+                    name: DefaultBudgetName,
                 }),
             );
             navigate(`/${newBudgetID}`);

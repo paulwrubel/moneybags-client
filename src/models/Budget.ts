@@ -24,8 +24,8 @@ export interface Transaction {
     id: string;
     accountID: string;
     categoryID: string;
-    date: number;
-    description?: string;
+    timestamp: number;
+    note?: string;
     amount: number;
 }
 

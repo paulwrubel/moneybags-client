@@ -4,11 +4,10 @@ import { PopperPlacementType } from "@mui/material/Popper";
 const SolidPopper: React.FC<{
     isOpen: boolean;
     anchorEl: Element | null;
-    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-    setAnchorEl: React.Dispatch<React.SetStateAction<Element | null>>;
+    close: VoidFunction;
     placement?: PopperPlacementType;
     children: React.ReactNode;
-}> = ({ isOpen, anchorEl, setIsOpen, setAnchorEl, placement, children }) => {
+}> = ({ isOpen, anchorEl, close, placement, children }) => {
     return (
         <Popper
             open={isOpen}
@@ -54,12 +53,7 @@ const SolidPopper: React.FC<{
                         }}
                     /> */}
             {/* <Box sx={{ marginTop: 2 }}> */}
-            <ClickAwayListener
-                onClickAway={() => {
-                    setIsOpen(false);
-                    setAnchorEl(null);
-                }}
-            >
+            <ClickAwayListener onClickAway={close}>
                 <Box>{children}</Box>
             </ClickAwayListener>
             {/* </Box> */}

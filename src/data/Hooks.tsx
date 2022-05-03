@@ -33,12 +33,26 @@ export const useAccount = (id: string) =>
     );
 
 export const useCategories = () =>
+    useAppSelector((state) =>
+        (state.budget?.categories ?? []).filter(
+            ({ groupID }) => groupID !== "__cg_id_0__",
+        ),
+    );
+
+export const useCategoriesIncludeSystem = () =>
     useAppSelector((state) => state.budget?.categories ?? []);
 
 export const useCategoriesByGroupID = (groupID: string) =>
     useCategories().filter((category) => category.groupID === groupID);
 
 export const useCategoryGroups = () =>
+    useAppSelector((state) =>
+        (state.budget?.categoryGroups ?? []).filter(
+            ({ id }) => id !== "__cg_id_0__",
+        ),
+    );
+
+export const useCategoryGroupsIncludeSystem = () =>
     useAppSelector((state) => state.budget?.categoryGroups ?? []);
 
 export const useTransactions = () =>

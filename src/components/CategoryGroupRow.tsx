@@ -84,6 +84,7 @@ const CategoryGroupRow: React.FC<{
                                 setIsOpen={setNewCategoryPopoverIsOpen}
                                 anchorEl={newCategoryPopoverAnchorEl}
                                 setAnchorEl={setNewCategoryPopoverAnchorEl}
+                                setIsExpanded={setIsExpanded}
                             />
                         </Item>
                         <Item sx={{ alignSelf: "flex-end" }}>

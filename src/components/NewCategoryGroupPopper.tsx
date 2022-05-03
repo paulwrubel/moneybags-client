@@ -41,12 +41,7 @@ const NewCategoryGroupPopper = ({
     };
 
     return (
-        <SolidPopper
-            isOpen={isOpen}
-            anchorEl={anchorEl}
-            setIsOpen={setIsOpen}
-            setAnchorEl={setAnchorEl}
-        >
+        <SolidPopper isOpen={isOpen} anchorEl={anchorEl} close={close}>
             <Paper elevation={10}>
                 <Box
                     sx={{
@@ -58,6 +53,7 @@ const NewCategoryGroupPopper = ({
                 >
                     <Item>
                         <TextField
+                            autoFocus
                             label="Category Group Name"
                             value={categoryGroupName}
                             onChange={(
@@ -76,9 +72,7 @@ const NewCategoryGroupPopper = ({
                             }}
                         >
                             <Button
-                                onClick={() => {
-                                    close();
-                                }}
+                                onClick={close}
                                 variant="outlined"
                                 sx={{
                                     color: "black",

@@ -1,12 +1,32 @@
-import { Grid } from "@mui/material";
+import { Box, Grid, Paper, Typography } from "@mui/material";
 
-import CenterPanel from "components/CenterPanel";
-
-const InsightsView: React.FC = () => {
+const InsightsView = () => {
     return (
         <>
             <Grid item xs={10}>
-                <CenterPanel />
+                <Paper
+                    elevation={0}
+                    square
+                    sx={{
+                        height: 1,
+                        maxHeight: "100vh",
+                        bgcolor: "white",
+                        overflow: "auto",
+                    }}
+                >
+                    <Box
+                        sx={{
+                            height: 1,
+                            display: "flex",
+                            flexDirection: "column",
+                            justifyContent: "center",
+                        }}
+                    >
+                        <Typography align="center" fontStyle="italic">
+                            INSIGHTS COMING SOON!
+                        </Typography>
+                    </Box>
+                </Paper>
             </Grid>
         </>
     );

@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
 import { Budget } from "models/Budget";
@@ -132,7 +133,7 @@ export const budgetSlice = createSlice({
                     transactionID: string;
                     name: string;
                     initialBalance: number;
-                    createdDate: number;
+                    createdTimestamp: number;
                 }>,
             ) => {
                 console.log(action.payload);
@@ -154,8 +155,8 @@ export const budgetSlice = createSlice({
                 state.transactions.push({
                     id: action.payload.transactionID,
                     accountID: action.payload.accountID,
-                    categoryID: "0",
-                    date: action.payload.createdDate,
+                    categoryID: "__c_id_0__",
+                    timestamp: action.payload.createdTimestamp,
                     amount: action.payload.initialBalance,
                 });
             },
@@ -173,7 +174,7 @@ export const budgetSlice = createSlice({
                         initialBalance,
                         accountID: uuid(),
                         transactionID: uuid(),
-                        createdDate: Date.now(),
+                        createdTimestamp: dayjs().valueOf(),
                     },
                 };
             },

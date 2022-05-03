@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
 import { BudgetHeader } from "models/Budget";
@@ -48,9 +49,9 @@ export const metadataSlice = createSlice({
                     payload: {
                         id: id,
                         name: name,
-                        createdAt: Date.now(),
-                        modifiedAt: Date.now(),
-                        accessedAt: Date.now(),
+                        createdAt: dayjs().valueOf(),
+                        modifiedAt: dayjs().valueOf(),
+                        accessedAt: dayjs().valueOf(),
                     },
                 };
             },
