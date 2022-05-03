@@ -1,4 +1,4 @@
-import { Box, Paper, SxProps, Typography } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 
 import dayjs from "dayjs";
 
@@ -28,10 +28,7 @@ const TransactionsList = () => {
             }}
         >
             {transactions.map(
-                (
-                    { id, accountID, categoryID, timestamp, note, amount },
-                    index,
-                ) => (
+                ({ id, categoryID, timestamp, note, amount }, index) => (
                     <Box
                         key={id}
                         sx={{
