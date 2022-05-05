@@ -51,12 +51,12 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
                         justifyContent: "space-between",
                     }}
                 >
-                    <Item sx={{ width: 0.15, flexGrow: 1 }}>
+                    <Item sx={{ flexGrow: 1 }}>
                         <Typography sx={{ textAlign: "left" }}>
                             {account.name}
                         </Typography>
                     </Item>
-                    <Item sx={{ width: 0.15 }}>
+                    <Item sx={{}}>
                         <Typography sx={{ textAlign: "right" }}>
                             {balance}
                         </Typography>

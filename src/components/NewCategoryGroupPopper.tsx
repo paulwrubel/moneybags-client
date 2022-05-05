@@ -31,6 +31,11 @@ const NewCategoryGroupPopper = ({
         setCategoryGroupName("");
     };
 
+    const submit = () => {
+        handleAddCategoryGroup();
+        close();
+    };
+
     const handleAddCategoryGroup = () => {
         dispatch(
             addCategoryGroup({
@@ -56,6 +61,14 @@ const NewCategoryGroupPopper = ({
                             autoFocus
                             label="Category Group Name"
                             value={categoryGroupName}
+                            onKeyDown={(
+                                event: React.KeyboardEvent<HTMLDivElement>,
+                            ) => {
+                                console.log(event.key);
+                                if (event.key === "Enter") {
+                                    submit();
+                                }
+                            }}
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
@@ -81,10 +94,7 @@ const NewCategoryGroupPopper = ({
                                 Cancel
                             </Button>
                             <Button
-                                onClick={() => {
-                                    handleAddCategoryGroup();
-                                    close();
-                                }}
+                                onClick={submit}
                                 variant="outlined"
                                 sx={{
                                     color: "black",

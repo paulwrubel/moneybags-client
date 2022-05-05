@@ -9,6 +9,7 @@ import {
     TextField,
 } from "@mui/material";
 
+import SolidNumericTextField from "components/SolidNumericTextField";
 import { addAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
 
@@ -26,15 +27,16 @@ const NewAccountDialog: React.FC<{
     ) => {
         setAccountName(event.target.value);
     };
-    const handleAccountInitialBalanceChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        let value = parseFloat(event.target.value);
-        if (isNaN(value)) {
-            value = 0;
-        }
-        setAccountInitialBalance(value);
-    };
+
+    // const handleAccountInitialBalanceChange = (
+    //     event: React.ChangeEvent<HTMLInputElement>,
+    // ) => {
+    //     let value = parseFloat(event.target.value);
+    //     if (isNaN(value)) {
+    //         value = 0;
+    //     }
+    //     setAccountInitialBalance(value);
+    // };
 
     const handleInternalClose = () => {
         setAccountName("");
@@ -67,14 +69,19 @@ const NewAccountDialog: React.FC<{
                     onChange={handleAccountNameChange}
                     sx={{ textAlign: "left" }}
                 />
-                <TextField
+                <SolidNumericTextField
+                    value={accountInitialBalance}
+                    setValue={setAccountInitialBalance}
+                    fullWidth
+                />
+                {/* <TextField
                     fullWidth
                     margin="dense"
                     label="Initial Balance"
                     value={accountInitialBalance}
                     onChange={handleAccountInitialBalanceChange}
                     sx={{ textAlign: "end" }}
-                />
+                /> */}
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleInternalClose}>Cancel</Button>

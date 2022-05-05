@@ -6,7 +6,7 @@ import TransactionsList from "components/TransactionsList";
 const AccountsView: React.FC = () => {
     return (
         <>
-            <Grid item xs={10}>
+            <Grid item xs={9}>
                 <Paper
                     square
                     elevation={0}

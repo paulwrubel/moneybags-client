@@ -1,19 +1,33 @@
 import { useState } from "react";
 
 import AddCircleSharpIcon from "@mui/icons-material/AddCircleSharp";
-import { Box, Divider, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Divider, IconButton, SxProps, Typography } from "@mui/material";
 
 import NewCategoryGroupPopper from "components/NewCategoryGroupPopper";
 
+const Item = ({
+    children,
+    sx,
+}: {
+    children: React.ReactNode;
+    sx?: SxProps;
+}) => {
+    return (
+        <Box sx={{ ...sx }}>
+            <Box sx={{ mx: 1 }}>{children}</Box>
+        </Box>
+    );
+};
+
 const CategoryHeader: React.FC = () => {
-    const columnHeaderSx = {
-        width: 0.15,
-        padding: 1,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-    };
+    // const columnHeaderSx = {
+    //     width: 0.15,
+    //     padding: 1,
+    //     display: "flex",
+    //     flexDirection: "row",
+    //     justifyContent: "center",
+    //     alignItems: "center",
+    // };
 
     const [newCategoryGroupPopoverIsOpen, setNewCategoryGroupPopoverIsOpen] =
         useState(false);
@@ -23,42 +37,50 @@ const CategoryHeader: React.FC = () => {
     ] = useState<Element | null>(null);
 
     return (
-        <Stack
-            direction="row"
-            spacing={2}
-            divider={<Divider orientation="vertical" flexItem />}
-            width={1}
-            // justifyContent="center"
+        <Box
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                // justifyContent: "space-between",
+                width: 1,
+            }}
         >
-            <Box sx={{ ...columnHeaderSx, width: 0.55 }}>
-                <Typography noWrap>Category</Typography>
-                <IconButton
-                    onClick={(event: React.MouseEvent<HTMLButtonElement>) => {
-                        setNewCategoryGroupPopoverIsOpen(true);
-                        setNewCategoryGroupPopoverAnchorEl(event.currentTarget);
-                    }}
-                >
-                    <AddCircleSharpIcon />
-                </IconButton>
-                {/* {newCategoryGroupPopoverIsOpen && ( */}
-                <NewCategoryGroupPopper
-                    isOpen={newCategoryGroupPopoverIsOpen}
-                    setIsOpen={setNewCategoryGroupPopoverIsOpen}
-                    anchorEl={newCategoryGroupPopoverAnchorEl}
-                    setAnchorEl={setNewCategoryGroupPopoverAnchorEl}
-                />
-                {/* )} */}
-            </Box>
-            <Box sx={{ ...columnHeaderSx }}>
+            <Item sx={{ width: 0.55 }}>
+                <Box sx={{ display: "flex", alignItems: "center", width: 1 }}>
+                    <IconButton
+                        onClick={(
+                            event: React.MouseEvent<HTMLButtonElement>,
+                        ) => {
+                            setNewCategoryGroupPopoverIsOpen(true);
+                            setNewCategoryGroupPopoverAnchorEl(
+                                event.currentTarget,
+                            );
+                        }}
+                    >
+                        <AddCircleSharpIcon />
+                    </IconButton>
+                    <NewCategoryGroupPopper
+                        isOpen={newCategoryGroupPopoverIsOpen}
+                        setIsOpen={setNewCategoryGroupPopoverIsOpen}
+                        anchorEl={newCategoryGroupPopoverAnchorEl}
+                        setAnchorEl={setNewCategoryGroupPopoverAnchorEl}
+                    />
+                    <Typography noWrap>Category</Typography>
+                </Box>
+            </Item>
+            <Divider orientation="vertical" flexItem />
+            <Item sx={{ width: 0.15 }}>
                 <Typography sx={{ textAlign: "right" }}>Allocated</Typography>
-            </Box>
-            <Box sx={{ ...columnHeaderSx }}>
+            </Item>
+            <Divider orientation="vertical" flexItem />
+            <Item sx={{ width: 0.15 }}>
                 <Typography sx={{ textAlign: "right" }}>Activity</Typography>
-            </Box>
-            <Box sx={{ ...columnHeaderSx }}>
+            </Item>
+            <Divider orientation="vertical" flexItem />
+            <Item sx={{ width: 0.15 }}>
                 <Typography sx={{ textAlign: "right" }}>Balance</Typography>
-            </Box>
-        </Stack>
+            </Item>
+        </Box>
     );
 };
 

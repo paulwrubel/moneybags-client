@@ -10,6 +10,6 @@ start:
 
 pretty:
 	npx eslint .
-	npx prettier --write .
+	# npx prettier --write .
 
 clean: pretty

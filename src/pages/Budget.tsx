@@ -136,7 +136,7 @@ const Budget: React.FC<{
                     path="allocations"
                     element={
                         <Grid container sx={{ height: "100vh" }}>
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <ViewsPanel />
                             </Grid>
                             <AllocationsView />
@@ -147,7 +147,7 @@ const Budget: React.FC<{
                     path="insights"
                     element={
                         <Grid container sx={{ height: "100vh" }}>
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <ViewsPanel />
                             </Grid>
                             <InsightsView />
@@ -158,7 +158,7 @@ const Budget: React.FC<{
                     path="accounts"
                     element={
                         <Grid container sx={{ height: "100vh" }}>
-                            <Grid item xs={2}>
+                            <Grid item xs={3}>
                                 <ViewsPanel />
                             </Grid>
                             <AccountsView />

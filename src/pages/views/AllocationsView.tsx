@@ -7,7 +7,7 @@ import ContextPanel from "components/ContextPanel";
 const AllocationsView: React.FC = () => {
     return (
         <>
-            <Grid item xs={8}>
+            <Grid item xs={6}>
                 <Paper
                     square
                     elevation={0}
@@ -23,7 +23,7 @@ const AllocationsView: React.FC = () => {
                     <CategoryGroupList />
                 </Paper>
             </Grid>
-            <Grid item xs={2}>
+            <Grid item xs={3}>
                 <ContextPanel />
             </Grid>
         </>

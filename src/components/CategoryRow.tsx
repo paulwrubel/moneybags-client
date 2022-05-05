@@ -1,42 +1,77 @@
-import { useState } from "react";
+import { Box, SxProps, Typography } from "@mui/material";
 
-import {
-    Box,
-    Divider,
-    Paper,
-    Stack,
-    TextField,
-    Typography,
-} from "@mui/material";
-
+import SolidNumericTextField from "components/SolidNumericTextField";
 import { setAllocated } from "data/BudgetSlice";
 import { useAllocatedByCategoryID, useAppDispatch } from "data/Hooks";
 import { Category } from "models/Budget";
+import { formatCurrencyCents } from "Utils";
 
-const CategoryRow: React.FC<{
+const Item = ({
+    children,
+    noMargin = false,
+    sx,
+}: {
+    children: React.ReactNode;
+    noMargin?: boolean;
+    sx?: SxProps;
+}) => {
+    return (
+        <Box sx={{ ...sx }}>
+            <Box sx={{ mx: noMargin ? 0 : 1 }}>{children}</Box>
+        </Box>
+    );
+};
+
+const CategoryRow = ({
+    category: { id, name, previousBalance, activity },
+}: {
     category: Category;
-}> = ({ category: { id, name, previousBalance, activity } }) => {
+}) => {
     const allocated = useAllocatedByCategoryID(id);
     const dispatch = useAppDispatch();
 
-    const [allocatedInput, setAllocatedInput] = useState<string>(
-        allocated.toString(),
-    );
-
-    const handleAllocatedValueBlur = () => {
-        let value = parseFloat(allocatedInput);
-        if (isNaN(value)) {
-            value = 0;
-        }
+    const handleSetAllocated = (value: number) => {
         dispatch(setAllocated({ id, value }));
-        setAllocatedInput(value.toString());
     };
 
-    const handleAllocatedValueChange = (
-        event: React.ChangeEvent<HTMLInputElement>,
-    ) => {
-        setAllocatedInput(event.target.value);
-    };
+    //     const [allocatedInput, setAllocatedInput] = useState<string>(
+    //         formatCurrencyCents(allocated, { sign: "" }),
+    //     );
+    //
+    //     const handleAllocatedValueKeypress = (
+    //         event: React.KeyboardEvent<HTMLInputElement>,
+    //     ) => {
+    //         // console.log(event.key);
+    //         if (event.key === "Enter") {
+    //             (event.target as HTMLElement).blur();
+    //             // console.log("did a blur");
+    //         }
+    //     };
+    //
+    //     const handleAllocatedValueFocus = (
+    //         event: React.FocusEvent<HTMLInputElement>,
+    //     ) => {
+    //         // setAllocatedInput((allocated / 100).toFixed(2));
+    //         event.target.select();
+    //     };
+    //
+    //     const handleAllocatedValueBlur = () => {
+    //         // console.log("blurring!");
+    //         const preValue = allocatedInput.replace(",", "");
+    //         let value = parseFloat(preValue);
+    //         if (isNaN(value)) {
+    //             value = 0;
+    //         }
+    //         value = Math.round(value * 100);
+    //         dispatch(setAllocated({ id, value }));
+    //         setAllocatedInput(formatCurrencyCents(value, { sign: "" }));
+    //     };
+    //
+    //     const handleAllocatedValueChange = (
+    //         event: React.ChangeEvent<HTMLInputElement>,
+    //     ) => {
+    //         setAllocatedInput(event.target.value);
+    //     };
 
     const balance = previousBalance + allocated + activity;
 
@@ -46,39 +81,46 @@ const CategoryRow: React.FC<{
         //         <Envelope key={envelope.id} envelopeStack={envelopeStack} />
         //     ))}
         // </>
-        <>
-            <Paper>
-                <Stack
-                    direction="row"
-                    spacing={2}
-                    divider={<Divider orientation="vertical" flexItem />}
-                    width={1}
-                    // justifyContent="center"
-                >
-                    <Box width={"55%"} padding={2}>
-                        <Typography noWrap>{name}</Typography>
-                    </Box>
-                    <Box width={"15%"} padding={2}>
-                        <TextField
-                            onChange={handleAllocatedValueChange}
-                            onBlur={handleAllocatedValueBlur}
-                            value={allocatedInput}
-                            sx={{ textAlign: "right" }}
-                        />
-                    </Box>
-                    <Box width={"15%"} padding={2}>
-                        <Typography sx={{ textAlign: "right" }}>
-                            {activity}
-                        </Typography>
-                    </Box>
-                    <Box width={"15%"} padding={2}>
-                        <Typography sx={{ textAlign: "right" }}>
-                            {balance}
-                        </Typography>
-                    </Box>
-                </Stack>
-            </Paper>
-        </>
+
+        <Box
+            sx={{
+                display: "flex",
+                flexDirection: "row",
+                width: 1,
+                alignItems: "center",
+                // justifyContent="center"
+            }}
+        >
+            <Item sx={{ width: 0.55 }}>
+                <Typography noWrap>{name}</Typography>
+            </Item>
+            <Item noMargin sx={{ width: 0.15 }}>
+                <SolidNumericTextField
+                    value={allocated}
+                    setValue={handleSetAllocated}
+                />
+                {/* <TextField
+                    size="small"
+                    onChange={handleAllocatedValueChange}
+                    onKeyDown={handleAllocatedValueKeypress}
+                    onFocus={handleAllocatedValueFocus}
+                    onBlur={handleAllocatedValueBlur}
+                    value={allocatedInput}
+                    inputProps={{ sx: { textAlign: "right" } }}
+                    // sx={{ textAlign: "right" }}
+                /> */}
+            </Item>
+            <Item sx={{ width: 0.15 }}>
+                <Typography sx={{ textAlign: "right" }}>
+                    {formatCurrencyCents(activity, { sign: "" })}
+                </Typography>
+            </Item>
+            <Item sx={{ width: 0.15 }}>
+                <Typography sx={{ textAlign: "right" }}>
+                    {formatCurrencyCents(balance, { sign: "" })}
+                </Typography>
+            </Item>
+        </Box>
     );
 };
 

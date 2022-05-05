@@ -37,7 +37,7 @@ const TransactionsList = () => {
                             // mx: 1,
                             width: 1,
                             backgroundColor:
-                                index % 2 === 0 ? "#F0F0F0" : "white",
+                                index % 2 === 0 ? "neutral.light" : "white",
                         }}
                     >
                         <Item sx={{ width: 0.2 }}>

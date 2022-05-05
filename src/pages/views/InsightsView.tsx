@@ -3,7 +3,7 @@ import { Box, Grid, Paper, Typography } from "@mui/material";
 const InsightsView = () => {
     return (
         <>
-            <Grid item xs={10}>
+            <Grid item xs={9}>
                 <Paper
                     elevation={0}
                     square

@@ -35,6 +35,12 @@ const NewCategoryPopper = ({
         setCategoryName("");
     };
 
+    const submit = () => {
+        handleAddCategory();
+        close();
+        setIsExpanded(true);
+    };
+
     const handleAddCategory = () => {
         dispatch(
             addCategory({
@@ -61,6 +67,14 @@ const NewCategoryPopper = ({
                             autoFocus
                             label="Category Name"
                             value={categoryName}
+                            onKeyDown={(
+                                event: React.KeyboardEvent<HTMLDivElement>,
+                            ) => {
+                                console.log(event.key);
+                                if (event.key === "Enter") {
+                                    submit();
+                                }
+                            }}
                             onChange={(
                                 event: React.ChangeEvent<HTMLInputElement>,
                             ) => {
@@ -86,11 +100,7 @@ const NewCategoryPopper = ({
                                 Cancel
                             </Button>
                             <Button
-                                onClick={() => {
-                                    handleAddCategory();
-                                    close();
-                                    setIsExpanded(true);
-                                }}
+                                onClick={submit}
                                 variant="outlined"
                                 sx={{
                                     color: "black",
