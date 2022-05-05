@@ -11,7 +11,6 @@ function SolidNumericTextField({
 }: {
     value: number;
     setValue: (arg0: number) => void;
-    // ...textFieldProps?: TextFieldProps;
 } & TextFieldProps) {
     const [valueInput, setValueInput] = useState(
         formatCurrencyCents(value, { sign: "" }),
