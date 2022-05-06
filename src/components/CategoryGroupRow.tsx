@@ -14,7 +14,6 @@ import {
 import MuiAccordionSummary, {
     AccordionSummaryProps,
 } from "@mui/material/AccordionSummary";
-import { Theme } from "@mui/material/styles";
 
 import CategoryRow from "components/CategoryRow";
 import NewCategoryPopper from "components/NewCategoryPopper";
@@ -26,7 +25,7 @@ const Item = ({
     sx,
 }: {
     children: React.ReactNode;
-    sx?: SxProps<Theme>;
+    sx?: SxProps;
 }) => {
     return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
 };
@@ -36,11 +35,20 @@ const AccordionSummary = (props: AccordionSummaryProps) => {
 
     return (
         <MuiAccordionSummary
+            // focusVisibleClassName="focus-visible"
             sx={{
                 p: 0,
                 m: 0,
+                // eslint-disable-next-line sonarjs/no-duplicate-string
                 backgroundColor: "primary.lightest",
-                "& .MuiAccordionSummary-root": { p: 0, m: 0 },
+                "&.Mui-focusVisible": {
+                    backgroundColor: "primary.lightest",
+                },
+
+                "& .MuiAccordionSummary-root": {
+                    p: 0,
+                    m: 0,
+                },
                 "& .MuiAccordionSummary-content": { p: 0, m: 0 },
                 ...sx,
             }}

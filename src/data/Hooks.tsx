@@ -1,16 +1,22 @@
+import dayjs, { unix } from "dayjs";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import type { AppDispatch, RootState } from "data/Store";
-import { Account, Category } from "models/Budget";
+import { Account } from "models/Budget";
 
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 
 export const useBudgetHeaders = () =>
-    useAppSelector((state) => state.metadata.budgetHeaders ?? []);
+    useAppSelector((state) => state.metadata.budgetHeaders);
 
 export const useActiveBudgetID = () =>
-    useAppSelector((state) => state.metadata.activeBudgetID);
+    useAppSelector((state) => state.core.activeBudgetID);
+
+export const useSelectedMonth = () =>
+    useAppSelector(
+        (state) => state.core.selectedMonth ?? dayjs().startOf("month").unix(),
+    );
 
 export const useAccountIDs = () =>
     useAppSelector((state) =>
@@ -20,7 +26,7 @@ export const useAccountIDs = () =>
 export const useActiveBudgetHeader = () =>
     useAppSelector((state) =>
         state.metadata.budgetHeaders?.find(
-            (header) => header.id === state.metadata.activeBudgetID,
+            (header) => header.id === state.core.activeBudgetID,
         ),
     );
 
@@ -65,12 +71,119 @@ export const useTransactionsByAccountID = (accountID: string) =>
         ),
     );
 
-export const useAllocatedByCategoryID = (categoryID: string) =>
+export const useAllocatedByCategoryIDAndMonth = (
+    categoryID: string,
+    month: number,
+) =>
     useAppSelector(
         (state) =>
-            (
-                (state.budget?.categories as Category[]).find(
-                    (cat) => cat.id === categoryID,
-                ) as Category
-            ).allocated,
+            state.budget?.categories
+                ?.find(({ id }) => id === categoryID)
+                ?.allocations?.find(({ month: catMonth }) => month === catMonth)
+                ?.amount ?? 0,
+    );
+
+export const useActivityByCategoryIDAndMonth = (
+    categoryID: string,
+    month: number,
+) =>
+    useAppSelector(
+        (state) =>
+            state.budget?.transactions
+                ?.filter(
+                    ({ timestamp, categoryID: tCategoryID }) =>
+                        tCategoryID === categoryID &&
+                        unix(timestamp).isBetween(
+                            unix(month),
+                            unix(month).add(1, "month"),
+                            "day",
+                            "[)",
+                        ),
+                )
+                ?.reduce((total, { amount }) => total + amount, 0) ?? 0,
+    );
+
+export const useBalanceByCategoryIDAndMonth = (
+    categoryID: string,
+    month: number,
+) =>
+    useAppSelector(
+        (state) =>
+            // get transaction values for this category before or equal to this month
+            (state.budget?.transactions
+                ?.filter(
+                    ({ timestamp, categoryID: tCategoryID }) =>
+                        tCategoryID === categoryID &&
+                        unix(timestamp).isBefore(unix(month).add(1, "month")),
+                )
+                ?.reduce((total, { amount }) => total + amount, 0) ?? 0) +
+            // get category allocations for this category before or equal to this month
+            (state.budget?.categories
+                ?.find(({ id }) => id === categoryID)
+                ?.allocations?.filter(({ month: catMonth }) =>
+                    unix(catMonth).isBefore(unix(month).add(1, "month")),
+                )
+                .reduce((total, { amount }) => total + amount, 0) ?? 0),
+    );
+
+export const useTotalBalanceByMonth = (month: number) =>
+    useAppSelector(
+        (state) =>
+            state.budget?.categories?.reduce(
+                (catTotal, { id: categoryID, allocations }) =>
+                    catTotal +
+                        // get transaction values for this category before or equal to this month
+                        (state.budget?.transactions
+                            ?.filter(
+                                ({ timestamp, categoryID: tCategoryID }) =>
+                                    tCategoryID === categoryID &&
+                                    unix(timestamp).isBefore(
+                                        unix(month).add(1, "month"),
+                                    ),
+                            )
+                            ?.reduce(
+                                (total, { amount }) => total + amount,
+                                0,
+                            ) ?? 0) +
+                        // get category allocations for this category before or equal to this month
+                        allocations
+                            ?.filter(({ month: catMonth }) =>
+                                unix(catMonth).isBefore(
+                                    unix(month).add(1, "month"),
+                                ),
+                            )
+                            ?.reduce(
+                                (total, { amount }) => total + amount,
+                                0,
+                            ) ?? 0,
+                0,
+            ) ?? 0,
+    );
+
+export const useTotalActivityByMonth = (month: number) =>
+    useAppSelector(
+        (state) =>
+            state.budget?.transactions
+                ?.filter(({ timestamp }) =>
+                    unix(timestamp).isSame(unix(month), "month"),
+                )
+                ?.reduce((total, { amount }) => total + amount, 0) ?? 0,
+    );
+
+export const useTotalAllocatedByMonth = (month: number) =>
+    useAppSelector(
+        (state) =>
+            state.budget?.categories?.reduce(
+                (total, { allocations }) =>
+                    total +
+                        allocations
+                            ?.filter(({ month: catMonth }) =>
+                                unix(catMonth).isSame(unix(month), "month"),
+                            )
+                            ?.reduce(
+                                (aTotal, { amount }) => aTotal + amount,
+                                0,
+                            ) ?? 0,
+                0,
+            ) ?? 0,
     );

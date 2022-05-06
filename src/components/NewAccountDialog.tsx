@@ -1,17 +1,29 @@
 import { useState } from "react";
 
 import {
+    Box,
     Button,
     Dialog,
     DialogActions,
     DialogContent,
     DialogTitle,
+    SxProps,
     TextField,
 } from "@mui/material";
 
 import SolidNumericTextField from "components/SolidNumericTextField";
 import { addAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
+
+const Item = ({
+    children,
+    sx,
+}: {
+    children: React.ReactNode;
+    sx?: SxProps;
+}) => {
+    return <Box sx={{ my: 1, ...sx }}>{children}</Box>;
+};
 
 const NewAccountDialog: React.FC<{
     isOpen: boolean;
@@ -61,20 +73,28 @@ const NewAccountDialog: React.FC<{
         <Dialog open={isOpen} onClose={handleInternalClose}>
             <DialogTitle>Add a New Account</DialogTitle>
             <DialogContent>
-                <TextField
-                    fullWidth
-                    margin="dense"
-                    label="Name"
-                    value={accountName}
-                    onChange={handleAccountNameChange}
-                    sx={{ textAlign: "left" }}
-                />
-                <SolidNumericTextField
-                    value={accountInitialBalance}
-                    setValue={setAccountInitialBalance}
-                    fullWidth
-                />
-                {/* <TextField
+                <Box
+                    sx={{ width: 1, display: "flex", flexDirection: "column" }}
+                >
+                    <Item>
+                        <TextField
+                            fullWidth
+                            margin="dense"
+                            label="Name"
+                            value={accountName}
+                            onChange={handleAccountNameChange}
+                            sx={{ textAlign: "left" }}
+                        />
+                    </Item>
+                    <Item>
+                        <SolidNumericTextField
+                            value={accountInitialBalance}
+                            setValue={setAccountInitialBalance}
+                            fullWidth
+                            label="Current Balance"
+                        />
+                    </Item>
+                    {/* <TextField
                     fullWidth
                     margin="dense"
                     label="Initial Balance"
@@ -82,6 +102,7 @@ const NewAccountDialog: React.FC<{
                     onChange={handleAccountInitialBalanceChange}
                     sx={{ textAlign: "end" }}
                 /> */}
+                </Box>
             </DialogContent>
             <DialogActions>
                 <Button onClick={handleInternalClose}>Cancel</Button>

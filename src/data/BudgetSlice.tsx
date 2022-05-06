@@ -24,6 +24,7 @@ export const budgetSlice = createSlice({
             state: Budget | null,
             action: PayloadAction<{
                 id: string;
+                month: number;
                 value: number;
             }>,
         ) => {
@@ -37,7 +38,16 @@ export const budgetSlice = createSlice({
                 (cat) => cat.id === action.payload.id,
             );
             if (category) {
-                category.allocated = action.payload.value;
+                const index = category.allocations.findIndex(
+                    ({ month }) => month === action.payload.month,
+                );
+                index === -1
+                    ? category.allocations.push({
+                          month: action.payload.month,
+                          amount: action.payload.value,
+                      })
+                    : (category.allocations[index].amount =
+                          action.payload.value);
             }
         },
         addCategoryGroup: {
@@ -80,9 +90,7 @@ export const budgetSlice = createSlice({
                     name: string;
                     sort: number;
 
-                    previousBalance: number;
-                    allocated: number;
-                    activity: number;
+                    allocations: { month: number; amount: number }[];
                 }>,
             ) => {
                 if (!state || !state.categoryGroups) {
@@ -97,9 +105,7 @@ export const budgetSlice = createSlice({
                     name: action.payload.name,
                     sort: action.payload.sort,
 
-                    previousBalance: action.payload.previousBalance,
-                    allocated: action.payload.allocated,
-                    activity: action.payload.activity,
+                    allocations: action.payload.allocations,
                 });
             },
             prepare: ({
@@ -119,7 +125,7 @@ export const budgetSlice = createSlice({
                         sort,
 
                         previousBalance: 0,
-                        allocated: 0,
+                        allocations: [],
                         activity: 0,
                     },
                 };

@@ -21,7 +21,7 @@ const MenuPanel: React.FC = () => {
             <AppBar
                 position="static"
                 elevation={0}
-                sx={{ bgcolor: "primary.main" }}
+                sx={{ backgroundColor: "primary.dark" }}
             >
                 <Toolbar>
                     <IconButton

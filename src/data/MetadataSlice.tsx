@@ -5,18 +5,14 @@ import { v4 as uuid } from "uuid";
 import { BudgetHeader } from "models/Budget";
 
 interface MetadataState {
-    saveLock: boolean;
-    activeBudgetID?: string;
-    budgetHeaders?: BudgetHeader[];
+    budgetHeaders: BudgetHeader[];
 }
 
 const loadMetadataStateFromLocalStorage = (): MetadataState => {
-    const budgetHeaders = localStorage.getItem("budgetHeaders");
-    const initState: MetadataState = {
-        saveLock: false,
-    };
-    if (budgetHeaders) {
-        initState.budgetHeaders = JSON.parse(budgetHeaders);
+    const metadataString = localStorage.getItem("metadata");
+    let initState: MetadataState = { budgetHeaders: [] };
+    if (metadataString) {
+        initState = JSON.parse(metadataString);
     }
     return initState;
 };
@@ -25,15 +21,6 @@ export const metadataSlice = createSlice({
     name: "metadata",
     initialState: loadMetadataStateFromLocalStorage(),
     reducers: {
-        saveLock: (state) => {
-            state.saveLock = true;
-        },
-        saveUnlock: (state) => {
-            state.saveLock = false;
-        },
-        setActiveBudgetID: (state, action: PayloadAction<string>) => {
-            state.activeBudgetID = action.payload;
-        },
         addBudgetHeader: {
             reducer: (state, action: PayloadAction<BudgetHeader>) => {
                 if (!state.budgetHeaders) {
@@ -62,7 +49,6 @@ export const metadataSlice = createSlice({
 export type { MetadataState };
 
 // Action creators are generated for each case reducer function
-export const { saveLock, saveUnlock, setActiveBudgetID, addBudgetHeader } =
-    metadataSlice.actions;
+export const { addBudgetHeader } = metadataSlice.actions;
 
 export default metadataSlice.reducer;

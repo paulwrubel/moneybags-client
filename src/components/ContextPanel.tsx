@@ -1,29 +1,31 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Box, Paper, Typography } from "@mui/material";
 
-import { useCategories, useTransactions } from "data/Hooks";
+import { extend as dayjsExtend } from "dayjs";
+import IsBetween from "dayjs/plugin/isBetween";
+
+import {
+    useSelectedMonth,
+    useTotalActivityByMonth,
+    useTotalAllocatedByMonth,
+    useTotalBalanceByMonth,
+    useTransactions,
+} from "data/Hooks";
 import { formatCurrencyCents } from "Utils";
 
 const ContextPanel: React.FC = () => {
-    const categories = useCategories();
+    dayjsExtend(IsBetween);
+
+    const selectedMonth = useSelectedMonth();
+    // const categories = useCategories();
     const transactions = useTransactions();
 
-    const totalAllocated = categories.reduce(
-        (total, cat) => total + cat.allocated,
-        0,
-    );
-    const totalActivity = categories.reduce(
-        (total, cat) => total + cat.activity,
-        0,
-    );
-    const totalBalance = categories.reduce(
-        (total, cat) =>
-            total + cat.allocated + cat.activity + cat.previousBalance,
-        0,
-    );
+    const totalBalance = useTotalBalanceByMonth(selectedMonth);
+    const totalActivity = useTotalActivityByMonth(selectedMonth);
+    const totalAllocated = useTotalAllocatedByMonth(selectedMonth);
 
     const totalUnallocated =
-        transactions.reduce((total, trans) => total + trans.amount, 0) -
+        (transactions.reduce((total, { amount }) => total + amount, 0) ?? 0) -
         totalAllocated;
 
     return (

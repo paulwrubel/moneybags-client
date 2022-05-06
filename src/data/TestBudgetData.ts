@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 
 import { Budget } from "models/Budget";
 
+const MAY_2022 = dayjs("2022-05-01", "YYYY-MM-DD").unix();
+
 const TestBudgetData: Budget = {
     id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
     name: "Test",
@@ -27,36 +29,28 @@ const TestBudgetData: Budget = {
             groupID: "ecfba38a-b180-42d2-b3d2-f5ebd09a2586",
             name: "Cash",
             sort: 0,
-            previousBalance: 0,
-            allocated: 0,
-            activity: 0,
+            allocations: [{ month: MAY_2022, amount: 0 }],
         },
         {
             id: "20d3e464-253e-4e30-a867-0d844b0cc051",
             groupID: "ecfba38a-b180-42d2-b3d2-f5ebd09a2586",
             name: "Credit Card",
             sort: 1,
-            previousBalance: 0,
-            allocated: 0,
-            activity: 0,
+            allocations: [{ month: MAY_2022, amount: 0 }],
         },
         {
             id: "6a433025-024e-4fca-a3f9-0a47b2bed180",
             groupID: "15ea8126-0ac8-4ec0-a7f4-e4571b0bb632",
             name: "Expenses",
             sort: 0,
-            previousBalance: 0,
-            allocated: 0,
-            activity: 0,
+            allocations: [{ month: MAY_2022, amount: 0 }],
         },
         {
             id: "f18973aa-7805-4bc9-be9a-8ec71f595eb8",
             groupID: "15ea8126-0ac8-4ec0-a7f4-e4571b0bb632",
             name: "Materials",
             sort: 1,
-            previousBalance: 0,
-            allocated: 0,
-            activity: 0,
+            allocations: [{ month: MAY_2022, amount: 0 }],
         },
     ],
     // accounts: [

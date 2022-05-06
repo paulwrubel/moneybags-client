@@ -14,17 +14,13 @@ import { v4 as uuid } from "uuid";
 
 import ViewsPanel from "components/ViewsPanel";
 import { setBudget } from "data/BudgetSlice";
+import { saveLock, saveUnlock, setActiveBudgetID } from "data/CoreSlice";
 import {
     useActiveBudgetHeader,
     useAppDispatch,
     useBudgetHeaders,
 } from "data/Hooks";
-import {
-    addBudgetHeader,
-    saveLock,
-    saveUnlock,
-    setActiveBudgetID,
-} from "data/MetadataSlice";
+import { addBudgetHeader } from "data/MetadataSlice";
 import type { AppDispatch } from "data/Store";
 import { BudgetHeader, Budget as BudgetModel } from "models/Budget";
 import Loading from "pages/Loading";
@@ -52,9 +48,7 @@ function InitDefaultBudget(header: BudgetHeader): BudgetModel {
                 name: "Initial Balance",
                 sort: 0,
 
-                previousBalance: 0,
-                allocated: 0,
-                activity: 0,
+                allocations: [],
             },
         ],
     };

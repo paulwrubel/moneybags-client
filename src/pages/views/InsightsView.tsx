@@ -22,7 +22,11 @@ const InsightsView = () => {
                             justifyContent: "center",
                         }}
                     >
-                        <Typography align="center" fontStyle="italic">
+                        <Typography
+                            variant="h5"
+                            align="center"
+                            fontStyle="italic"
+                        >
                             INSIGHTS COMING SOON!
                         </Typography>
                     </Box>

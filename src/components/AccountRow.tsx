@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Box, Paper, SxProps, Typography } from "@mui/material";
 
 import { useAccount, useTransactionsByAccountID } from "data/Hooks";
+import { formatCurrencyCents } from "Utils";
 
 const Item = ({
     children,
@@ -58,7 +59,7 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
                     </Item>
                     <Item sx={{}}>
                         <Typography sx={{ textAlign: "right" }}>
-                            {balance}
+                            {formatCurrencyCents(balance)}
                         </Typography>
                     </Item>
                 </Box>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import TextField, { TextFieldProps } from "@mui/material/TextField";
 
@@ -15,6 +15,10 @@ function SolidNumericTextField({
     const [valueInput, setValueInput] = useState(
         formatCurrencyCents(value, { sign: "" }),
     );
+
+    useEffect(() => {
+        setValueInput(formatCurrencyCents(value, { sign: "" }));
+    }, [value]);
 
     const handleKeypress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         // console.log(event.key);

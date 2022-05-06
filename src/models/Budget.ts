@@ -4,9 +4,7 @@ export interface Category {
     name: string;
     sort: number;
 
-    previousBalance: number;
-    allocated: number;
-    activity: number;
+    allocations: { amount: number; month: number }[];
 }
 
 export interface CategoryGroup {

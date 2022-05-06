@@ -1,8 +1,9 @@
-import { Grid, Paper } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 
 import CategoryGroupList from "components/CategoryGroupList";
 import CategoryHeader from "components/CategoryHeader";
 import ContextPanel from "components/ContextPanel";
+import MonthHeader from "components/MonthHeader";
 
 const AllocationsView: React.FC = () => {
     return (
@@ -19,8 +20,11 @@ const AllocationsView: React.FC = () => {
                     }}
                     // color="blue"
                 >
-                    <CategoryHeader />
-                    <CategoryGroupList />
+                    <Box sx={{ display: "flex", flexDirection: "column" }}>
+                        <MonthHeader />
+                        <CategoryHeader />
+                        <CategoryGroupList />
+                    </Box>
                 </Paper>
             </Grid>
             <Grid item xs={3}>
