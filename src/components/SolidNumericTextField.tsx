@@ -35,8 +35,10 @@ function SolidNumericTextField({
 
     const handleBlur = () => {
         // console.log("blurring!");
-        const preValue = valueInput.replace(",", "");
-        let value = parseFloat(preValue);
+        let valueString = valueInput.replaceAll(",", "");
+        valueString = valueString.replaceAll(/[^-()\d+*/.]/g, "");
+
+        value = Function(`"use strict";return (${valueString})`)();
         if (isNaN(value)) {
             value = 0;
         }

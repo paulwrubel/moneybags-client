@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 
-import { Box, Paper, SxProps, Typography } from "@mui/material";
+import { Box, Button, Paper, SxProps, Typography } from "@mui/material";
+
+import { Link } from "react-router-dom";
 
 import { useAccount, useTransactionsByAccountID } from "data/Hooks";
+import { Account } from "models/Budget";
 import { formatCurrencyCents } from "Utils";
 
 const Item = ({
@@ -16,7 +19,7 @@ const Item = ({
 };
 
 const AccountRow: React.FC<{ id: string }> = ({ id }) => {
-    const account = useAccount(id);
+    const account = useAccount(id) as Account;
 
     // const allTransactions = useTransactions();
     const transactions = useTransactionsByAccountID(id);
@@ -43,26 +46,41 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
         //     ))}
         // </>
         <>
-            <Paper square elevation={0}>
-                <Box
+            <Paper
+                square
+                elevation={0}
+                sx={{ backgroundColor: "primary.light" }}
+            >
+                <Button
+                    to={`../accounts/${id}`}
+                    component={Link}
                     sx={{
+                        p: 1,
                         width: 1,
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
+                        textTransform: "none",
+                        color: "black",
                     }}
                 >
-                    <Item sx={{ flexGrow: 1 }}>
-                        <Typography sx={{ textAlign: "left" }}>
-                            {account.name}
-                        </Typography>
-                    </Item>
-                    <Item sx={{}}>
-                        <Typography sx={{ textAlign: "right" }}>
-                            {formatCurrencyCents(balance)}
-                        </Typography>
-                    </Item>
-                </Box>
+                    <Box
+                        sx={{
+                            width: 1,
+                            display: "flex",
+                            flexDirection: "row",
+                            justifyContent: "space-between",
+                        }}
+                    >
+                        <Item sx={{ flexGrow: 1 }}>
+                            <Typography sx={{ textAlign: "left" }}>
+                                {account.name}
+                            </Typography>
+                        </Item>
+                        <Item sx={{}}>
+                            <Typography sx={{ textAlign: "right" }}>
+                                {formatCurrencyCents(balance)}
+                            </Typography>
+                        </Item>
+                    </Box>
+                </Button>
             </Paper>
         </>
     );

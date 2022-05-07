@@ -24,7 +24,7 @@ const Item = ({
 //     );
 // };
 
-const TransactionsHeader = () => {
+const TransactionsHeader = ({ all }: { all: boolean }) => {
     return (
         <Paper square elevation={1}>
             <Box
@@ -34,15 +34,20 @@ const TransactionsHeader = () => {
                     alignItems: "center",
                 }}
             >
+                {all && (
+                    <Item sx={{ width: 0.2 }}>
+                        <Typography>Account</Typography>
+                    </Item>
+                )}
                 <Item sx={{ width: 0.2 }}>
                     <Typography>Date</Typography>
                 </Item>
                 <Divider orientation="vertical" flexItem />
-                <Item sx={{ width: 0.3 }}>
+                <Item sx={{ width: all ? 0.2 : 0.3 }}>
                     <Typography>Category</Typography>
                 </Item>
                 <Divider orientation="vertical" flexItem />
-                <Item sx={{ width: 0.35 }}>
+                <Item sx={{ width: all ? 0.25 : 0.35 }}>
                     <Typography>Note</Typography>
                 </Item>
                 <Divider orientation="vertical" flexItem />

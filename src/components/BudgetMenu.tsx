@@ -39,8 +39,18 @@ const BudgetMenu: React.FC<{
                         to={`/${id}`}
                         component={Link}
                         key={id}
+                        sx={{ color: "black" }}
                     >
+                        {/* <Box
+                            sx={{
+                                width: 1,
+                                display: "flex",
+                                justifyContent: "space-between",
+                                alignItems: "center",
+                            }}
+                        > */}
                         <Typography>{name}</Typography>
+                        {/* </Box> */}
                     </MenuItem>
                 ))}
                 <Divider />

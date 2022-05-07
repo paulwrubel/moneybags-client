@@ -7,7 +7,9 @@ import IsBetween from "dayjs/plugin/isBetween";
 import {
     useSelectedMonth,
     useTotalActivityByMonth,
+    useTotalAllocated,
     useTotalAllocatedByMonth,
+    useTotalAllocatedSoFar,
     useTotalBalanceByMonth,
     useTransactions,
 } from "data/Hooks";
@@ -22,11 +24,15 @@ const ContextPanel: React.FC = () => {
 
     const totalBalance = useTotalBalanceByMonth(selectedMonth);
     const totalActivity = useTotalActivityByMonth(selectedMonth);
-    const totalAllocated = useTotalAllocatedByMonth(selectedMonth);
+    const totalAllocated = useTotalAllocated();
+    const totalAllocatedThisMonth = useTotalAllocatedByMonth(selectedMonth);
+    const totalAllocatedSoFar = useTotalAllocatedSoFar(selectedMonth);
 
     const totalUnallocated =
         (transactions.reduce((total, { amount }) => total + amount, 0) ?? 0) -
         totalAllocated;
+
+    const totalAllocatedInFuture = totalAllocated - totalAllocatedSoFar;
 
     return (
         <Paper
@@ -78,6 +84,15 @@ const ContextPanel: React.FC = () => {
                         {totalUnallocated < 0 && (
                             <Typography>Overallocated Funds</Typography>
                         )}
+                        {totalUnallocated !== 0 &&
+                            totalAllocatedInFuture !== 0 && (
+                                <Typography variant="subtitle2">
+                                    {formatCurrencyCents(
+                                        totalAllocatedInFuture,
+                                    )}{" "}
+                                    allocated in the future
+                                </Typography>
+                            )}
                     </Box>
                 </Paper>
                 <Paper
@@ -104,7 +119,7 @@ const ContextPanel: React.FC = () => {
                         >
                             <Typography>Total Allocated</Typography>
                             <Typography>
-                                {formatCurrencyCents(totalAllocated)}
+                                {formatCurrencyCents(totalAllocatedThisMonth)}
                             </Typography>
                         </Box>
                         <Box

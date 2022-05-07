@@ -7,6 +7,7 @@ const TRIADIC = "#d10289";
 const NEUTRAL = "#DDDDDD";
 
 const Theme = createTheme({
+    spacing: 8,
     palette: {
         primary: {
             main: lightBlue[700],

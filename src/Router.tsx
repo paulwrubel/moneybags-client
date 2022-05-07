@@ -13,7 +13,7 @@ const Router: React.FC = () => {
         <BrowserRouter>
             <Routes>
                 <Route
-                    path="/"
+                    index
                     element={
                         activeBudgetID ? (
                             <Navigate to={`/${activeBudgetID}`} />

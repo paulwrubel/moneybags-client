@@ -149,7 +149,7 @@ const Budget: React.FC<{
                     }
                 />
                 <Route
-                    path="accounts"
+                    path="accounts/*"
                     element={
                         <Grid container sx={{ height: "100vh" }}>
                             <Grid item xs={3}>

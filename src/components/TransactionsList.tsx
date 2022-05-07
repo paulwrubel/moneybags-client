@@ -2,7 +2,13 @@ import { Box, SxProps, Typography } from "@mui/material";
 
 import dayjs from "dayjs";
 
-import { useCategoriesIncludeSystem, useTransactions } from "data/Hooks";
+import TransactionRow from "components/TransactionRow";
+import {
+    useAccount,
+    useCategoriesIncludeSystem,
+    useTransactions,
+} from "data/Hooks";
+import { Account } from "models/Budget";
 
 const Item = ({
     children,
@@ -14,9 +20,13 @@ const Item = ({
     return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
 };
 
-const TransactionsList = () => {
-    const transactions = useTransactions();
+const TransactionsList = ({ account }: { account?: Account }) => {
+    const allTransactions = useTransactions();
     const categories = useCategoriesIncludeSystem();
+
+    const transactions = account
+        ? allTransactions.filter(({ accountID }) => accountID === account.id)
+        : allTransactions;
 
     return (
         // <Paper square elevation={0}>
@@ -27,42 +37,55 @@ const TransactionsList = () => {
                 alignItems: "stretch",
             }}
         >
-            {transactions.map(
-                ({ id, categoryID, timestamp, note, amount }, index) => (
-                    <Box
-                        key={id}
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            // mx: 1,
-                            width: 1,
-                            backgroundColor:
-                                index % 2 === 0 ? "neutral.light" : "white",
-                        }}
-                    >
-                        <Item sx={{ width: 0.2 }}>
-                            <Typography>
-                                {dayjs(timestamp).format("YYYY-MM-DD")}
-                            </Typography>
-                        </Item>
-                        <Item sx={{ width: 0.3 }}>
-                            <Typography>
-                                {
-                                    categories.find(
-                                        ({ id }) => id === categoryID,
-                                    )?.name
-                                }
-                            </Typography>
-                        </Item>
-                        <Item sx={{ width: 0.35 }}>
-                            <Typography>{note}</Typography>
-                        </Item>
-                        <Item sx={{ width: 0.15 }}>
-                            <Typography>{amount}</Typography>
-                        </Item>
-                    </Box>
-                ),
-            )}
+            {transactions.map((transaction, index) => {
+                return (
+                    <TransactionRow
+                        showAccount={!account}
+                        key={transaction.id}
+                        index={index}
+                        transaction={transaction}
+                    />
+                );
+                // return (
+                //     <Box
+                //         key={id}
+                //         sx={{
+                //             display: "flex",
+                //             flexDirection: "row",
+                //             // mx: 1,
+                //             width: 1,
+                //             backgroundColor:
+                //                 index % 2 === 0 ? "neutral.light" : "white",
+                //         }}
+                //     >
+                //         {!account && (
+                //             <Item sx={{ width: 0.2 }}>
+                //                 <Typography>{tAccount.name}</Typography>
+                //             </Item>
+                //         )}
+                //         <Item sx={{ width: 0.2 }}>
+                //             <Typography>
+                //                 {dayjs(timestamp).format("YYYY-MM-DD")}
+                //             </Typography>
+                //         </Item>
+                //         <Item sx={{ width: account ? 0.3 : 0.2 }}>
+                //             <Typography>
+                //                 {
+                //                     categories.find(
+                //                         ({ id }) => id === categoryID,
+                //                     )?.name
+                //                 }
+                //             </Typography>
+                //         </Item>
+                //         <Item sx={{ width: account ? 0.35 : 0.25 }}>
+                //             <Typography>{note}</Typography>
+                //         </Item>
+                //         <Item sx={{ width: 0.15 }}>
+                //             <Typography>{amount}</Typography>
+                //         </Item>
+                //     </Box>
+                // );
+            })}
         </Box>
         // </Paper>
     );

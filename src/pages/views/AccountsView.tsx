@@ -1,7 +1,8 @@
 import { Grid, Paper } from "@mui/material";
 
-import TransactionsHeader from "components/TransactionsHeader";
-import TransactionsList from "components/TransactionsList";
+import { Navigate, Route, Routes } from "react-router-dom";
+
+import TransactionsPanel from "components/TransactionsPanel";
 
 const AccountsView: React.FC = () => {
     return (
@@ -19,8 +20,17 @@ const AccountsView: React.FC = () => {
                     }}
                     // color="blue"
                 >
-                    <TransactionsHeader />
-                    <TransactionsList />
+                    <Routes>
+                        <Route index element={<TransactionsPanel />}></Route>
+                        <Route
+                            path=":accountID"
+                            element={<TransactionsPanel />}
+                        ></Route>
+                        <Route
+                            path="*"
+                            element={<Navigate to="../../accounts" />}
+                        ></Route>
+                    </Routes>
                 </Paper>
             </Grid>
         </>

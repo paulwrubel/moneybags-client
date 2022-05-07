@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-identical-functions */
 import dayjs, { unix } from "dayjs";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
@@ -31,11 +32,8 @@ export const useActiveBudgetHeader = () =>
     );
 
 export const useAccount = (id: string) =>
-    useAppSelector(
-        (state) =>
-            state.budget?.accounts?.find(
-                (account) => account.id === id,
-            ) as Account,
+    useAppSelector((state) =>
+        state.budget?.accounts?.find((account) => account.id === id),
     );
 
 export const useCategories = () =>
@@ -184,6 +182,40 @@ export const useTotalAllocatedByMonth = (month: number) =>
                                 (aTotal, { amount }) => aTotal + amount,
                                 0,
                             ) ?? 0,
+                0,
+            ) ?? 0,
+    );
+
+export const useTotalAllocatedSoFar = (month: number) =>
+    useAppSelector(
+        (state) =>
+            state.budget?.categories?.reduce(
+                (total, { allocations }) =>
+                    total +
+                        allocations
+                            ?.filter(({ month: catMonth }) =>
+                                unix(catMonth).isBefore(
+                                    unix(month).add(1, "month"),
+                                ),
+                            )
+                            ?.reduce(
+                                (aTotal, { amount }) => aTotal + amount,
+                                0,
+                            ) ?? 0,
+                0,
+            ) ?? 0,
+    );
+
+export const useTotalAllocated = () =>
+    useAppSelector(
+        (state) =>
+            state.budget?.categories?.reduce(
+                (total, { allocations }) =>
+                    total +
+                        allocations?.reduce(
+                            (aTotal, { amount }) => aTotal + amount,
+                            0,
+                        ) ?? 0,
                 0,
             ) ?? 0,
     );

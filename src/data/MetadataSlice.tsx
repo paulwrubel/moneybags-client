@@ -43,12 +43,22 @@ export const metadataSlice = createSlice({
                 };
             },
         },
+        setBudgetHeaderName: (
+            state,
+            action: PayloadAction<{ id: string; name: string }>,
+        ) => {
+            (
+                state.budgetHeaders.find(
+                    ({ id }) => id === action.payload.id,
+                ) as BudgetHeader
+            ).name = action.payload.name;
+        },
     },
 });
 
 export type { MetadataState };
 
 // Action creators are generated for each case reducer function
-export const { addBudgetHeader } = metadataSlice.actions;
+export const { addBudgetHeader, setBudgetHeaderName } = metadataSlice.actions;
 
 export default metadataSlice.reducer;
