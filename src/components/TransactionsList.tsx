@@ -1,28 +1,11 @@
-import { Box, SxProps, Typography } from "@mui/material";
-
-import dayjs from "dayjs";
+import { Box } from "@mui/material";
 
 import TransactionRow from "components/TransactionRow";
-import {
-    useAccount,
-    useCategoriesIncludeSystem,
-    useTransactions,
-} from "data/Hooks";
+import { useTransactions } from "data/Hooks";
 import { Account } from "models/Budget";
-
-const Item = ({
-    children,
-    sx,
-}: {
-    children: React.ReactNode;
-    sx?: SxProps;
-}) => {
-    return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
-};
 
 const TransactionsList = ({ account }: { account?: Account }) => {
     const allTransactions = useTransactions();
-    const categories = useCategoriesIncludeSystem();
 
     const transactions = account
         ? allTransactions.filter(({ accountID }) => accountID === account.id)

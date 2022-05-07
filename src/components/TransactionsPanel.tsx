@@ -1,5 +1,3 @@
-import { Typography } from "@mui/material";
-
 import { Navigate, useParams } from "react-router-dom";
 
 import TransactionsHeader from "components/TransactionsHeader";

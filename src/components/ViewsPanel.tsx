@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Box, Divider, Paper, SxProps, Typography } from "@mui/material";
+import { Box, Divider, Paper, SxProps } from "@mui/material";
 
 import AccountList from "components/AccountList";
 import AddAccountButton from "components/AddAccountButton";
