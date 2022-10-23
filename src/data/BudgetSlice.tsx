@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
-import { Budget } from "models/Budget";
+import { Budget, Category } from "models/Budget";
 
 const initialState: Budget | null = null;
 
@@ -131,6 +131,22 @@ export const budgetSlice = createSlice({
                 };
             },
         },
+        setCategoryName: (
+            state: Budget | null,
+            action: PayloadAction<{
+                id: string;
+                name: string;
+            }>,
+        ) => {
+            if (!state || !state.categories) {
+                return;
+            }
+            (
+                state.categories.find(
+                    (cat) => cat.id === action.payload.id,
+                ) as Category
+            ).name = action.payload.name;
+        },
         addAccount: {
             reducer: (
                 state: Budget | null,
@@ -199,6 +215,7 @@ export const {
     setAllocated,
     addCategory,
     addCategoryGroup,
+    setCategoryName,
     addAccount,
 } = budgetSlice.actions;
 

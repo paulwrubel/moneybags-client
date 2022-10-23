@@ -51,6 +51,9 @@ function SolidNumericTextField({
         setValueInput(event.target.value);
     };
 
+    const { inputProps, ...textFieldPropsRest } = textFieldProps;
+    const { sx: inputSx, ...inputPropsRest } = inputProps || {};
+
     return (
         <TextField
             onChange={handleChange}
@@ -58,8 +61,11 @@ function SolidNumericTextField({
             onFocus={handleFocus}
             onBlur={handleBlur}
             value={valueInput}
-            inputProps={{ sx: { textAlign: "right" } }}
-            {...textFieldProps}
+            inputProps={{
+                sx: { textAlign: "right", ...inputSx },
+                ...inputPropsRest,
+            }}
+            {...textFieldPropsRest}
         />
     );
 }

@@ -1,4 +1,5 @@
-import { Box, Divider, Paper, SxProps, Typography } from "@mui/material";
+import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp";
+import { Box, Button, Paper, SxProps } from "@mui/material";
 
 const Item = ({
     children,
@@ -10,49 +11,47 @@ const Item = ({
     return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
 };
 
-// const Divider = () => {
-//     return (
-//         <Box
-//             sx={{
-//                 alignSelf: "stretch",
-//                 mx: 1,
-//                 border: "1px solid",
-//                 borderColor: "gray",
-//                 // borderRadius: "full",
-//             }}
-//         />
-//     );
-// };
-
-const TransactionsHeader = ({ all }: { all: boolean }) => {
+const TransactionsHeader = ({
+    setIsAddingTransaction,
+}: {
+    setIsAddingTransaction: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
     return (
-        <Paper square elevation={1}>
+        <Paper
+            square
+            elevation={0}
+            sx={{
+                boxSizing: "border-box",
+                width: 1,
+                p: 1,
+                backgroundColor: "primary.main",
+                height: "64px",
+                color: "white",
+            }}
+        >
             <Box
                 sx={{
+                    // boxSizing: "border-box",
+                    // width: 1,
+                    height: 1,
+                    // minHeight: "inherit",
                     display: "flex",
                     flexDirection: "row",
                     alignItems: "center",
+                    justifyContent: "space-between",
                 }}
             >
-                {all && (
-                    <Item sx={{ width: 0.2 }}>
-                        <Typography>Account</Typography>
-                    </Item>
-                )}
-                <Item sx={{ width: 0.2 }}>
-                    <Typography>Date</Typography>
-                </Item>
-                <Divider orientation="vertical" flexItem />
-                <Item sx={{ width: all ? 0.2 : 0.3 }}>
-                    <Typography>Category</Typography>
-                </Item>
-                <Divider orientation="vertical" flexItem />
-                <Item sx={{ width: all ? 0.25 : 0.35 }}>
-                    <Typography>Note</Typography>
-                </Item>
-                <Divider orientation="vertical" flexItem />
-                <Item sx={{ width: 0.15 }}>
-                    <Typography>Amount</Typography>
+                <Item sx={{ flexGrow: 1 }}>
+                    <Button
+                        onClick={() => {
+                            setIsAddingTransaction(true);
+                        }}
+                        size="small"
+                        startIcon={<AddCircleOutlineSharpIcon />}
+                        sx={{ textTransform: "none", color: "black" }}
+                    >
+                        Add transaction
+                    </Button>
                 </Item>
             </Box>
         </Paper>
