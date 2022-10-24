@@ -4,7 +4,9 @@ import { Box, SxProps, TextField } from "@mui/material";
 
 import dayjs from "dayjs";
 
+import SolidAutocomplete from "components/SolidAutocomplete";
 import SolidNumericTextField from "components/SolidNumericTextField";
+import SolidTextField from "components/SolidTextField";
 import { Account } from "models/Budget";
 
 const Item = ({
@@ -30,7 +32,8 @@ const AddTransactionRow = ({
 
     const [accountName, setAccountName] = useState("");
     const [timestamp, setTimestamp] = useState(dayjs().startOf("day"));
-    const [categoryName, setCategoryName] = useState("");
+    const [categoryName, setCategoryName] = useState<string | null>("");
+    const [categoryNameInput, setCategoryNameInput] = useState("");
     const [note, setNote] = useState("");
     const [amount, setAmount] = useState(0);
 
@@ -43,49 +46,68 @@ const AddTransactionRow = ({
                 flexDirection: "row",
                 // mx: 1,
                 width: 1,
-                backgroundColor: "white",
+                height: 30,
+                // backgroundColor: "white",
             }}
         >
             {showAccount && (
-                <Item sx={{ width: columnRatios[columnIndex++] }}>
-                    <TextField
+                <Item sx={{ width: columnRatios[columnIndex++], height: 1 }}>
+                    <SolidTextField
                         fullWidth
-                        margin="dense"
-                        label="Name"
+                        // margin="dense"
                         value={accountName}
-                        onChange={(event) => {
-                            setAccountName(event.target.value);
+                        setValue={(value) => {
+                            setAccountName(value);
                         }}
-                        sx={{ textAlign: "left" }}
+                        sx={{ height: 1 }}
+                        inputBaseSx={{ height: 1 }}
+                        inputProps={{ sx: { height: 1 } }}
                     />
                     {/* <Typography>{account.name}</Typography> */}
                 </Item>
             )}
-            <Item sx={{ width: columnRatios[columnIndex++] }}>
-                <TextField
+            <Item sx={{ width: columnRatios[columnIndex++], height: 1 }}>
+                <SolidTextField
                     fullWidth
-                    margin="dense"
-                    label="Name"
                     value={timestamp.format("YYYY-MM-DD")}
-                    onChange={(event) => {
-                        setTimestamp(dayjs(event.target.value));
+                    setValue={(value) => {
+                        setTimestamp(dayjs(value));
                     }}
-                    sx={{ textAlign: "left" }}
+                    sx={{ height: 1 }}
+                    inputBaseSx={{ height: 1 }}
                 />
                 {/* <Typography>
                     {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
                 </Typography> */}
             </Item>
-            <Item sx={{ width: columnRatios[columnIndex++] }}>
-                <TextField
+            <Item sx={{ height: 1, width: columnRatios[columnIndex++] }}>
+                <SolidAutocomplete
                     fullWidth
-                    margin="dense"
-                    label="Name"
+                    // label="Name"
                     value={categoryName}
-                    onChange={(event) => {
-                        setCategoryName(event.target.value);
+                    setValue={(value) => {
+                        setCategoryName(value);
                     }}
-                    sx={{ textAlign: "left" }}
+                    inputValue={categoryNameInput}
+                    setInputValue={(value) => {
+                        setCategoryNameInput(value);
+                    }}
+                    options={["Test 1", "Test 2", "Test 3"]}
+                    renderInput={(params) => (
+                        <TextField
+                            margin="dense"
+                            label="Category"
+                            sx={{ height: 1 }}
+                            {...params}
+                        />
+                    )}
+                    sx={{
+                        height: 1,
+                        "& .MuiInputBase-root": {
+                            // "& input": {
+                            height: 1,
+                        },
+                    }}
                 />
                 {/* <Typography>
                     {
@@ -96,15 +118,14 @@ const AddTransactionRow = ({
                 </Typography> */}
             </Item>
             <Item sx={{ width: columnRatios[columnIndex++] }}>
-                <TextField
+                <SolidTextField
                     fullWidth
-                    margin="dense"
-                    label="Name"
                     value={note}
-                    onChange={(event) => {
-                        setNote(event.target.value);
+                    setValue={(value) => {
+                        setNote(value);
                     }}
-                    sx={{ textAlign: "left" }}
+                    sx={{ height: 1 }}
+                    inputBaseSx={{ height: 1 }}
                 />
                 {/* <Typography>{transaction.note}</Typography> */}
             </Item>

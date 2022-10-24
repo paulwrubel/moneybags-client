@@ -23,6 +23,7 @@
     },
     "plugins": ["react", "@typescript-eslint", "prettier", "sonarjs", "import"],
     "rules": {
+        "comma-dangle": ["error", "always-multiline"],
         "no-empty-function": "warn",
         "@typescript-eslint/no-empty-function": ["warn"],
         "react/prop-types": ["off"],

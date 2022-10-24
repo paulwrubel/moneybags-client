@@ -34,7 +34,7 @@ const TransactionsLabelsRow = ({
     let columnIndex = 0;
 
     return (
-        <Paper square elevation={1}>
+        <Paper square elevation={1} sx={{ mb: 0.4 }}>
             <Box
                 sx={{
                     display: "flex",
@@ -43,9 +43,12 @@ const TransactionsLabelsRow = ({
                 }}
             >
                 {all && (
-                    <Item sx={{ width: columnRatios[columnIndex++] }}>
-                        <Typography>Account</Typography>
-                    </Item>
+                    <>
+                        <Item sx={{ width: columnRatios[columnIndex++] }}>
+                            <Typography>Account</Typography>
+                        </Item>
+                        <Divider orientation="vertical" flexItem />
+                    </>
                 )}
                 <Item sx={{ width: columnRatios[columnIndex++] }}>
                     <Typography>Date</Typography>
