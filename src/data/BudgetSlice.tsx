@@ -201,6 +201,62 @@ export const budgetSlice = createSlice({
                 };
             },
         },
+        addTransaction: {
+            reducer: (
+                state: Budget | null,
+                action: PayloadAction<{
+                    id: string;
+                    accountID: string;
+                    timestamp: number;
+                    categoryID: string;
+                    note?: string;
+                    amount: number;
+                }>,
+            ) => {
+                console.log(action.payload);
+                if (!state) {
+                    return;
+                }
+                // check if we need to create the transactions list
+                if (!state.transactions) {
+                    state.transactions = [];
+                }
+                // then, create a new transaction
+                state.transactions.push({
+                    id: action.payload.id,
+                    accountID: action.payload.accountID,
+                    categoryID: action.payload.categoryID,
+                    timestamp: action.payload.timestamp,
+                    note: action.payload.note,
+                    amount: action.payload.amount,
+                });
+            },
+            prepare: ({
+                accountID,
+                timestamp,
+                categoryID,
+                note,
+                amount,
+            }: {
+                accountID: string;
+                timestamp: number;
+                categoryID: string;
+                note?: string;
+                amount: number;
+            }) => {
+                // console.log(initialBalance);
+                return {
+                    payload: {
+                        id: uuid(),
+                        accountID,
+                        categoryID,
+                        timestamp,
+                        note,
+                        amount,
+                    },
+                };
+            },
+        },
     },
 });
 
@@ -217,6 +273,7 @@ export const {
     addCategoryGroup,
     setCategoryName,
     addAccount,
+    addTransaction,
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

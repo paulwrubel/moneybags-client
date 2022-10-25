@@ -23,6 +23,9 @@ export const useAccountIDs = () =>
         (state.budget?.accounts ?? []).map((account) => account.id),
     );
 
+export const useAccounts = () =>
+    useAppSelector((state) => state.budget?.accounts ?? []);
+
 export const useActiveBudgetHeader = () =>
     useAppSelector((state) =>
         state.metadata.budgetHeaders?.find(

@@ -9,19 +9,21 @@ const SolidTextField = ({
     ...textFieldProps
 }: {
     value: string;
-    setValue: (arg0: string) => void;
+    setValue?: (arg0: string) => void;
     inputBaseSx?: SystemStyleObject;
 } & TextFieldProps) => {
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setValue(event.target.value);
+        if (setValue) {
+            setValue(event.target.value);
+        }
     };
 
-    const { sx, inputProps, ...textFieldPropsRest } = textFieldProps;
+    const { sx, inputProps, onChange, ...textFieldPropsRest } = textFieldProps;
     const { sx: inputSx, ...inputPropsRest } = inputProps || {};
 
     return (
         <TextField
-            onChange={handleChange}
+            onChange={onChange || handleChange}
             // onKeyDown={handleKeypress}
             // onFocus={handleFocus}
             // onBlur={handleBlur}

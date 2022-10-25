@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { forwardRef, useState } from "react";
+
+import { Collapse } from "@mui/material";
 
 import { Navigate, useParams } from "react-router-dom";
 
@@ -23,8 +25,8 @@ const TransactionsPanel = () => {
     const showAllTransactions = !accountIDParam;
 
     const columnRatios = showAllTransactions
-        ? [0.2, 0.2, 0.25, 0.15]
-        : [0.2, 0.2, 0.3, 0.35, 0.15];
+        ? [0.18, 0.1, 0.2, 0.35, 0.17]
+        : [0.1, 0.2, 0.53, 0.17];
 
     return (
         <>
@@ -35,13 +37,16 @@ const TransactionsPanel = () => {
                 all={showAllTransactions}
                 columnRatios={columnRatios}
             />
-            {isAddingTransaction && (
+            {/* {isAddingTransaction && ( */}
+            <Collapse in={isAddingTransaction}>
                 <AddTransactionRow
                     account={account}
                     columnRatios={columnRatios}
+                    isAddingTransaction={isAddingTransaction}
                     setIsAddingTransaction={setIsAddingTransaction}
                 />
-            )}
+            </Collapse>
+            {/* )} */}
             <TransactionsList account={account} columnRatios={columnRatios} />
         </>
     );
