@@ -6,27 +6,29 @@ import Autocomplete, {
     AutocompleteRenderInputParams,
 } from "@mui/material/Autocomplete";
 
-const SolidAutocomplete = ({
+const SolidAutocomplete = <T,>({
     value,
     setValue,
     inputValue,
     setInputValue,
     options,
+    getOptionLabel,
     renderInput,
     ...autocompleteProps
 }: {
-    value: string | null;
-    setValue: (arg0: string | null) => void;
+    value: T | null;
+    setValue: (arg0: T | null) => void;
     inputValue: string;
     setInputValue: (arg0: string) => void;
-    options: string[] | { label: string }[];
+    options: T[];
+    getOptionLabel: (option: T) => string;
     renderInput: (params: AutocompleteRenderInputParams) => React.ReactNode;
-} & AutocompleteProps<string, undefined, undefined, undefined>) => {
+} & AutocompleteProps<T, undefined, undefined, undefined>) => {
     const handleChange = (
         event: React.SyntheticEvent<Element, Event>,
-        value: string | null,
+        value: T | null,
         reason: AutocompleteChangeReason,
-        details?: AutocompleteChangeDetails<string> | undefined,
+        details?: AutocompleteChangeDetails<T> | undefined,
     ) => {
         setValue(value);
     };
@@ -45,10 +47,12 @@ const SolidAutocomplete = ({
     return (
         <Autocomplete
             value={value}
+            // onChange={handleChange}
             onChange={handleChange}
             inputValue={inputValue}
             onInputChange={handleInputChange}
             options={options}
+            getOptionLabel={getOptionLabel}
             renderInput={renderInput}
             {...autocompleteProps}
         />

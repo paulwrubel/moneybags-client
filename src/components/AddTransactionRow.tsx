@@ -7,15 +7,16 @@ import {
     SxProps,
     TextField,
 } from "@mui/material";
-import { AutocompleteOption } from "@mui/material/Autocomplete";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
 import SolidAutocomplete from "components/SolidAutocomplete";
 import SolidNumericTextField from "components/SolidNumericTextField";
 import SolidTextField from "components/SolidTextField";
-import { useAccounts } from "data/Hooks";
-import { Account } from "models/Budget";
+import { addTransaction } from "data/BudgetSlice";
+import { useAccounts, useAppDispatch, useCategories } from "data/Hooks";
+import { Account, Category } from "models/Budget";
 
 const Item = ({
     children,
@@ -37,33 +38,36 @@ const AddTransactionRow = ({
     columnRatios: number[];
     isAddingTransaction: boolean;
     setIsAddingTransaction: React.Dispatch<React.SetStateAction<boolean>>;
+    // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
     const showAccount = !account;
 
     // data model stuff
+    const dispatch = useAppDispatch();
+
     const accounts = useAccounts() as Account[];
-    const accountOptions = accounts.map((a) => {
-        return {
-            // id: a.id,
-            label: a.name,
-        };
-    }) as AutocompleteOption[];
+
+    const categories = useCategories() as Category[];
 
     // ui state stuff
-    const [accountName, setAccountName] = useState<string | null>("");
+    const [selectedAccount, setSelectedAccount] = useState<Account | null>(
+        null,
+    );
     const [accountNameInput, setAccountNameInput] = useState("");
     const [timestamp, setTimestamp] = useState(dayjs().startOf("day"));
-    const [categoryName, setCategoryName] = useState<string | null>("");
+    const [selectedCategory, setSelectedCategory] = useState<Category | null>(
+        null,
+    );
     const [categoryNameInput, setCategoryNameInput] = useState("");
     const [note, setNote] = useState("");
     const [amount, setAmount] = useState(0);
 
-    const [isAccountError, setIsAccountError] = useState(false);
-    const [isTimestampError, setIsTimestampError] = useState(false);
-    const [isCategoryError, setIsCategoryError] = useState(false);
-    const [isAmountError, setIsTAmountError] = useState(false);
-
-    const [hadInteraction, setHadInteraction] = useState(false);
+    const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
+    const [hadTimestampInteraction, setHadTimestampInteraction] =
+        useState(false);
+    const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
+    const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
+    const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
 
     const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
         useState(false);
@@ -71,6 +75,48 @@ const AddTransactionRow = ({
         useState(false);
 
     let columnIndex = 0;
+
+    const hadInteraction = () => {
+        return (
+            hadAccountInteraction ||
+            hadTimestampInteraction ||
+            hadCategoryInteraction ||
+            hadNoteInteraction ||
+            hadAmountInteraction
+        );
+    };
+
+    const isAccountError = () => hadInteraction() && !selectedAccount;
+    const isTimestampError = () => false;
+    const isCategoryError = () => hadInteraction() && !selectedCategory;
+    const isNoteError = () => false;
+    const isAmountError = () => false;
+
+    const isInErrorState = () => {
+        return (
+            isAccountError() ||
+            isTimestampError() ||
+            isCategoryError() ||
+            isNoteError() ||
+            isAmountError()
+        );
+    };
+
+    const handleAddTransaction = () => {
+        // checkError();
+        if (!isInErrorState()) {
+            dispatch(
+                addTransaction({
+                    accountID: (selectedAccount as Account).id,
+                    timestamp: timestamp.startOf("day").unix(),
+                    categoryID: (selectedCategory as Category).id,
+                    note: note,
+                    amount: amount,
+                }),
+            );
+            close();
+        }
+    };
 
     const close = () => {
         setIsAddingTransaction(false);
@@ -114,19 +160,21 @@ const AddTransactionRow = ({
                             onClose={() => {
                                 setIsAccountAutocompleteOpen(false);
                             }}
-                            value={accountName}
+                            value={selectedAccount}
                             setValue={(value) => {
-                                setHadInteraction(true);
-                                setAccountName(value);
+                                setHadAccountInteraction(true);
+                                setSelectedAccount(value);
                             }}
                             inputValue={accountNameInput}
                             setInputValue={(value) => {
-                                setHadInteraction(true);
+                                setHadAccountInteraction(true);
                                 setAccountNameInput(value);
                             }}
-                            options={accountOptions}
+                            options={accounts}
+                            getOptionLabel={(o) => o.name}
                             renderInput={(params) => (
                                 <TextField
+                                    error={isAccountError()}
                                     sx={{
                                         height: 1,
                                     }}
@@ -157,17 +205,33 @@ const AddTransactionRow = ({
                     </Item>
                 )}
                 <Item sx={{ width: columnRatios[columnIndex++], height: 1 }}>
-                    <SolidTextField
+                    <DatePicker
+                        inputFormat="YYYY-MM-DD"
+                        value={timestamp}
+                        onChange={() => {
+                            setTimestamp(dayjs());
+                        }}
+                        renderInput={(params) => (
+                            <TextField
+                                error={isTimestampError()}
+                                sx={{
+                                    height: 1,
+                                }}
+                                {...params}
+                            />
+                        )}
+                    />
+                    {/* <SolidTextField
                         fullWidth
-                        error={isTimestampError}
+                        error={isTimestampError()}
                         value={timestamp.format("YYYY-MM-DD")}
                         setValue={(value) => {
-                            setHadInteraction(true);
+                            setHadTimestampInteraction(true);
                             setTimestamp(dayjs(value));
                         }}
                         sx={{ height: 1 }}
                         inputBaseSx={{ height: 1 }}
-                    />
+                    /> */}
                     {/* <Typography>
                     {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
                 </Typography> */}
@@ -177,29 +241,27 @@ const AddTransactionRow = ({
                         fullWidth
                         open={isCategoryAutocompleteOpen}
                         onOpen={() => {
-                            console.log("opening DIRECT");
                             setIsCategoryAutocompleteOpen(true);
-                            console.log("DONE OPENING");
                         }}
                         onClose={() => {
-                            console.log("closing DIRECT");
                             setIsCategoryAutocompleteOpen(false);
-                            console.log("DONE CLOSING");
                         }}
-                        value={categoryName}
+                        value={selectedCategory}
                         setValue={(value) => {
-                            setHadInteraction(true);
-                            setCategoryName(value);
+                            setHadCategoryInteraction(true);
+                            setSelectedCategory(value);
                         }}
                         inputValue={categoryNameInput}
                         setInputValue={(value) => {
-                            setHadInteraction(true);
+                            setHadCategoryInteraction(true);
                             setCategoryNameInput(value);
                         }}
-                        options={["Test 1", "Test 2", "Test 3"]}
+                        options={categories}
+                        getOptionLabel={(c) => c.name}
                         // eslint-disable-next-line sonarjs/no-identical-functions
                         renderInput={(params) => (
                             <TextField
+                                error={isCategoryError()}
                                 sx={{
                                     height: 1,
                                 }}
@@ -225,9 +287,10 @@ const AddTransactionRow = ({
                 <Item sx={{ width: columnRatios[columnIndex++] }}>
                     <SolidTextField
                         fullWidth
+                        error={isNoteError()}
                         value={note}
                         setValue={(value) => {
-                            setHadInteraction(true);
+                            setHadNoteInteraction(true);
                             setNote(value);
                         }}
                         sx={{ height: 1 }}
@@ -238,9 +301,10 @@ const AddTransactionRow = ({
                 <Item sx={{ width: columnRatios[columnIndex++] }}>
                     <SolidNumericTextField
                         fullWidth
+                        error={isAmountError()}
                         value={amount}
                         setValue={(value) => {
-                            setHadInteraction(true);
+                            setHadAmountInteraction(true);
                             setAmount(value);
                         }}
                         sx={{ height: 1 }}
@@ -268,7 +332,7 @@ const AddTransactionRow = ({
                         // color="contained"
                         variant="contained"
                         disableElevation
-                        onClick={() => {}}
+                        onClick={handleAddTransaction}
                         size="small"
                         sx={{ textTransform: "none", color: "black" }}
                     >
@@ -298,8 +362,8 @@ const AddTransactionRow = ({
     return isAddingTransaction ? (
         <ClickAwayListener
             onClickAway={() => {
-                console.log(hadInteraction);
-                if (!hadInteraction) {
+                console.log(hadInteraction());
+                if (!hadInteraction()) {
                     close();
                 }
             }}

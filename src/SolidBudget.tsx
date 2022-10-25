@@ -2,6 +2,8 @@
 // import { AuthProvider } from "auth/AuthProvider";
 // import { QueryClientProvider, QueryClient } from "react-query";
 import { ThemeProvider } from "@mui/material/styles";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Provider as ReduxStoreProvider } from "react-redux";
@@ -19,12 +21,14 @@ const SolidBudget: React.FC = () => {
         <>
             <ThemeProvider theme={Theme}>
                 <ReduxStoreProvider store={reduxStore}>
-                    <HelmetProvider>
-                        <Helmet>
-                            <title>SolidBudget</title>
-                        </Helmet>
-                        <Router />
-                    </HelmetProvider>
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <HelmetProvider>
+                            <Helmet>
+                                <title>SolidBudget</title>
+                            </Helmet>
+                            <Router />
+                        </HelmetProvider>
+                    </LocalizationProvider>
                 </ReduxStoreProvider>
             </ThemeProvider>
         </>
