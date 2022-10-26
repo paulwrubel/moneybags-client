@@ -34,7 +34,15 @@ const TransactionsLabelsRow = ({
     let columnIndex = 0;
 
     return (
-        <Paper square elevation={1} sx={{ mb: 0.4 }}>
+        <Paper
+            square
+            elevation={1}
+            sx={{
+                mb: 0.4,
+                position: "sticky",
+                top: 64,
+            }}
+        >
             <Box
                 sx={{
                     display: "flex",

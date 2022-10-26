@@ -26,17 +26,21 @@ const TransactionsList = ({
                 alignItems: "stretch",
             }}
         >
-            {transactions.map((transaction, index) => {
-                return (
-                    <TransactionRow
-                        showAccount={!account}
-                        columnRatios={columnRatios}
-                        key={transaction.id}
-                        index={index}
-                        transaction={transaction}
-                    />
-                );
-            })}
+            {transactions
+                .slice()
+                .sort((a, b) => a.timestamp - b.timestamp)
+                .reverse()
+                .map((transaction, index) => {
+                    return (
+                        <TransactionRow
+                            showAccount={!account}
+                            columnRatios={columnRatios}
+                            key={transaction.id}
+                            index={index}
+                            transaction={transaction}
+                        />
+                    );
+                })}
         </Box>
         // </Paper>
     );

@@ -178,7 +178,9 @@ export const budgetSlice = createSlice({
                     id: action.payload.transactionID,
                     accountID: action.payload.accountID,
                     categoryID: "__c_id_0__",
-                    timestamp: action.payload.createdTimestamp,
+                    timestamp: dayjs(action.payload.createdTimestamp)
+                        .startOf("day")
+                        .valueOf(),
                     amount: action.payload.initialBalance,
                 });
             },

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import {
     Box,
@@ -51,7 +51,7 @@ const AddTransactionRow = ({
 
     // ui state stuff
     const [selectedAccount, setSelectedAccount] = useState<Account | null>(
-        null,
+        account ?? null,
     );
     const [accountNameInput, setAccountNameInput] = useState("");
     const [timestamp, setTimestamp] = useState(dayjs().startOf("day"));
@@ -73,6 +73,10 @@ const AddTransactionRow = ({
         useState(false);
     const [isCategoryAutocompleteOpen, setIsCategoryAutocompleteOpen] =
         useState(false);
+
+    useEffect(() => {
+        setSelectedAccount(account ?? null);
+    }, [account]);
 
     let columnIndex = 0;
 
@@ -108,7 +112,7 @@ const AddTransactionRow = ({
             dispatch(
                 addTransaction({
                     accountID: (selectedAccount as Account).id,
-                    timestamp: timestamp.startOf("day").unix(),
+                    timestamp: timestamp.startOf("day").valueOf(),
                     categoryID: (selectedCategory as Category).id,
                     note: note,
                     amount: amount,
@@ -208,18 +212,23 @@ const AddTransactionRow = ({
                     <DatePicker
                         inputFormat="YYYY-MM-DD"
                         value={timestamp}
-                        onChange={() => {
-                            setTimestamp(dayjs());
+                        onChange={(value) => {
+                            setTimestamp(value ?? dayjs());
                         }}
                         renderInput={(params) => (
                             <TextField
                                 error={isTimestampError()}
                                 sx={{
                                     height: 1,
+                                    "& .MuiInputBase-root": {
+                                        // flexWrap: "nowrap",
+                                        height: 1,
+                                    },
                                 }}
                                 {...params}
                             />
                         )}
+                        // sx={{ height: 1 }}
                     />
                     {/* <SolidTextField
                         fullWidth

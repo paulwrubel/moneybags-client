@@ -11,7 +11,7 @@ import {
     Typography,
 } from "@mui/material";
 
-import dayjs, { unix } from "dayjs";
+import dayjs from "dayjs";
 
 import { setSelectedMonth } from "data/CoreSlice";
 import { useAppDispatch, useSelectedMonth } from "data/Hooks";
@@ -69,9 +69,9 @@ const MonthHeader = () => {
                                 onClick={() => {
                                     dispatch(
                                         setSelectedMonth(
-                                            unix(selectedMonth)
+                                            dayjs(selectedMonth)
                                                 .subtract(1, "month")
-                                                .unix(),
+                                                .valueOf(),
                                         ),
                                     );
                                 }}
@@ -82,7 +82,7 @@ const MonthHeader = () => {
                         </Item>
                         <Item>
                             <Typography variant="h6">
-                                {unix(selectedMonth).format("MMMM, YYYY")}
+                                {dayjs(selectedMonth).format("MMMM, YYYY")}
                             </Typography>
                         </Item>
                         <Item>
@@ -90,9 +90,9 @@ const MonthHeader = () => {
                                 onClick={() => {
                                     dispatch(
                                         setSelectedMonth(
-                                            unix(selectedMonth)
+                                            dayjs(selectedMonth)
                                                 .add(1, "month")
-                                                .unix(),
+                                                .valueOf(),
                                         ),
                                     );
                                 }}
@@ -109,7 +109,7 @@ const MonthHeader = () => {
                         onClick={() => {
                             dispatch(
                                 setSelectedMonth(
-                                    dayjs().startOf("month").unix(),
+                                    dayjs().startOf("month").valueOf(),
                                 ),
                             );
                         }}

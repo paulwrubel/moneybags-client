@@ -3,7 +3,7 @@ import dayjs from "dayjs";
 
 import { Budget } from "models/Budget";
 
-const MAY_2022 = dayjs("2022-05-01", "YYYY-MM-DD").unix();
+const MAY_2022 = dayjs("2022-05-01", "YYYY-MM-DD").valueOf();
 
 const TestBudgetData: Budget = {
     id: "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",

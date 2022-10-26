@@ -27,6 +27,9 @@ const TransactionsHeader = ({
                 backgroundColor: "primary.main",
                 height: "64px",
                 color: "white",
+                position: "sticky",
+                top: 0,
+                // position: "-webkit-sticky",
             }}
         >
             <Box
