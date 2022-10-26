@@ -1,7 +1,7 @@
 import Autocomplete, {
-    AutocompleteChangeDetails,
-    AutocompleteChangeReason,
-    AutocompleteInputChangeReason,
+    // AutocompleteChangeDetails,
+    // AutocompleteChangeReason,
+    // AutocompleteInputChangeReason,
     AutocompleteProps,
     AutocompleteRenderInputParams,
 } from "@mui/material/Autocomplete";
@@ -27,8 +27,8 @@ const SolidAutocomplete = <T,>({
     const handleChange = (
         event: React.SyntheticEvent<Element, Event>,
         value: T | null,
-        reason: AutocompleteChangeReason,
-        details?: AutocompleteChangeDetails<T> | undefined,
+        // reason: AutocompleteChangeReason,
+        // details?: AutocompleteChangeDetails<T> | undefined,
     ) => {
         setValue(value);
     };
@@ -36,7 +36,7 @@ const SolidAutocomplete = <T,>({
     const handleInputChange = (
         event: React.SyntheticEvent<Element, Event>,
         value: string,
-        reason: AutocompleteInputChangeReason,
+        // reason: AutocompleteInputChangeReason,
     ) => {
         setInputValue(value);
     };

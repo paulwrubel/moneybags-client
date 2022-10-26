@@ -213,6 +213,7 @@ const AddTransactionRow = ({
                         inputFormat="YYYY-MM-DD"
                         value={timestamp}
                         onChange={(value) => {
+                            setHadTimestampInteraction(true);
                             setTimestamp(value ?? dayjs());
                         }}
                         renderInput={(params) => (
