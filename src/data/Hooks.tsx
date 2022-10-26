@@ -1,5 +1,5 @@
 /* eslint-disable sonarjs/no-identical-functions */
-import dayjs, { unix } from "dayjs";
+import dayjs from "dayjs";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
 import type { AppDispatch, RootState } from "data/Store";
@@ -15,13 +15,17 @@ export const useActiveBudgetID = () =>
 
 export const useSelectedMonth = () =>
     useAppSelector(
-        (state) => state.core.selectedMonth ?? dayjs().startOf("month").unix(),
+        (state) =>
+            state.core.selectedMonth ?? dayjs().startOf("month").valueOf(),
     );
 
 export const useAccountIDs = () =>
     useAppSelector((state) =>
         (state.budget?.accounts ?? []).map((account) => account.id),
     );
+
+export const useAccounts = () =>
+    useAppSelector((state) => state.budget?.accounts ?? []);
 
 export const useActiveBudgetHeader = () =>
     useAppSelector((state) =>
@@ -90,9 +94,9 @@ export const useActivityByCategoryIDAndMonth = (
                 ?.filter(
                     ({ timestamp, categoryID: tCategoryID }) =>
                         tCategoryID === categoryID &&
-                        unix(timestamp).isBetween(
-                            unix(month),
-                            unix(month).add(1, "month"),
+                        dayjs(timestamp).isBetween(
+                            dayjs(month),
+                            dayjs(month).add(1, "month"),
                             "day",
                             "[)",
                         ),
@@ -111,14 +115,14 @@ export const useBalanceByCategoryIDAndMonth = (
                 ?.filter(
                     ({ timestamp, categoryID: tCategoryID }) =>
                         tCategoryID === categoryID &&
-                        unix(timestamp).isBefore(unix(month).add(1, "month")),
+                        dayjs(timestamp).isBefore(dayjs(month).add(1, "month")),
                 )
                 ?.reduce((total, { amount }) => total + amount, 0) ?? 0) +
             // get category allocations for this category before or equal to this month
             (state.budget?.categories
                 ?.find(({ id }) => id === categoryID)
                 ?.allocations?.filter(({ month: catMonth }) =>
-                    unix(catMonth).isBefore(unix(month).add(1, "month")),
+                    dayjs(catMonth).isBefore(dayjs(month).add(1, "month")),
                 )
                 .reduce((total, { amount }) => total + amount, 0) ?? 0),
     );
@@ -134,8 +138,8 @@ export const useTotalBalanceByMonth = (month: number) =>
                             ?.filter(
                                 ({ timestamp, categoryID: tCategoryID }) =>
                                     tCategoryID === categoryID &&
-                                    unix(timestamp).isBefore(
-                                        unix(month).add(1, "month"),
+                                    dayjs(timestamp).isBefore(
+                                        dayjs(month).add(1, "month"),
                                     ),
                             )
                             ?.reduce(
@@ -145,8 +149,8 @@ export const useTotalBalanceByMonth = (month: number) =>
                         // get category allocations for this category before or equal to this month
                         allocations
                             ?.filter(({ month: catMonth }) =>
-                                unix(catMonth).isBefore(
-                                    unix(month).add(1, "month"),
+                                dayjs(catMonth).isBefore(
+                                    dayjs(month).add(1, "month"),
                                 ),
                             )
                             ?.reduce(
@@ -162,7 +166,7 @@ export const useTotalActivityByMonth = (month: number) =>
         (state) =>
             state.budget?.transactions
                 ?.filter(({ timestamp }) =>
-                    unix(timestamp).isSame(unix(month), "month"),
+                    dayjs(timestamp).isSame(dayjs(month), "month"),
                 )
                 ?.reduce((total, { amount }) => total + amount, 0) ?? 0,
     );
@@ -175,7 +179,7 @@ export const useTotalAllocatedByMonth = (month: number) =>
                     total +
                         allocations
                             ?.filter(({ month: catMonth }) =>
-                                unix(catMonth).isSame(unix(month), "month"),
+                                dayjs(catMonth).isSame(dayjs(month), "month"),
                             )
                             ?.reduce(
                                 (aTotal, { amount }) => aTotal + amount,
@@ -193,8 +197,8 @@ export const useTotalAllocatedSoFar = (month: number) =>
                     total +
                         allocations
                             ?.filter(({ month: catMonth }) =>
-                                unix(catMonth).isBefore(
-                                    unix(month).add(1, "month"),
+                                dayjs(catMonth).isBefore(
+                                    dayjs(month).add(1, "month"),
                                 ),
                             )
                             ?.reduce(

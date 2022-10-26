@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
-import { Budget } from "models/Budget";
+import { Budget, Category } from "models/Budget";
 
 const initialState: Budget | null = null;
 
@@ -131,6 +131,22 @@ export const budgetSlice = createSlice({
                 };
             },
         },
+        setCategoryName: (
+            state: Budget | null,
+            action: PayloadAction<{
+                id: string;
+                name: string;
+            }>,
+        ) => {
+            if (!state || !state.categories) {
+                return;
+            }
+            (
+                state.categories.find(
+                    (cat) => cat.id === action.payload.id,
+                ) as Category
+            ).name = action.payload.name;
+        },
         addAccount: {
             reducer: (
                 state: Budget | null,
@@ -162,7 +178,9 @@ export const budgetSlice = createSlice({
                     id: action.payload.transactionID,
                     accountID: action.payload.accountID,
                     categoryID: "__c_id_0__",
-                    timestamp: action.payload.createdTimestamp,
+                    timestamp: dayjs(action.payload.createdTimestamp)
+                        .startOf("day")
+                        .valueOf(),
                     amount: action.payload.initialBalance,
                 });
             },
@@ -185,6 +203,62 @@ export const budgetSlice = createSlice({
                 };
             },
         },
+        addTransaction: {
+            reducer: (
+                state: Budget | null,
+                action: PayloadAction<{
+                    id: string;
+                    accountID: string;
+                    timestamp: number;
+                    categoryID: string;
+                    note?: string;
+                    amount: number;
+                }>,
+            ) => {
+                console.log(action.payload);
+                if (!state) {
+                    return;
+                }
+                // check if we need to create the transactions list
+                if (!state.transactions) {
+                    state.transactions = [];
+                }
+                // then, create a new transaction
+                state.transactions.push({
+                    id: action.payload.id,
+                    accountID: action.payload.accountID,
+                    categoryID: action.payload.categoryID,
+                    timestamp: action.payload.timestamp,
+                    note: action.payload.note,
+                    amount: action.payload.amount,
+                });
+            },
+            prepare: ({
+                accountID,
+                timestamp,
+                categoryID,
+                note,
+                amount,
+            }: {
+                accountID: string;
+                timestamp: number;
+                categoryID: string;
+                note?: string;
+                amount: number;
+            }) => {
+                // console.log(initialBalance);
+                return {
+                    payload: {
+                        id: uuid(),
+                        accountID,
+                        categoryID,
+                        timestamp,
+                        note,
+                        amount,
+                    },
+                };
+            },
+        },
     },
 });
 
@@ -199,7 +273,9 @@ export const {
     setAllocated,
     addCategory,
     addCategoryGroup,
+    setCategoryName,
     addAccount,
+    addTransaction,
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

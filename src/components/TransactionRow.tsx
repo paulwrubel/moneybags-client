@@ -20,13 +20,17 @@ const TransactionRow = ({
     showAccount,
     index,
     transaction,
+    columnRatios,
 }: {
     showAccount?: boolean;
     index: number;
     transaction: Transaction;
+    columnRatios: number[];
 }) => {
     const account = useAccount(transaction.accountID) as Account;
     const categories = useCategoriesIncludeSystem();
+
+    let columnIndex = 0;
 
     return (
         <Box
@@ -39,16 +43,16 @@ const TransactionRow = ({
             }}
         >
             {showAccount && (
-                <Item sx={{ width: 0.2 }}>
+                <Item sx={{ width: columnRatios[columnIndex++] }}>
                     <Typography>{account.name}</Typography>
                 </Item>
             )}
-            <Item sx={{ width: 0.2 }}>
+            <Item sx={{ width: columnRatios[columnIndex++] }}>
                 <Typography>
                     {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
                 </Typography>
             </Item>
-            <Item sx={{ width: showAccount ? 0.2 : 0.3 }}>
+            <Item sx={{ width: columnRatios[columnIndex++] }}>
                 <Typography>
                     {
                         categories.find(
@@ -57,10 +61,10 @@ const TransactionRow = ({
                     }
                 </Typography>
             </Item>
-            <Item sx={{ width: showAccount ? 0.25 : 0.35 }}>
+            <Item sx={{ width: columnRatios[columnIndex++] }}>
                 <Typography>{transaction.note}</Typography>
             </Item>
-            <Item sx={{ width: 0.15 }}>
+            <Item sx={{ width: columnRatios[columnIndex++] }}>
                 <Typography>
                     {formatCurrencyCents(transaction.amount, { sign: "$" })}
                 </Typography>

@@ -1,16 +1,20 @@
 import { useEffect, useState } from "react";
 
-import TextField, { TextFieldProps } from "@mui/material/TextField";
+import { TextFieldProps } from "@mui/material/TextField";
+import { SystemStyleObject } from "@mui/system";
 
+import SolidTextField from "components/SolidTextField";
 import { formatCurrencyCents } from "Utils";
 
 function SolidNumericTextField({
     value,
     setValue,
+    inputBaseSx,
     ...textFieldProps
 }: {
     value: number;
     setValue: (arg0: number) => void;
+    inputBaseSx?: SystemStyleObject;
 } & TextFieldProps) {
     const [valueInput, setValueInput] = useState(
         formatCurrencyCents(value, { sign: "" }),
@@ -51,15 +55,22 @@ function SolidNumericTextField({
         setValueInput(event.target.value);
     };
 
+    const { inputProps, ...textFieldPropsRest } = textFieldProps;
+    const { sx: inputSx, ...inputPropsRest } = inputProps || {};
+
     return (
-        <TextField
+        <SolidTextField
             onChange={handleChange}
             onKeyDown={handleKeypress}
             onFocus={handleFocus}
             onBlur={handleBlur}
             value={valueInput}
-            inputProps={{ sx: { textAlign: "right" } }}
-            {...textFieldProps}
+            inputProps={{
+                sx: { textAlign: "right", ...inputSx },
+                ...inputPropsRest,
+            }}
+            inputBaseSx={inputBaseSx}
+            {...textFieldPropsRest}
         />
     );
 }
