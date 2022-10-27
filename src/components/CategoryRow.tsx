@@ -69,7 +69,7 @@ const CategoryRow = ({ category: { id, name } }: { category: Category }) => {
             onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                console.log("clicked");
+                // console.log("clicked");
             }}
             sx={{ width: 1 }}
         >
