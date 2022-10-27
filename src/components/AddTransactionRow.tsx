@@ -208,6 +208,7 @@ const AddTransactionRow = ({
                             getOptionLabel={(o) => o.name}
                             renderInput={(params) => (
                                 <TextField
+                                    required
                                     error={isAccountError(false)}
                                     sx={{
                                         height: 1,
@@ -402,7 +403,7 @@ const AddTransactionRow = ({
     return isAddingTransaction ? (
         <ClickAwayListener
             onClickAway={() => {
-                console.log(hadInteraction());
+                // console.log(hadInteraction());
                 if (!hadInteraction()) {
                     close();
                 }
