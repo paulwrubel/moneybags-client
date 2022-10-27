@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { Box, ButtonBase } from "@mui/material";
 
 import TransactionRow from "components/TransactionRow";
