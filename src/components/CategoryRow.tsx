@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { useEffect, useState } from "react";
 
 import { Box, ButtonBase, SxProps, TextField, Typography } from "@mui/material";
@@ -66,6 +67,7 @@ const CategoryRow = ({ category: { id, name } }: { category: Category }) => {
 
     return (
         <ButtonBase
+            disableRipple
             onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
@@ -83,7 +85,11 @@ const CategoryRow = ({ category: { id, name } }: { category: Category }) => {
                     // justifyContent="center"
                 }}
             >
-                <Item sx={{ width: 0.55, height: 1 }} childSx={{ height: 1 }}>
+                <Item
+                    // noMargin
+                    sx={{ width: 0.55, height: 1 }}
+                    childSx={{ height: 1 }}
+                >
                     {isInCategoryNameEditMode ? (
                         <TextField
                             // size="small"
@@ -104,30 +110,59 @@ const CategoryRow = ({ category: { id, name } }: { category: Category }) => {
                             }}
                             onBlur={handleCategoryNameBlur}
                             sx={{
+                                // textAlign: "left",
+                                width: 1,
                                 height: 1,
                                 "& .MuiInputBase-root": {
                                     height: 1,
                                 },
                             }}
-                            inputProps={{ sx: { px: 1, py: 0 } }}
+                            inputProps={{
+                                sx: {
+                                    px: 1,
+                                    py: 0,
+                                },
+                            }}
                         >
                             Weesnaw
                         </TextField>
                     ) : (
-                        <ButtonBase
-                            onClick={() => {
-                                setIsInCategoryNameEditMode(true);
+                        <Box
+                            sx={{
+                                ml: 1,
+                                height: 1,
+                                display: "flex",
+                                alignItems: "center",
                             }}
-                            onBlur={() => {
-                                setIsInCategoryNameEditMode(false);
-                            }}
-                            disableRipple
-                            sx={{ height: 1 }}
                         >
-                            <Typography noWrap sx={{ minWidth: "1em" }}>
-                                {name}
-                            </Typography>
-                        </ButtonBase>
+                            <ButtonBase
+                                onClick={() => {
+                                    setIsInCategoryNameEditMode(true);
+                                }}
+                                onBlur={() => {
+                                    setIsInCategoryNameEditMode(false);
+                                }}
+                                disableRipple
+                                sx={{
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    textAlign: "left",
+                                    height: 1,
+                                }}
+                            >
+                                <Typography
+                                    noWrap
+                                    sx={{
+                                        minWidth: "1em",
+                                        textAlign: "left",
+                                        // height: 1,
+                                        // width: 1,
+                                    }}
+                                >
+                                    {name}
+                                </Typography>
+                            </ButtonBase>
+                        </Box>
                     )}
                 </Item>
                 <Item
