@@ -68,6 +68,8 @@ const AddTransactionRow = ({
     const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
     const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
     const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
+    const [hadAddButtonInteraction, setHadAddButtonInteraction] =
+        useState(false);
 
     const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
         useState(false);
@@ -86,29 +88,51 @@ const AddTransactionRow = ({
             hadTimestampInteraction ||
             hadCategoryInteraction ||
             hadNoteInteraction ||
-            hadAmountInteraction
+            hadAmountInteraction ||
+            hadAddButtonInteraction
         );
     };
 
-    const isAccountError = () => hadInteraction() && !selectedAccount;
+    const isAccountError = (didInteractionJustNow: boolean) =>
+        (didInteractionJustNow || hadInteraction()) && !selectedAccount;
     const isTimestampError = () => false;
-    const isCategoryError = () => hadInteraction() && !selectedCategory;
+    const isCategoryError = (didInteractionJustNow: boolean) =>
+        (didInteractionJustNow || hadInteraction()) && !selectedCategory;
     const isNoteError = () => false;
     const isAmountError = () => false;
 
-    const isInErrorState = () => {
+    const isInErrorState = (didInteractionJustNow: boolean) => {
         return (
-            isAccountError() ||
+            isAccountError(didInteractionJustNow) ||
             isTimestampError() ||
-            isCategoryError() ||
+            isCategoryError(didInteractionJustNow) ||
             isNoteError() ||
             isAmountError()
         );
     };
 
-    const handleAddTransaction = () => {
+    const resetFormValues = () => {
+        setSelectedAccount(account ?? null);
+        setAccountNameInput("");
+        setTimestamp(dayjs().startOf("day"));
+        setSelectedCategory(null);
+        setCategoryNameInput("");
+        setNote("");
+        setAmount(0);
+
+        // interactions
+        setHadAccountInteraction(false);
+        setHadTimestampInteraction(false);
+        setHadCategoryInteraction(false);
+        setHadNoteInteraction(false);
+        setHadAmountInteraction(false);
+        setHadAddButtonInteraction(false);
+    };
+
+    const handleAddButtonClick = () => {
         // checkError();
-        if (!isInErrorState()) {
+        setHadAddButtonInteraction(true);
+        if (!isInErrorState(true)) {
             dispatch(
                 addTransaction({
                     accountID: (selectedAccount as Account).id,
@@ -118,8 +142,14 @@ const AddTransactionRow = ({
                     amount: amount,
                 }),
             );
+            resetFormValues();
             close();
         }
+    };
+
+    const handleClose = () => {
+        resetFormValues();
+        close();
     };
 
     const close = () => {
@@ -178,7 +208,7 @@ const AddTransactionRow = ({
                             getOptionLabel={(o) => o.name}
                             renderInput={(params) => (
                                 <TextField
-                                    error={isAccountError()}
+                                    error={isAccountError(false)}
                                     sx={{
                                         height: 1,
                                     }}
@@ -271,7 +301,7 @@ const AddTransactionRow = ({
                         // eslint-disable-next-line sonarjs/no-identical-functions
                         renderInput={(params) => (
                             <TextField
-                                error={isCategoryError()}
+                                error={isCategoryError(false)}
                                 sx={{
                                     height: 1,
                                 }}
@@ -342,7 +372,7 @@ const AddTransactionRow = ({
                         // color="contained"
                         variant="contained"
                         disableElevation
-                        onClick={handleAddTransaction}
+                        onClick={handleAddButtonClick}
                         size="small"
                         sx={{ textTransform: "none", color: "black" }}
                     >
@@ -354,7 +384,7 @@ const AddTransactionRow = ({
                         // color="contained"
                         variant="outlined"
                         disableElevation
-                        onClick={close}
+                        onClick={handleClose}
                         size="small"
                         sx={{
                             textTransform: "none",
