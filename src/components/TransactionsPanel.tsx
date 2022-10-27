@@ -22,6 +22,10 @@ const TransactionsPanel = () => {
 
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
 
+    const [selectedTransactions, setSelectedTransactions] = useState<
+        Set<string>
+    >(new Set<string>());
+
     const showAllTransactions = !accountIDParam;
 
     const columnRatios = showAllTransactions
@@ -47,7 +51,12 @@ const TransactionsPanel = () => {
                 />
             </Collapse>
             {/* )} */}
-            <TransactionsList account={account} columnRatios={columnRatios} />
+            <TransactionsList
+                selectedTransactions={selectedTransactions}
+                setSelectedTransactions={setSelectedTransactions}
+                account={account}
+                columnRatios={columnRatios}
+            />
         </>
     );
 };

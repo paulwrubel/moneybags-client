@@ -39,7 +39,7 @@ const MonthHeader = () => {
                 boxSizing: "border-box",
                 width: 1,
                 p: 1,
-                backgroundColor: "primary.main",
+                backgroundColor: "primary.light",
                 height: "64px",
                 color: "white",
             }}

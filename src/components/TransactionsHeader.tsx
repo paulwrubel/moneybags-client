@@ -1,4 +1,5 @@
 import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp";
+import EditSharpIcon from "@mui/icons-material/EditSharp";
 import { Box, Button, Paper, SxProps } from "@mui/material";
 
 const Item = ({
@@ -24,9 +25,9 @@ const TransactionsHeader = ({
                 boxSizing: "border-box",
                 width: 1,
                 p: 1,
-                backgroundColor: "primary.main",
+                backgroundColor: "primary.light",
                 height: "64px",
-                color: "white",
+                color: "black",
                 position: "sticky",
                 top: 0,
                 // position: "-webkit-sticky",
@@ -39,21 +40,57 @@ const TransactionsHeader = ({
                     height: 1,
                     // minHeight: "inherit",
                     display: "flex",
-                    flexDirection: "row",
+                    // flexDirection: "row",
                     alignItems: "center",
-                    justifyContent: "space-between",
+                    // justifyContent: "space-between",
                 }}
             >
-                <Item sx={{ flexGrow: 1 }}>
+                <Item sx={{}}>
                     <Button
+                        variant="outlined"
                         onClick={() => {
                             setIsAddingTransaction(true);
                         }}
                         size="small"
                         startIcon={<AddCircleOutlineSharpIcon />}
-                        sx={{ textTransform: "none", color: "black" }}
+                        sx={{
+                            textTransform: "none",
+                            color: "white",
+                            // backgroundColor: "primary.main",
+                            borderColor: "white",
+                            ":hover": {
+                                // color: "primary.dark",
+                                // borderColor: "primary.dark",
+                                backgroundColor: "primary.main",
+                                borderColor: "white",
+                            },
+                        }}
                     >
-                        Add transaction
+                        Add
+                    </Button>
+                </Item>
+                <Item sx={{}}>
+                    <Button
+                        variant="outlined"
+                        onClick={() => {
+                            setIsAddingTransaction(true);
+                        }}
+                        size="small"
+                        startIcon={<EditSharpIcon />}
+                        sx={{
+                            textTransform: "none",
+                            color: "white",
+                            // backgroundColor: "primary.main",
+                            borderColor: "white",
+                            ":hover": {
+                                // color: "primary.dark",
+                                // borderColor: "primary.dark",
+                                backgroundColor: "primary.main",
+                                borderColor: "white",
+                            },
+                        }}
+                    >
+                        Edit
                     </Button>
                 </Item>
             </Box>
