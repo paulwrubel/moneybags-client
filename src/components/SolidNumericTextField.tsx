@@ -4,7 +4,7 @@ import { TextFieldProps } from "@mui/material/TextField";
 import { SystemStyleObject } from "@mui/system";
 
 import SolidTextField from "components/SolidTextField";
-import { formatCurrencyCents } from "Utils";
+import { formatCurrencyCents, getSelectionText } from "Utils";
 
 function SolidNumericTextField({
     value,
@@ -44,10 +44,13 @@ function SolidNumericTextField({
         if (/[+\-*/]/.test(event.data ?? "")) {
             // console.log(event.data);
             // event.preventDefault();
+
             const selection = window.getSelection() ?? document.getSelection();
+            const selectionText = getSelectionText();
+
             // console.log(selection);
             if (selection) {
-                // console.log(selection.type);
+                console.log(selection.type);
                 // eslint-disable-next-line no-debugger
                 // debugger;
                 // console.log(
@@ -57,6 +60,7 @@ function SolidNumericTextField({
                 // console.log("has empty?: ", !!selection.empty);
                 // console.log("has collapeToEnd?: ", !!selection.collapseToEnd);
                 // console.log("1 the selection: " + selection.toString());
+                // console.log("2 the selection TEXT: " + selectionText);
                 // selection.selectAllChildren(event.currentTarget);
                 // console.log("2 the selection: " + selection.toString());
                 // event.target?.select();
@@ -64,15 +68,28 @@ function SolidNumericTextField({
                 // selection.removeAllRanges();
                 // selection.empty();
                 // selection.collapseToEnd();
-                event.preventDefault();
-                setValueInput(valueInput + event.data);
+                if (selectionText === valueInput) {
+                    event.preventDefault();
+                    setValueInput(valueInput + event.data);
+                }
             }
         }
     };
 
-    const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    // const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
+    //     // setAllocatedInput((allocated / 100).toFixed(2));
+    //     event.target.select();
+    // };
+
+    const handleInputFocus = (event: React.FocusEvent<HTMLInputElement>) => {
         // setAllocatedInput((allocated / 100).toFixed(2));
-        event.target.select();
+        event.currentTarget.select();
+
+        // const selection = window.getSelection() ?? document.getSelection();
+        // if (selection) {
+        //     console.log(selection.type);
+        //     console.log("1 the selection: " + selection.toString());
+        // }
     };
 
     const handleBlur = () => {
@@ -114,11 +131,12 @@ function SolidNumericTextField({
             onChange={handleChange}
             onKeyDown={handleKeyDown}
             onBeforeInput={handleBeforeInput}
-            onFocus={handleFocus}
+            // onFocus={handleFocus}
             onBlur={handleBlur}
             value={valueInput}
             inputProps={{
                 sx: { textAlign: "right", ...inputSx },
+                onFocus: handleInputFocus,
                 ...inputPropsRest,
             }}
             inputBaseSx={inputBaseSx}
