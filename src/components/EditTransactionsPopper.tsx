@@ -1,119 +1,133 @@
 // import { useState } from "react";
-export {};
-// import { Box, Button, Paper, TextField } from "@mui/material";
 
-// import SolidPopper from "components/SolidPopper";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Button, Paper } from "@mui/material";
+
+import SolidPopper from "components/SolidPopper";
 // import { addCategory } from "data/BudgetSlice";
-// import { useAppDispatch } from "data/Hooks";
+import { addTransactions, removeTransactions } from "data/BudgetSlice";
+import { useAppDispatch } from "data/Hooks";
+import { Transaction } from "models/Budget";
 
-// const Item = ({ children }: { children: React.ReactNode }) => {
-//     return <Box sx={{ m: 1 }}>{children}</Box>;
-// };
+const Item = ({ children }: { children: React.ReactNode }) => {
+    return <Box sx={{ m: 1 }}>{children}</Box>;
+};
 
-// const EditTransactionsPopper = ({
-//     categoryGroupID,
-//     isOpen,
-//     anchorEl,
-//     setIsOpen,
-//     setAnchorEl,
-//     setIsExpanded,
-// }: {
-//     categoryGroupID: string;
-//     isOpen: boolean;
-//     anchorEl: Element | null;
-//     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-//     setAnchorEl: React.Dispatch<React.SetStateAction<Element | null>>;
-//     setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
-// }) => {
-//     const dispatch = useAppDispatch();
+const EditTransactionsPopper = ({
+    selectedTransactions,
+    setSelectedTransactions,
+    isOpen,
+    anchorEl,
+    setIsOpen,
+    setAnchorEl,
+}: // setIsExpanded,
+{
+    selectedTransactions: Transaction[];
+    setSelectedTransactions: (arg0: Transaction[]) => void;
+    isOpen: boolean;
+    anchorEl: Element | null;
+    setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+    setAnchorEl: React.Dispatch<React.SetStateAction<Element | null>>;
+    // setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
+}) => {
+    const dispatch = useAppDispatch();
+    //
+    // const [categoryName, setCategoryName] = useState("");
 
-//     const [categoryName, setCategoryName] = useState("");
+    const handleDeleteButtonClick = () => {
+        dispatch(removeTransactions(selectedTransactions.map((t) => t.id)));
+        setSelectedTransactions([]);
+        close();
+    };
 
-//     const close = () => {
-//         setIsOpen(false);
-//         setAnchorEl(null);
-//         setCategoryName("");
-//     };
+    const handleDuplicateButtonClick = () => {
+        dispatch(addTransactions(selectedTransactions));
+        setSelectedTransactions([]);
+        close();
+    };
 
-//     const submit = () => {
-//         handleAddCategory();
-//         close();
-//         setIsExpanded(true);
-//     };
+    const close = () => {
+        setIsOpen(false);
+        setAnchorEl(null);
+        // setCategoryName("");
+    };
 
-//     const handleAddCategory = () => {
-//         dispatch(
-//             addCategory({
-//                 groupID: categoryGroupID,
-//                 name: categoryName,
-//                 sort: 0,
-//             }),
-//         );
-//     };
+    // const submit = () => {
+    //     handleAddCategory();
+    //     close();
+    //     setIsExpanded(true);
+    // };
 
-//     return (
-//         <SolidPopper isOpen={isOpen} anchorEl={anchorEl} close={close}>
-//             <Paper elevation={10}>
-//                 <Box
-//                     sx={{
-//                         display: "flex",
-//                         flexDirection: "column",
-//                         justifyContent: "space-between",
-//                         alignItems: "stretch",
-//                     }}
-//                 >
-//                     <Item>
-//                         <TextField
-//                             autoFocus
-//                             label="Category Name"
-//                             value={categoryName}
-//                             onKeyDown={(
-//                                 event: React.KeyboardEvent<HTMLDivElement>,
-//                             ) => {
-//                                 console.log(event.key);
-//                                 if (event.key === "Enter") {
-//                                     submit();
-//                                 }
-//                             }}
-//                             onChange={(
-//                                 event: React.ChangeEvent<HTMLInputElement>,
-//                             ) => {
-//                                 setCategoryName(event.target.value);
-//                             }}
-//                         />
-//                     </Item>
-//                     <Item>
-//                         <Box
-//                             sx={{
-//                                 display: "flex",
-//                                 flexDirection: "row",
-//                                 justifyContent: "space-around",
-//                             }}
-//                         >
-//                             <Button
-//                                 onClick={close}
-//                                 variant="outlined"
-//                                 sx={{
-//                                     color: "black",
-//                                 }}
-//                             >
-//                                 Cancel
-//                             </Button>
-//                             <Button
-//                                 onClick={submit}
-//                                 variant="outlined"
-//                                 sx={{
-//                                     color: "black",
-//                                 }}
-//                             >
-//                                 Add
-//                             </Button>
-//                         </Box>
-//                     </Item>
-//                 </Box>
-//             </Paper>
-//         </SolidPopper>
-//     );
-// };
+    // const handleAddCategory = () => {
+    //     dispatch(
+    //         addCategory({
+    //             groupID: categoryGroupID,
+    //             name: categoryName,
+    //             sort: 0,
+    //         }),
+    //     );
+    // };
 
-// export default NewCategoryPopper;
+    return (
+        <SolidPopper isOpen={isOpen} anchorEl={anchorEl} close={close}>
+            <Paper elevation={10}>
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "space-between",
+                        alignItems: "stretch",
+                    }}
+                >
+                    <Item>
+                        <Button
+                            variant="outlined"
+                            onClick={handleDeleteButtonClick}
+                            size="small"
+                            startIcon={<DeleteIcon />}
+                            sx={{
+                                // textTransform: "none",
+                                color: "black",
+                                // // backgroundColor: "primary.main",
+                                borderColor: "black",
+                                // ":hover": {
+                                //     // color: "primary.dark",
+                                //     // borderColor: "primary.dark",
+                                //     backgroundColor: "primary.main",
+                                //     borderColor: "white",
+                                // },
+                            }}
+                        >
+                            Delete Selected ({selectedTransactions.length})
+                        </Button>
+                    </Item>
+                    <Item>
+                        <Button
+                            variant="outlined"
+                            onClick={handleDuplicateButtonClick}
+                            size="small"
+                            startIcon={<ContentCopyIcon />}
+                            sx={{
+                                // textTransform: "none",
+                                color: "black",
+                                // // backgroundColor: "primary.main",
+                                borderColor: "black",
+                                // ":hover": {
+                                //     // color: "primary.dark",
+                                //     // borderColor: "primary.dark",
+                                //     backgroundColor: "primary.main",
+                                //     borderColor: "white",
+                                // },
+                            }}
+                        >
+                            Duplicate Selected ({selectedTransactions.length})
+                        </Button>
+                    </Item>
+                </Box>
+            </Paper>
+        </SolidPopper>
+    );
+};
+
+export default EditTransactionsPopper;

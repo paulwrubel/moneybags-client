@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import SolidAutocomplete from "components/SolidAutocomplete";
 import SolidNumericTextField from "components/SolidNumericTextField";
 import SolidTextField from "components/SolidTextField";
-import { addTransaction } from "data/BudgetSlice";
+import { addTransactions } from "data/BudgetSlice";
 import { useAccounts, useAppDispatch, useCategories } from "data/Hooks";
 import { Account, Category } from "models/Budget";
 
@@ -134,13 +134,15 @@ const AddTransactionRow = ({
         setHadAddButtonInteraction(true);
         if (!isInErrorState(true)) {
             dispatch(
-                addTransaction({
-                    accountID: (selectedAccount as Account).id,
-                    timestamp: timestamp.startOf("day").valueOf(),
-                    categoryID: (selectedCategory as Category).id,
-                    note: note,
-                    amount: amount,
-                }),
+                addTransactions([
+                    {
+                        accountID: (selectedAccount as Account).id,
+                        timestamp: timestamp.startOf("day").valueOf(),
+                        categoryID: (selectedCategory as Category).id,
+                        note: note,
+                        amount: amount,
+                    },
+                ]),
             );
             resetFormValues();
             close();

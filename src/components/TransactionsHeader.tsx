@@ -1,6 +1,11 @@
+import { useState } from "react";
+
 import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp";
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import { Box, Button, Paper, SxProps } from "@mui/material";
+
+import EditTransactionsPopper from "components/EditTransactionsPopper";
+import { Transaction } from "models/Budget";
 
 const Item = ({
     children,
@@ -13,10 +18,21 @@ const Item = ({
 };
 
 const TransactionsHeader = ({
+    selectedTransactions,
+    setSelectedTransactions,
     setIsAddingTransaction,
-}: {
+}: // styleHeight,
+{
+    selectedTransactions: Transaction[];
+    setSelectedTransactions: (arg0: Transaction[]) => void;
     setIsAddingTransaction: React.Dispatch<React.SetStateAction<boolean>>;
+    // styleHeight: number;
 }) => {
+    const [isEditTransactionsPopperOpen, setIsEditTransactionsPopperOpen] =
+        useState(false);
+    const [editTransactionsPopperAnchorEl, setEditTransactionsPopperAnchorEl] =
+        useState<Element | null>(null);
+
     return (
         <Paper
             square
@@ -26,9 +42,10 @@ const TransactionsHeader = ({
                 width: 1,
                 p: 1,
                 backgroundColor: "primary.light",
-                height: "64px",
+                height: 64,
                 color: "black",
-                position: "sticky",
+                // position: "sticky",
+                // zIndex: 0,
                 top: 0,
                 // position: "-webkit-sticky",
             }}
@@ -72,8 +89,13 @@ const TransactionsHeader = ({
                 <Item sx={{}}>
                     <Button
                         variant="outlined"
-                        onClick={() => {
-                            setIsAddingTransaction(true);
+                        onClick={(
+                            event: React.MouseEvent<HTMLButtonElement>,
+                        ) => {
+                            setIsEditTransactionsPopperOpen(true);
+                            setEditTransactionsPopperAnchorEl(
+                                event.currentTarget,
+                            );
                         }}
                         size="small"
                         startIcon={<EditSharpIcon />}
@@ -92,6 +114,14 @@ const TransactionsHeader = ({
                     >
                         Edit
                     </Button>
+                    <EditTransactionsPopper
+                        selectedTransactions={selectedTransactions}
+                        setSelectedTransactions={setSelectedTransactions}
+                        isOpen={isEditTransactionsPopperOpen}
+                        setIsOpen={setIsEditTransactionsPopperOpen}
+                        anchorEl={editTransactionsPopperAnchorEl}
+                        setAnchorEl={setEditTransactionsPopperAnchorEl}
+                    />
                 </Item>
             </Box>
         </Paper>
