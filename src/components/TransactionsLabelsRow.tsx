@@ -27,9 +27,11 @@ const Item = ({
 const TransactionsLabelsRow = ({
     all,
     columnRatios,
-}: {
+}: // styleHeight,
+{
     all: boolean;
     columnRatios: number[];
+    // styleHeight: number;
 }) => {
     let columnIndex = 0;
 
@@ -39,8 +41,9 @@ const TransactionsLabelsRow = ({
             elevation={1}
             sx={{
                 mb: 0.4,
-                position: "sticky",
+                // position: "sticky",
                 top: 64,
+                // height: styleHeight,
             }}
         >
             <Box
