@@ -1,12 +1,12 @@
 // import { useState } from "react";
 
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+// import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, Button, Paper, Typography } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 
 import SolidPopper from "components/SolidPopper";
 // import { addCategory } from "data/BudgetSlice";
-import { addTransactions, removeAccount } from "data/BudgetSlice";
+import { removeAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
 import { Account } from "models/Budget";
 
