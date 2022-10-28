@@ -1,10 +1,13 @@
 // import { useState } from "react";
 
 // import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import { useState } from "react";
+
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, Paper } from "@mui/material";
 
 import SolidPopper from "components/SolidPopper";
+import SolidTextField from "components/SolidTextField";
 // import { addCategory } from "data/BudgetSlice";
 import { removeAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
@@ -28,6 +31,8 @@ const EditAccountPopper = ({
     setAnchorEl: React.Dispatch<React.SetStateAction<Element | null>>;
 }) => {
     const dispatch = useAppDispatch();
+
+    const [accountName, setAccountName] = useState(account.name);
 
     const handleDeleteButtonClick = () => {
         dispatch(removeAccount(account.id));
@@ -75,27 +80,70 @@ const EditAccountPopper = ({
                     }}
                 >
                     <Item>
-                        {/* <Typography>Bingo</Typography> */}
-                        <Button
-                            variant="outlined"
-                            onClick={handleDeleteButtonClick}
+                        <SolidTextField
+                            label="Name"
                             size="small"
-                            startIcon={<DeleteIcon />}
+                            value={accountName}
+                            onChange={(e) => {
+                                setAccountName(e.target.value);
+                            }}
+                            sx={{ width: 1 }}
+                        />
+                    </Item>
+                    <Item>
+                        <Box
                             sx={{
-                                // textTransform: "none",
-                                color: "black",
-                                // // backgroundColor: "primary.main",
-                                borderColor: "black",
-                                // ":hover": {
-                                //     // color: "primary.dark",
-                                //     // borderColor: "primary.dark",
-                                //     backgroundColor: "primary.main",
-                                //     borderColor: "white",
-                                // },
+                                display: "flex",
+                                justifyContent: "space-between",
+                                gap: 1,
                             }}
                         >
-                            Delete Account
-                        </Button>
+                            {/* <Item> */}
+                            {/* <Typography>Bingo</Typography> */}
+                            <Button
+                                variant="outlined"
+                                onClick={handleDeleteButtonClick}
+                                size="small"
+                                startIcon={<DeleteIcon />}
+                                sx={{
+                                    // textTransform: "none",
+                                    color: "black",
+                                    // // backgroundColor: "primary.main",
+                                    borderColor: "black",
+                                    // ":hover": {
+                                    //     // color: "primary.dark",
+                                    //     // borderColor: "primary.dark",
+                                    //     backgroundColor: "primary.main",
+                                    //     borderColor: "white",
+                                    // },
+                                }}
+                            >
+                                Close Account
+                            </Button>
+                            {/* </Item>
+                            <Item> */}
+                            <Button
+                                variant="outlined"
+                                onClick={handleDeleteButtonClick}
+                                size="small"
+                                startIcon={<DeleteIcon />}
+                                sx={{
+                                    // textTransform: "none",
+                                    color: "black",
+                                    // // backgroundColor: "primary.main",
+                                    borderColor: "black",
+                                    // ":hover": {
+                                    //     // color: "primary.dark",
+                                    //     // borderColor: "primary.dark",
+                                    //     backgroundColor: "primary.main",
+                                    //     borderColor: "white",
+                                    // },
+                                }}
+                            >
+                                Close Account
+                            </Button>
+                            {/* </Item>{" "} */}
+                        </Box>
                     </Item>
                 </Box>
             </Paper>

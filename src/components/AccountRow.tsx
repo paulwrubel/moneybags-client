@@ -118,7 +118,7 @@ const AccountRow = ({ id }: { id: string }) => {
                             <IconButton
                                 size="small"
                                 onClick={(e) => {
-                                    e.stopPropagation();
+                                    // e.stopPropagation();
                                     e.preventDefault();
 
                                     setIsEditAccountPopperOpen(true);
