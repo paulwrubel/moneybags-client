@@ -6,40 +6,34 @@ import { Box, Button, Paper, Typography } from "@mui/material";
 
 import SolidPopper from "components/SolidPopper";
 // import { addCategory } from "data/BudgetSlice";
-import { addTransactions, removeTransactions } from "data/BudgetSlice";
+import { addTransactions, removeAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
-import { Transaction } from "models/Budget";
+import { Account } from "models/Budget";
 
 const Item = ({ children }: { children: React.ReactNode }) => {
     return <Box sx={{ m: 1 }}>{children}</Box>;
 };
 
 const EditAccountPopper = ({
-    // selectedTransactions,
-    // setSelectedTransactions,
+    account,
     isOpen,
     anchorEl,
     setIsOpen,
     setAnchorEl,
-}: // setIsExpanded,
-{
-    // selectedTransactions: Transaction[];
-    // setSelectedTransactions: (arg0: Transaction[]) => void;
+}: {
+    account: Account;
     isOpen: boolean;
     anchorEl: Element | null;
     setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
     setAnchorEl: React.Dispatch<React.SetStateAction<Element | null>>;
-    // setIsExpanded: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    // const dispatch = useAppDispatch();
-    //
-    // const [categoryName, setCategoryName] = useState("");
+    const dispatch = useAppDispatch();
 
-    // const handleDeleteButtonClick = () => {
-    //     dispatch(removeTransactions(selectedTransactions.map((t) => t.id)));
-    //     setSelectedTransactions([]);
-    //     close();
-    // };
+    const handleDeleteButtonClick = () => {
+        dispatch(removeAccount(account.id));
+        // setSelectedTransactions([]);
+        close();
+    };
 
     // const handleDuplicateButtonClick = () => {
     //     dispatch(addTransactions(selectedTransactions));
@@ -81,8 +75,8 @@ const EditAccountPopper = ({
                     }}
                 >
                     <Item>
-                        <Typography>Bingo</Typography>
-                        {/* <Button
+                        {/* <Typography>Bingo</Typography> */}
+                        <Button
                             variant="outlined"
                             onClick={handleDeleteButtonClick}
                             size="small"
@@ -100,8 +94,8 @@ const EditAccountPopper = ({
                                 // },
                             }}
                         >
-                            Delete Selected ({})
-                        </Button> */}
+                            Delete Account
+                        </Button>
                     </Item>
                 </Box>
             </Paper>

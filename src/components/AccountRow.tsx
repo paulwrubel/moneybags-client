@@ -10,7 +10,7 @@ import {
     Typography,
 } from "@mui/material";
 
-import { Link, useLocation, useMatch } from "react-router-dom";
+import { Link, Navigate, useLocation, useMatch } from "react-router-dom";
 
 import EditAccountPopper from "components/EditAccountPopper";
 import { useAccount, useTransactionsByAccountID } from "data/Hooks";
@@ -28,7 +28,11 @@ const Item = ({
 };
 
 const AccountRow = ({ id }: { id: string }) => {
-    const account = useAccount(id) as Account;
+    const account = useAccount(id);
+
+    if (!account) {
+        return <Navigate to="../accounts" />;
+    }
 
     const match = useMatch("/:budgetID/accounts/:accountID");
 
@@ -131,6 +135,7 @@ const AccountRow = ({ id }: { id: string }) => {
                     </Box>
                 </Button>
                 <EditAccountPopper
+                    account={account}
                     isOpen={isEditAccountPopperOpen}
                     setIsOpen={setIsEditAccountPopperOpen}
                     anchorEl={editAccountPopperAnchorEl}

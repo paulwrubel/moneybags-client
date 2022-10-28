@@ -183,6 +183,11 @@ export const budgetSlice = createSlice({
                         .valueOf(),
                     amount: action.payload.initialBalance,
                 });
+
+                // emergency remedy
+                // state.transactions = state.transactions.filter((t) => {
+                //     return state.accounts?.some((a) => t.accountID === a.id);
+                // });
             },
             prepare: ({
                 name,
@@ -202,6 +207,21 @@ export const budgetSlice = createSlice({
                     },
                 };
             },
+        },
+        removeAccount: (
+            state: Budget | null,
+            action: PayloadAction<string>,
+        ) => {
+            if (!state || !state.accounts || !state.transactions) {
+                return;
+            }
+            // remove the account, if it exists
+            state.transactions = state.transactions.filter(
+                (t) => t.accountID !== action.payload,
+            );
+            state.accounts = state.accounts.filter(
+                (a) => a.id !== action.payload,
+            );
         },
         addTransactions: {
             reducer: (
@@ -295,6 +315,7 @@ export const {
     addCategoryGroup,
     setCategoryName,
     addAccount,
+    removeAccount,
     addTransactions,
     removeTransactions,
 } = budgetSlice.actions;

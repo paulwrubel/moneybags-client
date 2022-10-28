@@ -17,14 +17,14 @@ const TransactionsPanel = () => {
 
     const account = useAccount(accountIDParam || "");
 
-    if (accountIDParam && !account) {
-        return <Navigate to="../../accounts" />;
-    }
-
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
     const [selectedTransactions, setSelectedTransactions] = useState<
         Transaction[]
     >([]);
+
+    if (accountIDParam && !account) {
+        return <Navigate to="../../accounts" />;
+    }
 
     const showAllTransactions = !accountIDParam;
 
