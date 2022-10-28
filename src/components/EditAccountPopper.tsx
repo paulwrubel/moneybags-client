@@ -9,7 +9,7 @@ import { Box, Button, Paper } from "@mui/material";
 import SolidPopper from "components/SolidPopper";
 import SolidTextField from "components/SolidTextField";
 // import { addCategory } from "data/BudgetSlice";
-import { removeAccount } from "data/BudgetSlice";
+import { removeAccount, updateAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
 import { Account } from "models/Budget";
 
@@ -36,37 +36,23 @@ const EditAccountPopper = ({
 
     const handleDeleteButtonClick = () => {
         dispatch(removeAccount(account.id));
-        // setSelectedTransactions([]);
         close();
     };
 
-    // const handleDuplicateButtonClick = () => {
-    //     dispatch(addTransactions(selectedTransactions));
-    //     setSelectedTransactions([]);
-    //     close();
-    // };
+    const handleSaveButtonClick = () => {
+        dispatch(
+            updateAccount({
+                id: account.id,
+                name: accountName,
+            }),
+        );
+        close();
+    };
 
     const close = () => {
         setIsOpen(false);
         setAnchorEl(null);
-        // setCategoryName("");
     };
-
-    // const submit = () => {
-    //     handleAddCategory();
-    //     close();
-    //     setIsExpanded(true);
-    // };
-
-    // const handleAddCategory = () => {
-    //     dispatch(
-    //         addCategory({
-    //             groupID: categoryGroupID,
-    //             name: categoryName,
-    //             sort: 0,
-    //         }),
-    //     );
-    // };
 
     return (
         <SolidPopper isOpen={isOpen} anchorEl={anchorEl} close={close}>
@@ -123,10 +109,11 @@ const EditAccountPopper = ({
                             {/* </Item>
                             <Item> */}
                             <Button
-                                variant="outlined"
-                                onClick={handleDeleteButtonClick}
+                                disableElevation
+                                variant="contained"
+                                onClick={handleSaveButtonClick}
                                 size="small"
-                                startIcon={<DeleteIcon />}
+                                // startIcon={<DeleteIcon />}
                                 sx={{
                                     // textTransform: "none",
                                     color: "black",
@@ -140,7 +127,7 @@ const EditAccountPopper = ({
                                     // },
                                 }}
                             >
-                                Close Account
+                                Save
                             </Button>
                             {/* </Item>{" "} */}
                         </Box>

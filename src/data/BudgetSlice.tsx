@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
-import { Budget, Category } from "models/Budget";
+import { Account, Budget, Category } from "models/Budget";
 
 const initialState: Budget | null = null;
 
@@ -208,6 +208,18 @@ export const budgetSlice = createSlice({
                 };
             },
         },
+        updateAccount: (
+            state: Budget | null,
+            action: PayloadAction<Account>,
+        ) => {
+            if (!state || !state.accounts) {
+                return;
+            }
+            state.accounts = state.accounts.filter(
+                (a) => a.id !== action.payload.id,
+            );
+            state.accounts.push(action.payload);
+        },
         removeAccount: (
             state: Budget | null,
             action: PayloadAction<string>,
@@ -315,6 +327,7 @@ export const {
     addCategoryGroup,
     setCategoryName,
     addAccount,
+    updateAccount,
     removeAccount,
     addTransactions,
     removeTransactions,
