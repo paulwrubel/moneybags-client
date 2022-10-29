@@ -49,7 +49,7 @@ const TransactionsPanel = () => {
                 // styleHeight={labelsHeight}
             />
             {/* {isAddingTransaction && ( */}
-            <Collapse in={isAddingTransaction}>
+            <Collapse in={isAddingTransaction} sx={{ flex: "0 0 auto" }}>
                 <AddTransactionRow
                     account={account}
                     columnRatios={columnRatios}
