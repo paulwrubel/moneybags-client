@@ -1,11 +1,12 @@
 import { useState } from "react";
 
-import { Box, Divider, Paper, SxProps } from "@mui/material";
+import { Box, Divider, Paper, SxProps, Typography } from "@mui/material";
 
 import AccountList from "components/AccountList";
 import AddAccountButton from "components/AddAccountButton";
 import MenuPanel from "components/MenuPanel";
 import NewAccountDialog from "components/NewAccountDialog";
+import VersionInfo from "components/VersionInfo";
 import ViewsList from "components/ViewsList";
 
 const Item = ({
@@ -31,43 +32,57 @@ const ViewsPanel: React.FC = () => {
                 <Box
                     sx={{
                         width: 1,
+                        height: 1,
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "center",
+                        justifyContent: "space-between",
                     }}
                 >
-                    <Item sx={{ width: 1, my: 0 }}>
-                        <MenuPanel />
-                    </Item>
-                    <Item sx={{ width: 1 }}>
-                        <ViewsList />
-                    </Item>
-                    <Divider
-                        orientation="horizontal"
-                        variant="middle"
-                        sx={{ width: 0.9 }}
-                    />
-                    <Item sx={{ width: 1 }}>
-                        <AccountList />
-                    </Item>
-                    <Item
+                    <Box
                         sx={{
                             width: 1,
                             display: "flex",
-                            justifyContent: "center",
+                            flexDirection: "column",
+                            alignItems: "center",
                         }}
                     >
-                        <AddAccountButton
-                            onClick={() => {
-                                setAddAccountDialogIsOpen(true);
-                            }}
+                        <Item sx={{ width: 1, my: 0 }}>
+                            <MenuPanel />
+                        </Item>
+                        <Item sx={{ width: 1 }}>
+                            <ViewsList />
+                        </Item>
+                        <Divider
+                            orientation="horizontal"
+                            variant="middle"
+                            sx={{ width: 0.9 }}
                         />
-                        <NewAccountDialog
-                            isOpen={addAccountDialogIsOpen}
-                            handleClose={() => {
-                                setAddAccountDialogIsOpen(false);
+                        <Item sx={{ width: 1 }}>
+                            <AccountList />
+                        </Item>
+                        <Item
+                            sx={{
+                                width: 1,
+                                display: "flex",
+                                justifyContent: "center",
                             }}
-                        />
+                        >
+                            <AddAccountButton
+                                onClick={() => {
+                                    setAddAccountDialogIsOpen(true);
+                                }}
+                            />
+                            <NewAccountDialog
+                                isOpen={addAccountDialogIsOpen}
+                                handleClose={() => {
+                                    setAddAccountDialogIsOpen(false);
+                                }}
+                            />
+                        </Item>
+                    </Box>
+                    <Item>
+                        <VersionInfo version="v0.8.0" />
                     </Item>
                 </Box>
             </Paper>
