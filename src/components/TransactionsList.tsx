@@ -53,9 +53,11 @@ const TransactionsList = ({
         // <Paper square elevation={0}>
         <Box
             sx={{
+                flex: "0 1 auto",
                 // boxSizing: "border-box",
                 width: 1,
                 height: 1,
+                // height: "calc(100% - 1px)",
                 // top: styleTop,
                 // display: "flex",
                 // flexDirection: "column",
@@ -68,7 +70,7 @@ const TransactionsList = ({
                         itemCount={transactions.length}
                         itemSize={32}
                         width={width}
-                        height={height}
+                        height={height - 5}
                         // overscanCount={5}
                     >
                         {({ index, style }) => {

@@ -38,15 +38,16 @@ const TransactionsHeader = ({
             square
             elevation={0}
             sx={{
+                flex: "0 0 auto",
                 boxSizing: "border-box",
                 width: 1,
                 p: 1,
                 backgroundColor: "primary.light",
-                height: 64,
+                height: "64px",
                 color: "black",
                 // position: "sticky",
                 // zIndex: 0,
-                top: 0,
+                // top: 0,
                 // position: "-webkit-sticky",
             }}
         >

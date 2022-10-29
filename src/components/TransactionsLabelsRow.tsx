@@ -40,9 +40,10 @@ const TransactionsLabelsRow = ({
             square
             elevation={1}
             sx={{
+                flex: "0 0 auto",
                 mb: 0.4,
                 // position: "sticky",
-                top: 64,
+                // top: 64,
                 // height: styleHeight,
             }}
         >
