@@ -332,9 +332,9 @@ const AddTransactionRow = ({
                         fullWidth
                         error={isNoteError()}
                         value={note}
-                        setValue={(value) => {
+                        onChange={(e) => {
                             setHadNoteInteraction(true);
-                            setNote(value);
+                            setNote(e.target.value);
                         }}
                         sx={{ height: 1 }}
                         inputBaseSx={{ height: 1 }}
