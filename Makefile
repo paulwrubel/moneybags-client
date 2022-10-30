@@ -1,9 +1,12 @@
 .PHONY: \
+all \
 run start \
 pretty \
 clean
 
 SB_VERSION=LOCAL_DEVELOPMENT
+
+all: run
 
 run: start
 
