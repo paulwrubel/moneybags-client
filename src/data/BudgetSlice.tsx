@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
-import { Budget, Category } from "models/Budget";
+import { Account, Budget, Category } from "models/Budget";
 
 const initialState: Budget | null = null;
 
@@ -183,6 +183,11 @@ export const budgetSlice = createSlice({
                         .valueOf(),
                     amount: action.payload.initialBalance,
                 });
+
+                // emergency remedy
+                // state.transactions = state.transactions.filter((t) => {
+                //     return state.accounts?.some((a) => t.accountID === a.id);
+                // });
             },
             prepare: ({
                 name,
@@ -203,17 +208,46 @@ export const budgetSlice = createSlice({
                 };
             },
         },
-        addTransaction: {
+        updateAccount: (
+            state: Budget | null,
+            action: PayloadAction<Account>,
+        ) => {
+            if (!state || !state.accounts) {
+                return;
+            }
+            state.accounts = state.accounts.filter(
+                (a) => a.id !== action.payload.id,
+            );
+            state.accounts.push(action.payload);
+        },
+        removeAccount: (
+            state: Budget | null,
+            action: PayloadAction<string>,
+        ) => {
+            if (!state || !state.accounts || !state.transactions) {
+                return;
+            }
+            // remove the account, if it exists
+            state.transactions = state.transactions.filter(
+                (t) => t.accountID !== action.payload,
+            );
+            state.accounts = state.accounts.filter(
+                (a) => a.id !== action.payload,
+            );
+        },
+        addTransactions: {
             reducer: (
                 state: Budget | null,
-                action: PayloadAction<{
-                    id: string;
-                    accountID: string;
-                    timestamp: number;
-                    categoryID: string;
-                    note?: string;
-                    amount: number;
-                }>,
+                action: PayloadAction<
+                    {
+                        id: string;
+                        accountID: string;
+                        timestamp: number;
+                        categoryID: string;
+                        note?: string;
+                        amount: number;
+                    }[]
+                >,
             ) => {
                 console.log(action.payload);
                 if (!state) {
@@ -223,41 +257,59 @@ export const budgetSlice = createSlice({
                 if (!state.transactions) {
                     state.transactions = [];
                 }
-                // then, create a new transaction
-                state.transactions.push({
-                    id: action.payload.id,
-                    accountID: action.payload.accountID,
-                    categoryID: action.payload.categoryID,
-                    timestamp: action.payload.timestamp,
-                    note: action.payload.note,
-                    amount: action.payload.amount,
-                });
+                // then, create the new transactions
+                state.transactions = state.transactions.concat(action.payload);
+                //     id: action.payload.id,
+                //     accountID: action.payload.accountID,
+                //     categoryID: action.payload.categoryID,
+                //     timestamp: action.payload.timestamp,
+                //     note: action.payload.note,
+                //     amount: action.payload.amount,
+                // });
+                // state.transactions.push({
+                //     id: action.payload.id,
+                //     accountID: action.payload.accountID,
+                //     categoryID: action.payload.categoryID,
+                //     timestamp: action.payload.timestamp,
+                //     note: action.payload.note,
+                //     amount: action.payload.amount,
+                // });
             },
-            prepare: ({
-                accountID,
-                timestamp,
-                categoryID,
-                note,
-                amount,
-            }: {
-                accountID: string;
-                timestamp: number;
-                categoryID: string;
-                note?: string;
-                amount: number;
-            }) => {
-                // console.log(initialBalance);
+            prepare: (
+                transactionsInfo: {
+                    accountID: string;
+                    timestamp: number;
+                    categoryID: string;
+                    note?: string;
+                    amount: number;
+                }[],
+            ) => {
                 return {
-                    payload: {
-                        id: uuid(),
-                        accountID,
-                        categoryID,
-                        timestamp,
-                        note,
-                        amount,
-                    },
+                    payload: transactionsInfo.map((tInfo) => {
+                        return {
+                            id: uuid(),
+                            accountID: tInfo.accountID,
+                            categoryID: tInfo.categoryID,
+                            timestamp: tInfo.timestamp,
+                            note: tInfo.note,
+                            amount: tInfo.amount,
+                        };
+                    }),
                 };
             },
+        },
+        removeTransactions: (
+            state: Budget | null,
+            action: PayloadAction<string[]>,
+        ) => {
+            // console.log(action.payload);
+            if (!state || !state.transactions) {
+                return;
+            }
+            // remove the transaction, if it exists
+            state.transactions = state.transactions.filter(
+                (t) => !action.payload.includes(t.id),
+            );
         },
     },
 });
@@ -275,7 +327,10 @@ export const {
     addCategoryGroup,
     setCategoryName,
     addAccount,
-    addTransaction,
+    updateAccount,
+    removeAccount,
+    addTransactions,
+    removeTransactions,
 } = budgetSlice.actions;
 
 export default budgetSlice.reducer;

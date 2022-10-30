@@ -1,11 +1,14 @@
 import { useEffect, useState } from "react";
 
-import { Box, Button, Paper, SxProps, Typography } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import { Box, Button, IconButton, SxProps, Typography } from "@mui/material";
 
-import { Link } from "react-router-dom";
+import { Link, Navigate, useMatch } from "react-router-dom";
 
+import EditAccountPopper from "components/EditAccountPopper";
+import SolidSelectable from "components/SolidSelectable";
 import { useAccount, useTransactionsByAccountID } from "data/Hooks";
-import { Account } from "models/Budget";
+// import { Account } from "models/Budget";
 import { formatCurrencyCents } from "Utils";
 
 const Item = ({
@@ -18,18 +21,22 @@ const Item = ({
     return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
 };
 
-const AccountRow: React.FC<{ id: string }> = ({ id }) => {
-    const account = useAccount(id) as Account;
+const AccountRow = ({ id }: { id: string }) => {
+    const account = useAccount(id);
 
-    // const allTransactions = useTransactions();
+    if (!account) {
+        return <Navigate to="../accounts" />;
+    }
+
+    const match = useMatch("/:budgetID/accounts/:accountID");
+
     const transactions = useTransactionsByAccountID(id);
-    // const dispatch = useAppDispatch();
-
-    // console.log(`AccountRow: ${id}`);
-    // console.log(allTransactions);
-    // console.log(transactions);
-
     const [balance, setBalance] = useState(0);
+
+    const [isEditAccountPopperOpen, setIsEditAccountPopperOpen] =
+        useState(false);
+    const [editAccountPopperAnchorEl, setEditAccountPopperAnchorEl] =
+        useState<Element | null>(null);
 
     useEffect(() => {
         const accBalance = transactions.reduce(
@@ -39,19 +46,18 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
         setBalance(accBalance);
     });
 
+    const isSelected = match?.params.accountID === id;
+
     return (
-        // <>
-        //     {envelopeStacks.envelopes.map((envelope) => (
-        //         <Envelope key={envelope.id} envelopeStack={envelopeStack} />
-        //     ))}
-        // </>
         <>
-            <Paper
-                square
-                elevation={0}
-                sx={{ backgroundColor: "primary.light" }}
+            <SolidSelectable
+                isSelected={isSelected}
+                color="primary.light"
+                selectedColor="primary.dark"
+                hoverColor="primary.main"
             >
                 <Button
+                    disableRipple
                     to={`../accounts/${id}`}
                     component={Link}
                     sx={{
@@ -61,27 +67,55 @@ const AccountRow: React.FC<{ id: string }> = ({ id }) => {
                         color: "black",
                     }}
                 >
-                    <Box
-                        sx={{
-                            width: 1,
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                        }}
-                    >
-                        <Item sx={{ flexGrow: 1 }}>
-                            <Typography sx={{ textAlign: "left" }}>
-                                {account.name}
-                            </Typography>
-                        </Item>
-                        <Item sx={{}}>
-                            <Typography sx={{ textAlign: "right" }}>
-                                {formatCurrencyCents(balance)}
-                            </Typography>
+                    <Box sx={{ width: 1, display: "flex" }}>
+                        <Box
+                            sx={{
+                                width: 1,
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                justifyContent: "space-between",
+                            }}
+                        >
+                            <Item sx={{ flexGrow: 1 }}>
+                                <Typography sx={{ textAlign: "left" }}>
+                                    {account.name}
+                                </Typography>
+                            </Item>
+                            <Item sx={{}}>
+                                <Typography sx={{ textAlign: "right" }}>
+                                    {formatCurrencyCents(balance)}
+                                </Typography>
+                            </Item>
+                        </Box>
+                        <Item>
+                            <IconButton
+                                size="small"
+                                onClick={(e) => {
+                                    // e.stopPropagation();
+                                    e.preventDefault();
+
+                                    setIsEditAccountPopperOpen(true);
+                                    setEditAccountPopperAnchorEl(
+                                        e.currentTarget,
+                                    );
+                                    // setIsBudgetSettingsDialogOpen(true);
+                                }}
+                                // sx={{ color: "white" }}
+                            >
+                                <EditIcon />
+                            </IconButton>
                         </Item>
                     </Box>
                 </Button>
-            </Paper>
+                <EditAccountPopper
+                    account={account}
+                    isOpen={isEditAccountPopperOpen}
+                    setIsOpen={setIsEditAccountPopperOpen}
+                    anchorEl={editAccountPopperAnchorEl}
+                    setAnchorEl={setEditAccountPopperAnchorEl}
+                />
+            </SolidSelectable>
         </>
     );
 };

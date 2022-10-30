@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Collapse } from "@mui/material";
+import { Box, Collapse } from "@mui/material";
 
 import { Navigate, useParams } from "react-router-dom";
 
@@ -9,6 +9,7 @@ import TransactionsHeader from "components/TransactionsHeader";
 import TransactionsLabelsRow from "components/TransactionsLabelsRow";
 import TransactionsList from "components/TransactionsList";
 import { useAccount } from "data/Hooks";
+import { Transaction } from "models/Budget";
 
 const TransactionsPanel = () => {
     const params = useParams();
@@ -16,11 +17,14 @@ const TransactionsPanel = () => {
 
     const account = useAccount(accountIDParam || "");
 
+    const [isAddingTransaction, setIsAddingTransaction] = useState(false);
+    const [selectedTransactions, setSelectedTransactions] = useState<
+        Transaction[]
+    >([]);
+
     if (accountIDParam && !account) {
         return <Navigate to="../../accounts" />;
     }
-
-    const [isAddingTransaction, setIsAddingTransaction] = useState(false);
 
     const showAllTransactions = !accountIDParam;
 
@@ -28,17 +32,24 @@ const TransactionsPanel = () => {
         ? [0.18, 0.1, 0.2, 0.35, 0.17]
         : [0.1, 0.2, 0.53, 0.17];
 
+    // const headerHeight = 64;
+    // const labelsHeight = 24;
+
     return (
-        <>
+        <Box sx={{ height: 1, display: "flex", flexDirection: "column" }}>
             <TransactionsHeader
+                selectedTransactions={selectedTransactions}
+                setSelectedTransactions={setSelectedTransactions}
                 setIsAddingTransaction={setIsAddingTransaction}
+                // styleHeight={headerHeight}
             />
             <TransactionsLabelsRow
                 all={showAllTransactions}
                 columnRatios={columnRatios}
+                // styleHeight={labelsHeight}
             />
             {/* {isAddingTransaction && ( */}
-            <Collapse in={isAddingTransaction}>
+            <Collapse in={isAddingTransaction} sx={{ flex: "0 0 auto" }}>
                 <AddTransactionRow
                     account={account}
                     columnRatios={columnRatios}
@@ -47,8 +58,14 @@ const TransactionsPanel = () => {
                 />
             </Collapse>
             {/* )} */}
-            <TransactionsList account={account} columnRatios={columnRatios} />
-        </>
+            <TransactionsList
+                selectedTransactions={selectedTransactions}
+                setSelectedTransactions={setSelectedTransactions}
+                account={account}
+                columnRatios={columnRatios}
+                // styleTop={headerHeight + labelsHeight}
+            />
+        </Box>
     );
 };
 

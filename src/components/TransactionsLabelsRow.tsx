@@ -7,7 +7,7 @@ const Item = ({
     children: React.ReactNode;
     sx?: SxProps;
 }) => {
-    return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
+    return <Box sx={{ px: 1, boxSizing: "border-box", ...sx }}>{children}</Box>;
 };
 
 // const Divider = () => {
@@ -27,9 +27,11 @@ const Item = ({
 const TransactionsLabelsRow = ({
     all,
     columnRatios,
-}: {
+}: // styleHeight,
+{
     all: boolean;
     columnRatios: number[];
+    // styleHeight: number;
 }) => {
     let columnIndex = 0;
 
@@ -38,9 +40,11 @@ const TransactionsLabelsRow = ({
             square
             elevation={1}
             sx={{
+                flex: "0 0 auto",
                 mb: 0.4,
-                position: "sticky",
-                top: 64,
+                // position: "sticky",
+                // top: 64,
+                // height: styleHeight,
             }}
         >
             <Box
@@ -62,7 +66,12 @@ const TransactionsLabelsRow = ({
                     <Typography>Date</Typography>
                 </Item>
                 <Divider orientation="vertical" flexItem />
-                <Item sx={{ width: columnRatios[columnIndex++] }}>
+                <Item
+                    sx={{
+                        width: columnRatios[columnIndex++],
+                        // maxWidth: columnRatios[columnIndex++],
+                    }}
+                >
                     <Typography>Category</Typography>
                 </Item>
                 <Divider orientation="vertical" flexItem />
@@ -71,7 +80,7 @@ const TransactionsLabelsRow = ({
                 </Item>
                 <Divider orientation="vertical" flexItem />
                 <Item sx={{ width: columnRatios[columnIndex++] }}>
-                    <Typography>Amount</Typography>
+                    <Typography sx={{ textAlign: "right" }}>Amount</Typography>
                 </Item>
             </Box>
         </Paper>

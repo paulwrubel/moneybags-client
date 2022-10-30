@@ -14,7 +14,7 @@ import dayjs from "dayjs";
 import SolidAutocomplete from "components/SolidAutocomplete";
 import SolidNumericTextField from "components/SolidNumericTextField";
 import SolidTextField from "components/SolidTextField";
-import { addTransaction } from "data/BudgetSlice";
+import { addTransactions } from "data/BudgetSlice";
 import { useAccounts, useAppDispatch, useCategories } from "data/Hooks";
 import { Account, Category } from "models/Budget";
 
@@ -134,13 +134,15 @@ const AddTransactionRow = ({
         setHadAddButtonInteraction(true);
         if (!isInErrorState(true)) {
             dispatch(
-                addTransaction({
-                    accountID: (selectedAccount as Account).id,
-                    timestamp: timestamp.startOf("day").valueOf(),
-                    categoryID: (selectedCategory as Category).id,
-                    note: note,
-                    amount: amount,
-                }),
+                addTransactions([
+                    {
+                        accountID: (selectedAccount as Account).id,
+                        timestamp: timestamp.startOf("day").valueOf(),
+                        categoryID: (selectedCategory as Category).id,
+                        note: note,
+                        amount: amount,
+                    },
+                ]),
             );
             resetFormValues();
             close();
@@ -208,6 +210,7 @@ const AddTransactionRow = ({
                             getOptionLabel={(o) => o.name}
                             renderInput={(params) => (
                                 <TextField
+                                    required
                                     error={isAccountError(false)}
                                     sx={{
                                         height: 1,
@@ -329,9 +332,9 @@ const AddTransactionRow = ({
                         fullWidth
                         error={isNoteError()}
                         value={note}
-                        setValue={(value) => {
+                        onChange={(e) => {
                             setHadNoteInteraction(true);
-                            setNote(value);
+                            setNote(e.target.value);
                         }}
                         sx={{ height: 1 }}
                         inputBaseSx={{ height: 1 }}
@@ -402,7 +405,7 @@ const AddTransactionRow = ({
     return isAddingTransaction ? (
         <ClickAwayListener
             onClickAway={() => {
-                console.log(hadInteraction());
+                // console.log(hadInteraction());
                 if (!hadInteraction()) {
                     close();
                 }

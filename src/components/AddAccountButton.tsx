@@ -9,9 +9,15 @@ const AddAccountButton: React.FC<{
             onClick={onClick}
             size="small"
             startIcon={<AddCircleOutlineSharpIcon />}
-            sx={{ textTransform: "none", color: "black" }}
+            sx={{
+                textTransform: "none",
+                color: "black",
+                ":hover": {
+                    backgroundColor: "primary.main",
+                },
+            }}
         >
-            Add an account
+            Add account
         </Button>
     );
 };

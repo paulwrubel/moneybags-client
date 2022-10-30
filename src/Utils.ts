@@ -22,4 +22,35 @@ function def<T>(value: T | undefined, def: T): T {
     return value === undefined ? def : value;
 }
 
-export { formatCurrencyCents, isError, def };
+function getSelectionText(): string {
+    if (window.getSelection) {
+        try {
+            const activeElement = document.activeElement;
+            if (
+                activeElement &&
+                activeElement instanceof HTMLInputElement &&
+                activeElement.value
+            ) {
+                // firefox bug https://bugzilla.mozilla.org/show_bug.cgi?id=85686
+                return activeElement.value.substring(
+                    activeElement.selectionStart ?? 0,
+                    activeElement.selectionEnd ?? 0,
+                );
+            } else {
+                return window.getSelection()?.toString() ?? "";
+            }
+        } catch (e) {
+            console.error(e);
+            return "";
+        }
+    } else {
+        // const docSel = document.getSelection();
+        // if (docSel && docSel.type != "Control") {
+        //     // For IE
+        //     return docSel.createRange().text;
+        // }
+        return document.getSelection()?.toString() ?? "";
+    }
+}
+
+export { formatCurrencyCents, isError, def, getSelectionText };

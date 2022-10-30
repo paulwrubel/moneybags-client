@@ -6,13 +6,14 @@ const SolidPopper: React.FC<{
     anchorEl: Element | null;
     close: VoidFunction;
     placement?: PopperPlacementType;
+    disablePortal?: boolean;
     children: React.ReactNode;
-}> = ({ isOpen, anchorEl, close, placement, children }) => {
+}> = ({ isOpen, anchorEl, close, placement, disablePortal, children }) => {
     return (
         <Popper
             open={isOpen}
             anchorEl={anchorEl}
-            disablePortal
+            disablePortal={disablePortal}
             placement={placement}
             sx={{ zIndex: 1 }}
             // modifiers={[
