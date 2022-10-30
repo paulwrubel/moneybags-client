@@ -1,18 +1,12 @@
 import { useEffect, useState } from "react";
 
 import EditIcon from "@mui/icons-material/Edit";
-import {
-    Box,
-    Button,
-    IconButton,
-    Paper,
-    SxProps,
-    Typography,
-} from "@mui/material";
+import { Box, Button, IconButton, SxProps, Typography } from "@mui/material";
 
 import { Link, Navigate, useMatch } from "react-router-dom";
 
 import EditAccountPopper from "components/EditAccountPopper";
+import SolidSelectable from "components/SolidSelectable";
 import { useAccount, useTransactionsByAccountID } from "data/Hooks";
 // import { Account } from "models/Budget";
 import { formatCurrencyCents } from "Utils";
@@ -36,14 +30,7 @@ const AccountRow = ({ id }: { id: string }) => {
 
     const match = useMatch("/:budgetID/accounts/:accountID");
 
-    // const allTransactions = useTransactions();
     const transactions = useTransactionsByAccountID(id);
-    // const dispatch = useAppDispatch();
-
-    // console.log(`AccountRow: ${id}`);
-    // console.log(allTransactions);
-    // console.log(transactions);
-
     const [balance, setBalance] = useState(0);
 
     const [isEditAccountPopperOpen, setIsEditAccountPopperOpen] =
@@ -62,25 +49,12 @@ const AccountRow = ({ id }: { id: string }) => {
     const isSelected = match?.params.accountID === id;
 
     return (
-        // <>
-        //     {envelopeStacks.envelopes.map((envelope) => (
-        //         <Envelope key={envelope.id} envelopeStack={envelopeStack} />
-        //     ))}
-        // </>
         <>
-            <Paper
-                square
-                elevation={0}
-                sx={{
-                    backgroundColor: isSelected
-                        ? "primary.dark"
-                        : "primary.light",
-                    ":hover": {
-                        backgroundColor: isSelected
-                            ? "primary.dark"
-                            : "primary.main",
-                    },
-                }}
+            <SolidSelectable
+                isSelected={isSelected}
+                color="primary.light"
+                selectedColor="primary.dark"
+                hoverColor="primary.main"
             >
                 <Button
                     disableRipple
@@ -141,7 +115,7 @@ const AccountRow = ({ id }: { id: string }) => {
                     anchorEl={editAccountPopperAnchorEl}
                     setAnchorEl={setEditAccountPopperAnchorEl}
                 />
-            </Paper>
+            </SolidSelectable>
         </>
     );
 };
