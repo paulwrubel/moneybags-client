@@ -4,7 +4,7 @@ run start \
 pretty \
 clean
 
-SB_VERSION=LOCAL_DEVELOPMENT
+SB_VERSION=local-development
 
 all: run
 

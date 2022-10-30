@@ -21,12 +21,10 @@ const TransactionsHeader = ({
     selectedTransactions,
     setSelectedTransactions,
     setIsAddingTransaction,
-}: // styleHeight,
-{
+}: {
     selectedTransactions: Transaction[];
     setSelectedTransactions: (arg0: Transaction[]) => void;
     setIsAddingTransaction: React.Dispatch<React.SetStateAction<boolean>>;
-    // styleHeight: number;
 }) => {
     const [isEditTransactionsPopperOpen, setIsEditTransactionsPopperOpen] =
         useState(false);
@@ -45,27 +43,18 @@ const TransactionsHeader = ({
                 backgroundColor: "primary.light",
                 height: "64px",
                 color: "black",
-                // position: "sticky",
-                // zIndex: 0,
-                // top: 0,
-                // position: "-webkit-sticky",
             }}
         >
             <Box
                 sx={{
-                    // boxSizing: "border-box",
-                    // width: 1,
                     height: 1,
-                    // minHeight: "inherit",
                     display: "flex",
-                    // flexDirection: "row",
                     alignItems: "center",
-                    // justifyContent: "space-between",
                 }}
             >
                 <Item sx={{}}>
                     <Button
-                        variant="outlined"
+                        // variant="outlined"
                         onClick={() => {
                             setIsAddingTransaction(true);
                         }}
@@ -73,14 +62,11 @@ const TransactionsHeader = ({
                         startIcon={<AddCircleOutlineSharpIcon />}
                         sx={{
                             textTransform: "none",
-                            color: "white",
-                            // backgroundColor: "primary.main",
-                            borderColor: "white",
+                            color: "black",
+                            borderColor: "black",
                             ":hover": {
-                                // color: "primary.dark",
-                                // borderColor: "primary.dark",
                                 backgroundColor: "primary.main",
-                                borderColor: "white",
+                                borderColor: "black",
                             },
                         }}
                     >
@@ -89,7 +75,7 @@ const TransactionsHeader = ({
                 </Item>
                 <Item sx={{}}>
                     <Button
-                        variant="outlined"
+                        // variant="outlined"
                         onClick={(
                             event: React.MouseEvent<HTMLButtonElement>,
                         ) => {
@@ -102,14 +88,11 @@ const TransactionsHeader = ({
                         startIcon={<EditSharpIcon />}
                         sx={{
                             textTransform: "none",
-                            color: "white",
-                            // backgroundColor: "primary.main",
-                            borderColor: "white",
+                            color: "black",
+                            borderColor: "black",
                             ":hover": {
-                                // color: "primary.dark",
-                                // borderColor: "primary.dark",
                                 backgroundColor: "primary.main",
-                                borderColor: "white",
+                                borderColor: "black",
                             },
                         }}
                     >
