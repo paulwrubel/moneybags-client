@@ -27,6 +27,7 @@ steps:
         - main
       event:
         - push
+        - pull_request
 
   - name: embed-vars
     image: alpine/git
