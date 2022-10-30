@@ -41,7 +41,7 @@ steps:
   - name: build
     image: node:latest
     commands:
-      - source .env
+      - . ./.env
       - npm install
       - npm run build
     when:
