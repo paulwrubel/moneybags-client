@@ -18,9 +18,31 @@ steps:
         - pull_request
         - tag
 
+  - name: embed-vars-dev
+    image: alpine/git
+    commands:
+      - echo "REACT_APP_SB_VERSION=${DRONE_COMMIT_SHA:0:8}" > .env
+    when:
+      branch:
+        - main
+      event:
+        - push
+        - pull_request
+
+  - name: embed-vars
+    image: alpine/git
+    commands:
+      - echo "REACT_APP_SB_VERSION=${DRONE_TAG}" > .env
+    when:
+      branch:
+        - main
+      event:
+        - tag
+
   - name: build
     image: node:latest
     commands:
+      - . ./.env
       - npm install
       - npm run build
     when:
