@@ -10,12 +10,16 @@ import { Account, Transaction } from "models/Budget";
 const TransactionsList = ({
     selectedTransactions,
     setSelectedTransactions,
+    isSelected,
+    setIsSelected,
     account,
     columnRatios,
 }: // styleTop,
 {
     selectedTransactions: Transaction[];
     setSelectedTransactions: (arg0: Transaction[]) => void;
+    isSelected: (arg0: Transaction) => boolean;
+    setIsSelected: (arg0: Transaction, arg1: boolean) => void;
     account?: Account;
     columnRatios: number[];
     // styleTop: number;
@@ -26,35 +30,12 @@ const TransactionsList = ({
         ? allTransactions.filter(({ accountID }) => accountID === account.id)
         : allTransactions;
 
-    const isSelected = (t: Transaction) =>
-        selectedTransactions.some((a) => t.id === a.id);
-    const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
-        const selected = isSelected(t);
-        if (shouldBeSelected && !selected) {
-            setSelectedTransactions([t, ...selectedTransactions]);
-        } else if (!shouldBeSelected && selected) {
-            setSelectedTransactions(
-                selectedTransactions.filter((a) => t.id !== a.id),
-            );
-            // const selTrxCopy = new Set(selectedTransactions);
-            // selTrxCopy.delete(id);
-            // setSelectedTransactions(selTrxCopy);
-        }
-        // if (isSelected(id) && !shouldBeSelected) {
-        //     setSelectedTransactions([...selectedTransactions, id]);
-        // } else if (!isSelected(id) && shouldBeSelected) {
-        //     setSelectedTransactions(
-        //         selectedTransactions.filter((a) => a !== id),
-        //     );
-        // }
-    };
-
     return (
         // <Paper square elevation={0}>
         <Box
             sx={{
                 flex: "1 1 auto",
-                overflowX: "hidden",
+                overflow: "hidden",
                 // boxSizing: "border-box",
                 // width: 1,
                 // height: 1,
@@ -71,7 +52,7 @@ const TransactionsList = ({
                         itemCount={transactions.length}
                         itemSize={32}
                         width={width}
-                        height={height - 7}
+                        height={height}
                         // overscanCount={5}
                     >
                         {({ index, style }) => {

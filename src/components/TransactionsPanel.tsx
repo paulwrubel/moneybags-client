@@ -21,6 +21,19 @@ const TransactionsPanel = () => {
         Transaction[]
     >([]);
 
+    const isSelected = (t: Transaction) =>
+        selectedTransactions.some((a) => t.id === a.id);
+    const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
+        const selected = isSelected(t);
+        if (shouldBeSelected && !selected) {
+            setSelectedTransactions([t, ...selectedTransactions]);
+        } else if (!shouldBeSelected && selected) {
+            setSelectedTransactions(
+                selectedTransactions.filter((a) => t.id !== a.id),
+            );
+        }
+    };
+
     if (accountID && !account) {
         return <Navigate to="../../accounts" />;
     }
@@ -65,6 +78,8 @@ const TransactionsPanel = () => {
             <TransactionsList
                 selectedTransactions={selectedTransactions}
                 setSelectedTransactions={setSelectedTransactions}
+                isSelected={isSelected}
+                setIsSelected={setIsSelected}
                 account={account}
                 columnRatios={columnRatios}
                 // styleTop={headerHeight + labelsHeight}
