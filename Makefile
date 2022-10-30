@@ -3,10 +3,13 @@ run start \
 pretty \
 clean
 
+SB_VERSION=LOCAL_DEVELOPMENT
+
 run: start
 
 start:
-	npm start
+	REACT_APP_SB_VERSION=${SB_VERSION} \
+		npm start
 
 pretty:
 	npx eslint .

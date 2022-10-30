@@ -4,9 +4,9 @@ import { Box, Divider, Paper, SxProps, Typography } from "@mui/material";
 
 import AccountList from "components/AccountList";
 import AddAccountButton from "components/AddAccountButton";
+import InfoRow from "components/InfoRow";
 import MenuPanel from "components/MenuPanel";
 import NewAccountDialog from "components/NewAccountDialog";
-import VersionInfo from "components/VersionInfo";
 import ViewsList from "components/ViewsList";
 
 const Item = ({
@@ -19,7 +19,10 @@ const Item = ({
     return <Box sx={{ my: 1, ...sx }}>{children}</Box>;
 };
 
-const ViewsPanel: React.FC = () => {
+const ViewsPanel = () => {
+    const REACT_APP_SB_VERSION =
+        process.env.REACT_APP_SB_VERSION ?? "__UNKNOWN__";
+
     const [addAccountDialogIsOpen, setAddAccountDialogIsOpen] = useState(false);
 
     return (
@@ -81,9 +84,9 @@ const ViewsPanel: React.FC = () => {
                             />
                         </Item>
                     </Box>
-                    <Item>
-                        <VersionInfo version="v0.8.0" />
-                    </Item>
+                    <Box sx={{ width: 1 }}>
+                        <InfoRow version={REACT_APP_SB_VERSION} />
+                    </Box>
                 </Box>
             </Paper>
         </>
