@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { Box, Collapse } from "@mui/material";
 
@@ -12,28 +12,24 @@ import { useAccount } from "data/Hooks";
 import { Transaction } from "models/Budget";
 
 const TransactionsPanel = () => {
-    const params = useParams();
-    const accountIDParam = params.accountID;
+    const accountID = useParams()?.accountID ?? "";
 
-    const account = useAccount(accountIDParam || "");
+    const account = useAccount(accountID);
 
     const [isAddingTransaction, setIsAddingTransaction] = useState(false);
     const [selectedTransactions, setSelectedTransactions] = useState<
         Transaction[]
     >([]);
 
-    if (accountIDParam && !account) {
+    if (accountID && !account) {
         return <Navigate to="../../accounts" />;
     }
 
-    const showAllTransactions = !accountIDParam;
+    const showAllTransactions = !accountID;
 
     const columnRatios = showAllTransactions
         ? [0.18, 0.1, 0.2, 0.35, 0.17]
         : [0.1, 0.2, 0.53, 0.17];
-
-    // const headerHeight = 64;
-    // const labelsHeight = 24;
 
     return (
         <Box
