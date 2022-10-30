@@ -21,7 +21,7 @@ steps:
   - name: embed-vars-dev
     image: alpine/git
     commands:
-      - export REACT_APP_SB_VERSION=${DRONE_COMMIT_SHA:0:8}
+      - echo "REACT_APP_SB_VERSION=${DRONE_COMMIT_SHA:0:8}" > .env
     when:
       branch:
         - main
@@ -31,7 +31,7 @@ steps:
   - name: embed-vars
     image: alpine/git
     commands:
-      - export REACT_APP_SB_VERSION=${DRONE_TAG}
+      - echo "REACT_APP_SB_VERSION=${DRONE_TAG}" > .env
     when:
       branch:
         - main
