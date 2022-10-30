@@ -53,10 +53,11 @@ const TransactionsList = ({
         // <Paper square elevation={0}>
         <Box
             sx={{
-                flex: "0 1 auto",
+                flex: "1 1 auto",
+                overflowX: "hidden",
                 // boxSizing: "border-box",
-                width: 1,
-                height: 1,
+                // width: 1,
+                // height: 1,
                 // height: "calc(100% - 1px)",
                 // top: styleTop,
                 // display: "flex",
@@ -70,7 +71,7 @@ const TransactionsList = ({
                         itemCount={transactions.length}
                         itemSize={32}
                         width={width}
-                        height={height - 5}
+                        height={height - 7}
                         // overscanCount={5}
                     >
                         {({ index, style }) => {
@@ -79,14 +80,12 @@ const TransactionsList = ({
                             return (
                                 <ButtonBase
                                     style={style}
-                                    // key={transaction.id}
                                     disableRipple
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         e.preventDefault();
 
                                         setIsSelected(transaction, !selected);
-                                        // console.log("clicked");
                                     }}
                                     sx={{ width: 1 }}
                                 >

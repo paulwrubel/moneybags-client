@@ -36,7 +36,15 @@ const TransactionsPanel = () => {
     // const labelsHeight = 24;
 
     return (
-        <Box sx={{ height: 1, display: "flex", flexDirection: "column" }}>
+        <Box
+            sx={{
+                width: 1,
+                height: 1,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-evenly",
+            }}
+        >
             <TransactionsHeader
                 selectedTransactions={selectedTransactions}
                 setSelectedTransactions={setSelectedTransactions}

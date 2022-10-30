@@ -77,7 +77,7 @@ const AddTransactionRow = ({
         useState(false);
 
     useEffect(() => {
-        setSelectedAccount(account ?? null);
+        handleClose();
     }, [account]);
 
     let columnIndex = 0;
