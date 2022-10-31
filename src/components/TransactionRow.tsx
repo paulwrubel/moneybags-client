@@ -5,6 +5,7 @@ import dayjs from "dayjs";
 
 import { useAccount, useCategoriesIncludeSystem } from "data/Hooks";
 import { Account, Transaction } from "models/Budget";
+import Theme from "Theme";
 import { formatCurrencyCents } from "Utils";
 
 const Item = ({
@@ -15,9 +16,52 @@ const Item = ({
     sx?: SxProps;
 }) => {
     return (
-        <Box sx={{ px: 1, boxSizing: "border-box", ...sx }}>
-            <Box>{children}</Box>
+        <Box
+            sx={{
+                display: "flex",
+                alignItems: "center",
+                height: 1,
+                px: 1,
+                boxSizing: "border-box",
+                ...sx,
+            }}
+        >
+            {children}
         </Box>
+    );
+};
+
+const HoverableTypography = ({
+    isSelected,
+    noWrap,
+    children,
+    sx,
+}: {
+    isSelected: boolean;
+    noWrap?: boolean;
+    children: React.ReactNode;
+    sx?: SxProps;
+}) => {
+    return (
+        <Typography
+            noWrap={noWrap}
+            sx={{
+                minWidth: "1rem",
+                // minHeight: "1.5rem",
+                // textAlign: "left",
+                ":hover": isSelected
+                    ? {
+                          outlineColor: (theme) => theme.palette.primary.dark,
+                          outlineStyle: "solid",
+                          outlineWidth: "0.1rem",
+                          borderRadius: "0.18rem",
+                      }
+                    : undefined,
+                ...sx,
+            }}
+        >
+            {children}
+        </Typography>
     );
 };
 
@@ -60,54 +104,66 @@ const TransactionRow = ({
             }}
         >
             {showAccount && (
-                <Item sx={{ width: columnRatios[columnIndex++] }}>
-                    <Typography sx={{ textAlign: "left" }}>
+                <Item
+                    sx={{
+                        // display: "flex",
+                        width: columnRatios[columnIndex++],
+                    }}
+                >
+                    <HoverableTypography isSelected={isSelected}>
                         {account.name}
-                    </Typography>
+                    </HoverableTypography>
                 </Item>
             )}
             <Item
                 sx={{
+                    // display: "flex",
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <Typography sx={{ textAlign: "left" }}>
+                <HoverableTypography isSelected={isSelected}>
                     {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
-                </Typography>
+                </HoverableTypography>
             </Item>
             <Item
                 sx={{
+                    // display: "flex",
                     width: columnRatios[columnIndex++],
-                    // boxSizing: "content-box",
                 }}
             >
-                <Typography
-                    noWrap
-                    sx={{
-                        // boxSizing: "content-box",
-                        // width: 0.9,
-                        // height: 1,
-                        textAlign: "left",
-                        // overflow: "hidden",
-                        // textOverflow: "ellipsis",
-                    }}
-                >
+                <HoverableTypography isSelected={isSelected} noWrap>
                     {
                         categories.find(
                             ({ id }) => id === transaction.categoryID,
                         )?.name
                     }
-                </Typography>
+                </HoverableTypography>
             </Item>
-            <Item sx={{ width: columnRatios[columnIndex++] }}>
-                <Typography sx={{ textAlign: "left" }}>
+            <Item
+                sx={{
+                    // display: "flex",
+                    width: columnRatios[columnIndex++],
+                }}
+            >
+                <HoverableTypography isSelected={isSelected} noWrap>
                     {transaction.note}
-                </Typography>
+                </HoverableTypography>
             </Item>
-            <Item sx={{ width: columnRatios[columnIndex++] }}>
-                <Typography sx={{ textAlign: "right" }}>
+            <Item
+                sx={{
+                    // display: "flex",
+                    flexDirection: "row-reverse",
+                    width: columnRatios[columnIndex++],
+                }}
+            >
+                <HoverableTypography
+                    isSelected={isSelected}
+                    sx={{
+                        textAlign: "right",
+                    }}
+                >
                     {formatCurrencyCents(transaction.amount, { sign: "$" })}
-                </Typography>
+                </HoverableTypography>
             </Item>
         </Box>
     );
