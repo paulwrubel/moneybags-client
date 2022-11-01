@@ -18,9 +18,9 @@ const Item = ({
     return (
         <Box
             sx={{
-                display: "flex",
-                alignItems: "center",
-                height: 1,
+                // display: "flex",
+                // alignItems: "center",
+                // height: 1,
                 px: 1,
                 boxSizing: "border-box",
                 ...sx,
@@ -46,9 +46,10 @@ const HoverableTypography = ({
         <Typography
             noWrap={noWrap}
             sx={{
-                minWidth: "1rem",
-                // minHeight: "1.5rem",
-                // textAlign: "left",
+                width: 1,
+                // minWidth: "1rem",
+                minHeight: "1.5rem",
+                textAlign: "left",
                 ":hover": isSelected
                     ? {
                           outlineColor: (theme) => theme.palette.primary.dark,
@@ -67,12 +68,14 @@ const HoverableTypography = ({
 
 const TransactionRow = ({
     isSelected,
+    isEditing,
     showAccount,
     index,
     transaction,
     columnRatios,
 }: {
     isSelected: boolean;
+    isEditing: boolean;
     showAccount?: boolean;
     index: number;
     transaction: Transaction;
@@ -83,87 +86,85 @@ const TransactionRow = ({
 
     let columnIndex = 0;
 
+    const bgColor = (() => {
+        if (isEditing) {
+            return index % 2 === 0 ? "red" : "green";
+        }
+        if (isSelected) {
+            return index % 2 === 0 ? "primary.light" : "primary.lighter";
+        }
+        return index % 2 === 0 ? "neutral.light" : "white";
+    })();
+
     return (
         <Box
             sx={{
                 display: "flex",
                 flexDirection: "row",
                 alignItems: "center",
-                // mx: 1,
                 width: 1,
                 height: "32px",
                 boxSizing: "border-box",
-                backgroundColor: isSelected
-                    ? // ? "primary.main"
-                      index % 2 === 0
-                        ? "primary.light"
-                        : "primary.lighter"
-                    : index % 2 === 0
-                    ? "neutral.light"
-                    : "white",
+                backgroundColor: bgColor,
             }}
         >
             {showAccount && (
                 <Item
                     sx={{
-                        // display: "flex",
+                        display: "flex",
                         width: columnRatios[columnIndex++],
                     }}
                 >
-                    <HoverableTypography isSelected={isSelected}>
-                        {account.name}
-                    </HoverableTypography>
+                    <Typography noWrap>{account.name}</Typography>
                 </Item>
             )}
             <Item
                 sx={{
-                    // display: "flex",
+                    display: "flex",
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <HoverableTypography isSelected={isSelected}>
+                <Typography noWrap>
                     {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
-                </HoverableTypography>
+                </Typography>
             </Item>
             <Item
                 sx={{
-                    // display: "flex",
+                    display: "flex",
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <HoverableTypography isSelected={isSelected} noWrap>
+                <Typography noWrap>
                     {
                         categories.find(
                             ({ id }) => id === transaction.categoryID,
                         )?.name
                     }
-                </HoverableTypography>
+                </Typography>
             </Item>
             <Item
                 sx={{
-                    // display: "flex",
+                    display: "flex",
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <HoverableTypography isSelected={isSelected} noWrap>
-                    {transaction.note}
-                </HoverableTypography>
+                <Typography noWrap>{transaction.note}</Typography>
             </Item>
             <Item
                 sx={{
-                    // display: "flex",
+                    display: "flex",
                     flexDirection: "row-reverse",
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <HoverableTypography
-                    isSelected={isSelected}
+                <Typography
+                    noWrap
                     sx={{
                         textAlign: "right",
                     }}
                 >
                     {formatCurrencyCents(transaction.amount, { sign: "$" })}
-                </HoverableTypography>
+                </Typography>
             </Item>
         </Box>
     );

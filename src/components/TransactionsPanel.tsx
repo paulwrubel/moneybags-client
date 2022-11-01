@@ -20,9 +20,13 @@ const TransactionsPanel = () => {
     const [selectedTransactions, setSelectedTransactions] = useState<
         Transaction[]
     >([]);
+    const [transactionBeingEdited, setTransactionBeingEdited] =
+        useState<Transaction | null>(null);
 
     const isSelected = (t: Transaction) =>
         selectedTransactions.some((a) => t.id === a.id);
+    const isEditing = (t: Transaction) => transactionBeingEdited?.id === t.id;
+
     const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
         const selected = isSelected(t);
         if (shouldBeSelected && !selected) {
@@ -31,6 +35,22 @@ const TransactionsPanel = () => {
             setSelectedTransactions(
                 selectedTransactions.filter((a) => t.id !== a.id),
             );
+        }
+    };
+
+    const onRowClick = (
+        t: Transaction,
+        wasCheckClicked: boolean,
+        wasShiftClicked: boolean,
+    ) => {
+        const currentlySelected = isSelected(t);
+        const currentlyEditing = isEditing(t);
+
+        if (currentlySelected) {
+            setTransactionBeingEdited(t);
+        } else {
+            setTransactionBeingEdited(null);
+            setIsSelected(t, true);
         }
     };
 
@@ -76,10 +96,12 @@ const TransactionsPanel = () => {
             </Collapse>
             {/* )} */}
             <TransactionsList
-                selectedTransactions={selectedTransactions}
-                setSelectedTransactions={setSelectedTransactions}
+                onRowClick={onRowClick}
+                // selectedTransactions={selectedTransactions}
+                // setSelectedTransactions={setSelectedTransactions}
                 isSelected={isSelected}
-                setIsSelected={setIsSelected}
+                // setIsSelected={setIsSelected}
+                isEditing={isEditing}
                 account={account}
                 columnRatios={columnRatios}
                 // styleTop={headerHeight + labelsHeight}
