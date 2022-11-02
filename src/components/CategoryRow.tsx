@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 
 import { Box, ButtonBase, SxProps, TextField, Typography } from "@mui/material";
 
-import SolidNumericTextField from "components/SolidNumericTextField";
+import SolidNumericTextField from "components/solid/SolidNumericTextField";
 import { setAllocated, setCategoryName } from "data/BudgetSlice";
 import {
     useActivityByCategoryIDAndMonth,

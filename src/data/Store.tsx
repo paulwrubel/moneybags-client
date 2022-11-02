@@ -25,19 +25,8 @@ store.subscribe(() => {
     if (!state.core.saveLock) {
         const metadataString = JSON.stringify(state.metadata);
         localStorage.setItem("metadata", metadataString);
-        // if (state.metadata.budgetHeaders) {
-        //     localStorage.setItem(
-        //         "budgetHeaders",
-        //         JSON.stringify(state.metadata.budgetHeaders),
-        //     );
-        // }
         if (state.core.activeBudgetID) {
-            // console.log(state);
             const budgetString = JSON.stringify(state.budget);
-            // console.log(
-            //     `STORING BUDGET STRING FOR ${state.metadata.activeBudgetID} | ` +
-            //         budgetString,
-            // );
             localStorage.setItem(state.core.activeBudgetID, budgetString);
         }
     }

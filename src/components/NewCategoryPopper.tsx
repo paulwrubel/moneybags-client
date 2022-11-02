@@ -2,7 +2,7 @@ import { useState } from "react";
 
 import { Box, Button, Paper, TextField } from "@mui/material";
 
-import SolidPopper from "components/SolidPopper";
+import SolidPopper from "components/solid/SolidPopper";
 import { addCategory } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
 

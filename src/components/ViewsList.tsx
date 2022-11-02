@@ -2,7 +2,7 @@ import { Box, Button } from "@mui/material";
 
 import { Link, useMatch } from "react-router-dom";
 
-import SolidSelectable from "components/SolidSelectable";
+import SolidSelectable from "components/solid/SolidSelectable";
 
 const ViewsList: React.FC = () => {
     const match = useMatch("/:budgetID/:viewName");

@@ -2,7 +2,7 @@ import { Grid, Paper } from "@mui/material";
 
 import { Navigate, Route, Routes } from "react-router-dom";
 
-import TransactionsPanel from "components/TransactionsPanel";
+import TransactionsPanel from "components/transactions/TransactionsPanel";
 
 const AccountsView: React.FC = () => {
     return (

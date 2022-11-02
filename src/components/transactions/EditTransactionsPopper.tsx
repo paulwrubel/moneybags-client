@@ -2,7 +2,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, Paper } from "@mui/material";
 
-import SolidPopper from "components/SolidPopper";
+import SolidPopper from "components/solid/SolidPopper";
 import { addTransactions, removeTransactions } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
 import { Transaction } from "models/Budget";

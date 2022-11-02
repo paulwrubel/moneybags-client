@@ -11,9 +11,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
-import SolidAutocomplete from "components/SolidAutocomplete";
-import SolidNumericTextField from "components/SolidNumericTextField";
-import SolidTextField from "components/SolidTextField";
+import SolidAutocomplete from "components/solid/SolidAutocomplete";
+import SolidNumericTextField from "components/solid/SolidNumericTextField";
+import SolidTextField from "components/solid/SolidTextField";
 import { addTransactions } from "data/BudgetSlice";
 import { useAccounts, useAppDispatch, useCategories } from "data/Hooks";
 import { Account, Category } from "models/Budget";
@@ -37,7 +37,7 @@ const AddTransactionRow = ({
     account?: Account;
     columnRatios: number[];
     isAddingTransaction: boolean;
-    setIsAddingTransaction: React.Dispatch<React.SetStateAction<boolean>>;
+    setIsAddingTransaction: (arg0: boolean) => void;
     // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
     const showAccount = !account;
