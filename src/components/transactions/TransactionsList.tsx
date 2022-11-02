@@ -61,9 +61,15 @@ const TransactionsList = forwardRef<
                                 const editing = isEditing(transaction);
                                 return (
                                     <ButtonBase
+                                        component={Box}
                                         style={style}
                                         disableRipple
-                                        onClick={(e) => {
+                                        onClick={(
+                                            e: React.MouseEvent<
+                                                HTMLDivElement,
+                                                MouseEvent
+                                            >,
+                                        ) => {
                                             e.stopPropagation();
                                             e.preventDefault();
 

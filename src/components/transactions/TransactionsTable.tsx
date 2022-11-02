@@ -10,16 +10,10 @@ import { Account, Transaction } from "models/Budget";
 const TransactionsTable = forwardRef<
     React.Ref<unknown>,
     {
-        columnRatios: number[];
-        showAllTransactions: boolean;
         isAddingTransaction: boolean;
+        setIsAddingTransaction: (isAddingTransaction: boolean) => void;
         account?: Account;
         transactions: Transaction[];
-        setIsAddingTransaction: (isAddingTransaction: boolean) => void;
-        // setSelectedTransactions: (selectedTransactions: Transaction[]) => boolean;
-        // setTransactionBeingEdited: (
-        //     transactionBeingEdited: Transaction | null,
-        // ) => void;
         onRowClick: (
             t: Transaction,
             wasCheckClicked: boolean,
@@ -32,40 +26,22 @@ const TransactionsTable = forwardRef<
 >(
     (
         {
-            columnRatios,
-            showAllTransactions,
             isAddingTransaction,
+            setIsAddingTransaction,
             account,
             transactions,
-            setIsAddingTransaction,
-            // setSelectedTransactions,
-            // setTransactionBeingEdited,
             onRowClick,
             isSelected,
             isEditing,
         },
         ref,
-        // {
-        //     columnRatios: number[];
-        //     showAllTransactions: boolean;
-        //     isAddingTransaction: boolean;
-        //     account?: Account;
-        //     transactions: Transaction[];
-        //     setIsAddingTransaction: (isAddingTransaction: boolean) => void;
-        //     // setSelectedTransactions: (selectedTransactions: Transaction[]) => boolean;
-        //     // setTransactionBeingEdited: (
-        //     //     transactionBeingEdited: Transaction | null,
-        //     // ) => void;
-        //     onRowClick: (
-        //         t: Transaction,
-        //         wasCheckClicked: boolean,
-        //         isShiftHeld: boolean,
-        //         isCtrlHeld: boolean,
-        //     ) => void;
-        //     isSelected: (t: Transaction) => boolean;
-        //     isEditing: (t: Transaction) => boolean;
-        // }
     ) => {
+        const showAllTransactions = !account;
+
+        const columnRatios = showAllTransactions
+            ? [0.18, 0.1, 0.2, 0.35, 0.17]
+            : [0.1, 0.2, 0.53, 0.17];
+
         return (
             <Box
                 ref={ref}

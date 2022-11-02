@@ -117,7 +117,7 @@ const TransactionsPanel = () => {
                     transactions.findIndex((a) => a.id === t.id),
                 );
             } else {
-                if (transactionBeingEdited?.id !== t.id) {
+                if (!currentlyEditing) {
                     setSelectedTransactions([t]);
                     setTransactionBeingEdited(null);
                     setLastSelectedIndex(
@@ -127,12 +127,6 @@ const TransactionsPanel = () => {
             }
         }
     };
-
-    const showAllTransactions = !accountID;
-
-    const columnRatios = showAllTransactions
-        ? [0.18, 0.1, 0.2, 0.35, 0.17]
-        : [0.1, 0.2, 0.53, 0.17];
 
     return (
         <Box
@@ -158,50 +152,15 @@ const TransactionsPanel = () => {
                 }}
             >
                 <TransactionsTable
-                    columnRatios={columnRatios}
-                    showAllTransactions={showAllTransactions}
                     isAddingTransaction={isAddingTransaction}
+                    setIsAddingTransaction={setIsAddingTransaction}
                     account={account}
                     transactions={transactions}
-                    setIsAddingTransaction={setIsAddingTransaction}
                     onRowClick={onRowClick}
                     isSelected={isSelected}
                     isEditing={isEditing}
                 />
             </ClickAwayListener>
-            {/* <TransactionsLabelsRow
-                all={showAllTransactions}
-                columnRatios={columnRatios}
-                // styleHeight={labelsHeight}
-            />
-            <Collapse in={isAddingTransaction} sx={{ flex: "0 0 auto" }}>
-                <AddTransactionRow
-                    account={account}
-                    columnRatios={columnRatios}
-                    isAddingTransaction={isAddingTransaction}
-                    setIsAddingTransaction={setIsAddingTransaction}
-                />
-            </Collapse>
-            <ClickAwayListener
-                onClickAway={() => {
-                    console.log("clicked away from trxs");
-                    setSelectedTransactions([]);
-                    setTransactionBeingEdited(null);
-                }}
-            >
-                <TransactionsList
-                    onRowClick={onRowClick}
-                    // selectedTransactions={selectedTransactions}
-                    // setSelectedTransactions={setSelectedTransactions}
-                    isSelected={isSelected}
-                    // setIsSelected={setIsSelected}
-                    isEditing={isEditing}
-                    account={account}
-                    transactions={transactions}
-                    columnRatios={columnRatios}
-                    // styleTop={headerHeight + labelsHeight}
-                />
-            </ClickAwayListener> */}
         </Box>
     );
 };
