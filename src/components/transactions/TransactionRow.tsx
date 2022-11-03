@@ -6,6 +6,9 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
+import SolidAutocomplete from "components/solid/SolidAutocomplete";
+import SolidNumericTextField from "components/solid/SolidNumericTextField";
+import SolidTextField from "components/solid/SolidTextField";
 import { addTransactions } from "data/BudgetSlice";
 import {
     useAccount,
@@ -70,13 +73,16 @@ const TransactionRow = ({
         account ?? null,
     );
     const [accountNameInput, setAccountNameInput] = useState("");
-    const [timestamp, setTimestamp] = useState(dayjs().startOf("day"));
+    const [timestamp, setTimestamp] = useState(
+        dayjs(transaction.timestamp) ?? dayjs().startOf("day"),
+    );
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(
-        null,
+        categoriesIncSystem.find(({ id }) => id === transaction.categoryID) ??
+            null,
     );
     const [categoryNameInput, setCategoryNameInput] = useState("");
-    const [note, setNote] = useState("");
-    const [amount, setAmount] = useState(0);
+    const [note, setNote] = useState(transaction.note ?? "");
+    const [amount, setAmount] = useState(transaction.amount ?? 0);
 
     const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
     const [hadTimestampInteraction, setHadTimestampInteraction] =
@@ -200,7 +206,49 @@ const TransactionRow = ({
                         width: columnRatios[columnIndex++],
                     }}
                 >
-                    <Typography noWrap>{account.name}</Typography>
+                    {isEditing ? (
+                        <SolidAutocomplete
+                            fullWidth
+                            open={isAccountAutocompleteOpen}
+                            onOpen={() => {
+                                setIsAccountAutocompleteOpen(true);
+                            }}
+                            onClose={() => {
+                                setIsAccountAutocompleteOpen(false);
+                            }}
+                            value={selectedAccount}
+                            setValue={(value) => {
+                                setHadAccountInteraction(true);
+                                setSelectedAccount(value);
+                            }}
+                            inputValue={accountNameInput}
+                            setInputValue={(value) => {
+                                setHadAccountInteraction(true);
+                                setAccountNameInput(value);
+                            }}
+                            options={accounts}
+                            getOptionLabel={(o) => o.name}
+                            renderInput={(params) => (
+                                <TextField
+                                    required
+                                    error={isAccountError(false)}
+                                    sx={{
+                                        height: 1,
+                                    }}
+                                    {...params}
+                                />
+                            )}
+                            sx={{
+                                height: 1,
+                                "& .MuiInputBase-root": {
+                                    flexWrap: "nowrap",
+                                    height: 1,
+                                },
+                            }}
+                        />
+                    ) : (
+                        <Typography noWrap>{account.name}</Typography>
+                    )}
                 </Item>
             )}
             <Item
@@ -244,13 +292,55 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <Typography noWrap>
-                    {
-                        categoriesIncSystem.find(
-                            ({ id }) => id === transaction.categoryID,
-                        )?.name
-                    }
-                </Typography>
+                {isEditing ? (
+                    <SolidAutocomplete
+                        fullWidth
+                        open={isCategoryAutocompleteOpen}
+                        onOpen={() => {
+                            setIsCategoryAutocompleteOpen(true);
+                        }}
+                        onClose={() => {
+                            setIsCategoryAutocompleteOpen(false);
+                        }}
+                        value={selectedCategory}
+                        setValue={(value) => {
+                            setHadCategoryInteraction(true);
+                            setSelectedCategory(value);
+                        }}
+                        inputValue={categoryNameInput}
+                        setInputValue={(value) => {
+                            setHadCategoryInteraction(true);
+                            setCategoryNameInput(value);
+                        }}
+                        options={categories}
+                        getOptionLabel={(c) => c.name}
+                        // eslint-disable-next-line sonarjs/no-identical-functions
+                        renderInput={(params) => (
+                            <TextField
+                                error={isCategoryError(false)}
+                                sx={{
+                                    height: 1,
+                                }}
+                                {...params}
+                            />
+                        )}
+                        sx={{
+                            height: 1,
+                            "& .MuiInputBase-root": {
+                                flexWrap: "nowrap",
+                                height: 1,
+                            },
+                        }}
+                    />
+                ) : (
+                    <Typography noWrap>
+                        {
+                            categoriesIncSystem.find(
+                                ({ id }) => id === transaction.categoryID,
+                            )?.name
+                        }
+                    </Typography>
+                )}
             </Item>
             <Item
                 sx={{
@@ -258,7 +348,21 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <Typography noWrap>{transaction.note}</Typography>
+                {isEditing ? (
+                    <SolidTextField
+                        fullWidth
+                        error={isNoteError()}
+                        value={note}
+                        onChange={(e) => {
+                            setHadNoteInteraction(true);
+                            setNote(e.target.value);
+                        }}
+                        sx={{ height: 1 }}
+                        inputBaseSx={{ height: 1 }}
+                    />
+                ) : (
+                    <Typography noWrap>{transaction.note}</Typography>
+                )}
             </Item>
             <Item
                 sx={{
@@ -267,14 +371,28 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                <Typography
-                    noWrap
-                    sx={{
-                        textAlign: "right",
-                    }}
-                >
-                    {formatCurrencyCents(transaction.amount, { sign: "$" })}
-                </Typography>
+                {isEditing ? (
+                    <SolidNumericTextField
+                        fullWidth
+                        error={isAmountError()}
+                        value={amount}
+                        setValue={(value) => {
+                            setHadAmountInteraction(true);
+                            setAmount(value);
+                        }}
+                        sx={{ height: 1 }}
+                        inputBaseSx={{ height: 1 }}
+                    />
+                ) : (
+                    <Typography
+                        noWrap
+                        sx={{
+                            textAlign: "right",
+                        }}
+                    >
+                        {formatCurrencyCents(transaction.amount, { sign: "$" })}
+                    </Typography>
+                )}
             </Item>
         </Box>
     );
