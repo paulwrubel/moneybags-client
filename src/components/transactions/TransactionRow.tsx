@@ -1,14 +1,18 @@
 /* eslint-disable sonarjs/no-duplicate-string */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Box, SxProps, TextField, Typography } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {
+    Box,
+    SxProps,
+    // , TextField, Typography
+} from "@mui/material";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
-import SolidAutocomplete from "components/solid/SolidAutocomplete";
-import SolidNumericTextField from "components/solid/SolidNumericTextField";
-import SolidTextField from "components/solid/SolidTextField";
+// import SolidAutocomplete from "components/solid/SolidAutocomplete";
+// import SolidNumericTextField from "components/solid/SolidNumericTextField";
+// import SolidTextField from "components/solid/SolidTextField";
 import {
     AccountItem,
     AmountItem,
@@ -16,17 +20,17 @@ import {
     DateItem,
     NoteItem,
 } from "components/transactions/TransactionRowItems";
-import { addTransactions } from "data/BudgetSlice";
+// import { addTransactions } from "data/BudgetSlice";
 import {
     useAccount,
     useAccounts,
-    useAppDispatch,
+    // useAppDispatch,
     useCategories,
     useCategoriesIncludeSystem,
 } from "data/Hooks";
 import { Account, Category, Transaction } from "models/Budget";
-import Theme from "Theme";
-import { formatCurrencyCents } from "Utils";
+// import Theme from "Theme";
+// import { formatCurrencyCents } from "Utils";
 const Item = ({
     children,
     sx,
@@ -69,7 +73,7 @@ const TransactionRow = ({
     const categoriesIncSystem = useCategoriesIncludeSystem();
 
     // data model stuff
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
 
     const accounts = useAccounts() as Account[];
 
@@ -79,7 +83,7 @@ const TransactionRow = ({
     const [selectedAccount, setSelectedAccount] = useState<Account | null>(
         account ?? null,
     );
-    const [accountNameInput, setAccountNameInput] = useState("");
+    // const [accountNameInput, setAccountNameInput] = useState("");
     const [timestamp, setTimestamp] = useState(
         dayjs(transaction.timestamp) ?? dayjs().startOf("day"),
     );
@@ -87,23 +91,23 @@ const TransactionRow = ({
         categoriesIncSystem.find(({ id }) => id === transaction.categoryID) ??
             null,
     );
-    const [categoryNameInput, setCategoryNameInput] = useState("");
+    // const [categoryNameInput, setCategoryNameInput] = useState("");
     const [note, setNote] = useState(transaction.note ?? "");
     const [amount, setAmount] = useState(transaction.amount ?? 0);
 
-    const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
-    const [hadTimestampInteraction, setHadTimestampInteraction] =
-        useState(false);
-    const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
-    const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
-    const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
-    const [hadAddButtonInteraction, setHadAddButtonInteraction] =
-        useState(false);
+    // const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
+    // const [hadTimestampInteraction, setHadTimestampInteraction] =
+    //     useState(false);
+    // const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
+    // const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
+    // const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
+    // const [hadAddButtonInteraction, setHadAddButtonInteraction] =
+    //     useState(false);
 
-    const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
-        useState(false);
-    const [isCategoryAutocompleteOpen, setIsCategoryAutocompleteOpen] =
-        useState(false);
+    // const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
+    //     useState(false);
+    // const [isCategoryAutocompleteOpen, setIsCategoryAutocompleteOpen] =
+    //     useState(false);
 
     // useEffect(() => {
     //     handleClose();
@@ -111,52 +115,52 @@ const TransactionRow = ({
 
     let columnIndex = 0;
 
-    const hadInteraction = () => {
-        return (
-            hadAccountInteraction ||
-            hadTimestampInteraction ||
-            hadCategoryInteraction ||
-            hadNoteInteraction ||
-            hadAmountInteraction ||
-            hadAddButtonInteraction
-        );
-    };
+    // const hadInteraction = () => {
+    //     return (
+    //         hadAccountInteraction ||
+    //         hadTimestampInteraction ||
+    //         hadCategoryInteraction ||
+    //         hadNoteInteraction ||
+    //         hadAmountInteraction ||
+    //         hadAddButtonInteraction
+    //     );
+    // };
 
-    const isAccountError = (didInteractionJustNow: boolean) =>
-        (didInteractionJustNow || hadInteraction()) && !selectedAccount;
-    const isTimestampError = () => false;
-    const isCategoryError = (didInteractionJustNow: boolean) =>
-        (didInteractionJustNow || hadInteraction()) && !selectedCategory;
-    const isNoteError = () => false;
-    const isAmountError = () => false;
+    // const isAccountError = (didInteractionJustNow: boolean) =>
+    //     (didInteractionJustNow || hadInteraction()) && !selectedAccount;
+    // const isTimestampError = () => false;
+    // const isCategoryError = (didInteractionJustNow: boolean) =>
+    //     (didInteractionJustNow || hadInteraction()) && !selectedCategory;
+    // const isNoteError = () => false;
+    // const isAmountError = () => false;
 
-    const isInErrorState = (didInteractionJustNow: boolean) => {
-        return (
-            isAccountError(didInteractionJustNow) ||
-            isTimestampError() ||
-            isCategoryError(didInteractionJustNow) ||
-            isNoteError() ||
-            isAmountError()
-        );
-    };
+    // const isInErrorState = (didInteractionJustNow: boolean) => {
+    //     return (
+    //         isAccountError(didInteractionJustNow) ||
+    //         isTimestampError() ||
+    //         isCategoryError(didInteractionJustNow) ||
+    //         isNoteError() ||
+    //         isAmountError()
+    //     );
+    // };
 
-    const resetFormValues = () => {
-        setSelectedAccount(account ?? null);
-        setAccountNameInput("");
-        setTimestamp(dayjs().startOf("day"));
-        setSelectedCategory(null);
-        setCategoryNameInput("");
-        setNote("");
-        setAmount(0);
+    // const resetFormValues = () => {
+    //     setSelectedAccount(account ?? null);
+    //     setAccountNameInput("");
+    //     setTimestamp(dayjs().startOf("day"));
+    //     setSelectedCategory(null);
+    //     setCategoryNameInput("");
+    //     setNote("");
+    //     setAmount(0);
 
-        // interactions
-        setHadAccountInteraction(false);
-        setHadTimestampInteraction(false);
-        setHadCategoryInteraction(false);
-        setHadNoteInteraction(false);
-        setHadAmountInteraction(false);
-        setHadAddButtonInteraction(false);
-    };
+    //     // interactions
+    //     setHadAccountInteraction(false);
+    //     setHadTimestampInteraction(false);
+    //     setHadCategoryInteraction(false);
+    //     setHadNoteInteraction(false);
+    //     setHadAmountInteraction(false);
+    //     setHadAddButtonInteraction(false);
+    // };
 
     // const handleAddButtonClick = () => {
     //     // checkError();
