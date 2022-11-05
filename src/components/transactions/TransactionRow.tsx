@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { useEffect, useState } from "react";
 
@@ -10,6 +9,13 @@ import dayjs from "dayjs";
 import SolidAutocomplete from "components/solid/SolidAutocomplete";
 import SolidNumericTextField from "components/solid/SolidNumericTextField";
 import SolidTextField from "components/solid/SolidTextField";
+import {
+    AccountItem,
+    AmountItem,
+    CategoryItem,
+    DateItem,
+    NoteItem,
+} from "components/transactions/TransactionRowItems";
 import { addTransactions } from "data/BudgetSlice";
 import {
     useAccount,
@@ -207,49 +213,13 @@ const TransactionRow = ({
                         width: columnRatios[columnIndex++],
                     }}
                 >
-                    {isEditing ? (
-                        <SolidAutocomplete
-                            fullWidth
-                            open={isAccountAutocompleteOpen}
-                            onOpen={() => {
-                                setIsAccountAutocompleteOpen(true);
-                            }}
-                            onClose={() => {
-                                setIsAccountAutocompleteOpen(false);
-                            }}
-                            value={selectedAccount}
-                            setValue={(value) => {
-                                setHadAccountInteraction(true);
-                                setSelectedAccount(value);
-                            }}
-                            inputValue={accountNameInput}
-                            setInputValue={(value) => {
-                                setHadAccountInteraction(true);
-                                setAccountNameInput(value);
-                            }}
-                            options={accounts}
-                            getOptionLabel={(o) => o.name}
-                            renderInput={(params) => (
-                                <TextField
-                                    required
-                                    error={isAccountError(false)}
-                                    sx={{
-                                        height: 1,
-                                    }}
-                                    {...params}
-                                />
-                            )}
-                            sx={{
-                                height: 1,
-                                "& .MuiInputBase-root": {
-                                    flexWrap: "nowrap",
-                                    height: 1,
-                                },
-                            }}
-                        />
-                    ) : (
-                        <Typography noWrap>{account.name}</Typography>
-                    )}
+                    <AccountItem
+                        isEditing={isEditing}
+                        currentValue={account}
+                        selectedValue={selectedAccount}
+                        setSelectedValue={setSelectedAccount}
+                        options={accounts}
+                    />
                 </Item>
             )}
             <Item
@@ -258,34 +228,12 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <DatePicker
-                        inputFormat="YYYY-MM-DD"
-                        value={timestamp}
-                        onChange={(value) => {
-                            setHadTimestampInteraction(true);
-                            setTimestamp(value ?? dayjs());
-                        }}
-                        renderInput={(params) => (
-                            <TextField
-                                error={isTimestampError()}
-                                sx={{
-                                    height: 1,
-                                    "& .MuiInputBase-root": {
-                                        // flexWrap: "nowrap",
-                                        height: 1,
-                                    },
-                                }}
-                                {...params}
-                            />
-                        )}
-                        // sx={{ height: 1 }}
-                    />
-                ) : (
-                    <Typography noWrap>
-                        {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
-                    </Typography>
-                )}
+                <DateItem
+                    isEditing={isEditing}
+                    currentValue={dayjs(transaction.timestamp)}
+                    selectedValue={timestamp}
+                    setSelectedValue={setTimestamp}
+                />
             </Item>
             <Item
                 sx={{
@@ -293,55 +241,17 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <SolidAutocomplete
-                        fullWidth
-                        open={isCategoryAutocompleteOpen}
-                        onOpen={() => {
-                            setIsCategoryAutocompleteOpen(true);
-                        }}
-                        onClose={() => {
-                            setIsCategoryAutocompleteOpen(false);
-                        }}
-                        value={selectedCategory}
-                        setValue={(value) => {
-                            setHadCategoryInteraction(true);
-                            setSelectedCategory(value);
-                        }}
-                        inputValue={categoryNameInput}
-                        setInputValue={(value) => {
-                            setHadCategoryInteraction(true);
-                            setCategoryNameInput(value);
-                        }}
-                        options={categories}
-                        getOptionLabel={(c) => c.name}
-                        // eslint-disable-next-line sonarjs/no-identical-functions
-                        renderInput={(params) => (
-                            <TextField
-                                error={isCategoryError(false)}
-                                sx={{
-                                    height: 1,
-                                }}
-                                {...params}
-                            />
-                        )}
-                        sx={{
-                            height: 1,
-                            "& .MuiInputBase-root": {
-                                flexWrap: "nowrap",
-                                height: 1,
-                            },
-                        }}
-                    />
-                ) : (
-                    <Typography noWrap>
-                        {
-                            categoriesIncSystem.find(
-                                ({ id }) => id === transaction.categoryID,
-                            )?.name
-                        }
-                    </Typography>
-                )}
+                <CategoryItem
+                    isEditing={isEditing}
+                    currentValue={
+                        categoriesIncSystem.find(
+                            ({ id }) => id === transaction.categoryID,
+                        ) ?? null
+                    }
+                    selectedValue={selectedCategory}
+                    setSelectedValue={setSelectedCategory}
+                    options={categories}
+                />
             </Item>
             <Item
                 sx={{
@@ -349,21 +259,12 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <SolidTextField
-                        fullWidth
-                        error={isNoteError()}
-                        value={note}
-                        onChange={(e) => {
-                            setHadNoteInteraction(true);
-                            setNote(e.target.value);
-                        }}
-                        sx={{ height: 1 }}
-                        inputBaseSx={{ height: 1 }}
-                    />
-                ) : (
-                    <Typography noWrap>{transaction.note}</Typography>
-                )}
+                <NoteItem
+                    isEditing={isEditing}
+                    currentValue={transaction.note ?? ""}
+                    selectedValue={note}
+                    setSelectedValue={setNote}
+                />
             </Item>
             <Item
                 sx={{
@@ -372,28 +273,12 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <SolidNumericTextField
-                        fullWidth
-                        error={isAmountError()}
-                        value={amount}
-                        setValue={(value) => {
-                            setHadAmountInteraction(true);
-                            setAmount(value);
-                        }}
-                        sx={{ height: 1 }}
-                        inputBaseSx={{ height: 1 }}
-                    />
-                ) : (
-                    <Typography
-                        noWrap
-                        sx={{
-                            textAlign: "right",
-                        }}
-                    >
-                        {formatCurrencyCents(transaction.amount, { sign: "$" })}
-                    </Typography>
-                )}
+                <AmountItem
+                    isEditing={isEditing}
+                    currentValue={transaction.amount}
+                    selectedValue={amount}
+                    setSelectedValue={setAmount}
+                />
             </Item>
         </Box>
     );
