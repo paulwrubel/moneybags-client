@@ -1,13 +1,13 @@
 import { useMemo, useState } from "react";
 
-import { Box, ClickAwayListener, Collapse } from "@mui/material";
+import { Box, ClickAwayListener } from "@mui/material";
 
 import { Navigate, useParams } from "react-router-dom";
 
-import AddTransactionRow from "components/transactions/AddTransactionRow";
+// import AddTransactionRow from "components/transactions/AddTransactionRow";
 import TransactionsHeader from "components/transactions/TransactionsHeader";
-import TransactionsLabelsRow from "components/transactions/TransactionsLabelsRow";
-import TransactionsList from "components/transactions/TransactionsList";
+// import TransactionsLabelsRow from "components/transactions/TransactionsLabelsRow";
+// import TransactionsList from "components/transactions/TransactionsList";
 import TransactionsTable from "components/transactions/TransactionsTable";
 import { useAccount, useTransactions } from "data/Hooks";
 import { Transaction } from "models/Budget";
@@ -47,16 +47,16 @@ const TransactionsPanel = () => {
         selectedTransactions.some((a) => t.id === a.id);
     const isEditing = (t: Transaction) => transactionBeingEdited?.id === t.id;
 
-    const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
-        const selected = isSelected(t);
-        if (shouldBeSelected && !selected) {
-            setSelectedTransactions([t, ...selectedTransactions]);
-        } else if (!shouldBeSelected && selected) {
-            setSelectedTransactions(
-                selectedTransactions.filter((a) => t.id !== a.id),
-            );
-        }
-    };
+    // const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
+    //     const selected = isSelected(t);
+    //     if (shouldBeSelected && !selected) {
+    //         setSelectedTransactions([t, ...selectedTransactions]);
+    //     } else if (!shouldBeSelected && selected) {
+    //         setSelectedTransactions(
+    //             selectedTransactions.filter((a) => t.id !== a.id),
+    //         );
+    //     }
+    // };
 
     const uniq = <T,>(a: Array<T>) =>
         a.filter((e: T, i: number) => {

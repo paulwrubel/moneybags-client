@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable sonarjs/no-duplicate-string */
 import { useEffect, useState } from "react";
 

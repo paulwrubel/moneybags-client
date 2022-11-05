@@ -1,4 +1,4 @@
-import { forwardRef, useMemo } from "react";
+import { forwardRef } from "react";
 
 import { Box, ButtonBase } from "@mui/material";
 
@@ -6,7 +6,7 @@ import AutoSizer from "react-virtualized-auto-sizer";
 import { FixedSizeList } from "react-window";
 
 import TransactionRow from "components/transactions/TransactionRow";
-import { useTransactions } from "data/Hooks";
+// import { useTransactions } from "data/Hooks";
 import { Account, Transaction } from "models/Budget";
 const TransactionsList = forwardRef<
     React.Ref<unknown>,
