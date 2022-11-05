@@ -11,7 +11,7 @@ import {
     TextField,
 } from "@mui/material";
 
-import SolidNumericTextField from "components/SolidNumericTextField";
+import SolidNumericTextField from "components/solid/SolidNumericTextField";
 import { addAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";
 

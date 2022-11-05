@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { TextFieldProps } from "@mui/material/TextField";
 import { SystemStyleObject } from "@mui/system";
 
-import SolidTextField from "components/SolidTextField";
+import SolidTextField from "components/solid/SolidTextField";
 import { formatCurrencyCents, getSelectionText } from "Utils";
 
 function SolidNumericTextField({

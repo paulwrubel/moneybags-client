@@ -6,8 +6,8 @@ import { useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Box, Button, Paper } from "@mui/material";
 
-import SolidPopper from "components/SolidPopper";
-import SolidTextField from "components/SolidTextField";
+import SolidPopper from "components/solid/SolidPopper";
+import SolidTextField from "components/solid/SolidTextField";
 // import { addCategory } from "data/BudgetSlice";
 import { removeAccount, updateAccount } from "data/BudgetSlice";
 import { useAppDispatch } from "data/Hooks";

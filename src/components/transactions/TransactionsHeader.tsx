@@ -4,7 +4,7 @@ import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import { Box, Button, Paper, SxProps } from "@mui/material";
 
-import EditTransactionsPopper from "components/EditTransactionsPopper";
+import EditTransactionsPopper from "components/transactions/EditTransactionsPopper";
 import { Transaction } from "models/Budget";
 
 const Item = ({
