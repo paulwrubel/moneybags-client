@@ -20,8 +20,8 @@ export interface Account {
 
 export interface Transaction {
     id: string;
-    accountID: string;
-    categoryID: string;
+    accountID?: string;
+    categoryID?: string;
     timestamp: number;
     note?: string;
     amount: number;

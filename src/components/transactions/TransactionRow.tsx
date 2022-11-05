@@ -69,14 +69,15 @@ const TransactionRow = ({
     transaction: Transaction;
     columnRatios: number[];
 }) => {
-    const account = useAccount(transaction.accountID) as Account;
+    const account = transaction.accountID
+        ? (useAccount(transaction.accountID) as Account)
+        : null;
     const categoriesIncSystem = useCategoriesIncludeSystem();
 
     // data model stuff
     // const dispatch = useAppDispatch();
 
     const accounts = useAccounts() as Account[];
-
     const categories = useCategories() as Category[];
 
     // ui state stuff

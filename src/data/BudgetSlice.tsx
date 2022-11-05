@@ -241,9 +241,9 @@ export const budgetSlice = createSlice({
                 action: PayloadAction<
                     {
                         id: string;
-                        accountID: string;
+                        accountID?: string;
                         timestamp: number;
-                        categoryID: string;
+                        categoryID?: string;
                         note?: string;
                         amount: number;
                     }[]
@@ -277,9 +277,9 @@ export const budgetSlice = createSlice({
             },
             prepare: (
                 transactionsInfo: {
-                    accountID: string;
+                    accountID?: string;
                     timestamp: number;
-                    categoryID: string;
+                    categoryID?: string;
                     note?: string;
                     amount: number;
                 }[],
