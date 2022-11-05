@@ -1,26 +1,36 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable sonarjs/no-duplicate-string */
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { Box, SxProps, TextField, Typography } from "@mui/material";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import {
+    Box,
+    SxProps,
+    // , TextField, Typography
+} from "@mui/material";
+// import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
 
-import SolidAutocomplete from "components/solid/SolidAutocomplete";
-import SolidNumericTextField from "components/solid/SolidNumericTextField";
-import SolidTextField from "components/solid/SolidTextField";
-import { addTransactions } from "data/BudgetSlice";
+// import SolidAutocomplete from "components/solid/SolidAutocomplete";
+// import SolidNumericTextField from "components/solid/SolidNumericTextField";
+// import SolidTextField from "components/solid/SolidTextField";
+import {
+    AccountItem,
+    AmountItem,
+    CategoryItem,
+    DateItem,
+    NoteItem,
+} from "components/transactions/TransactionRowItems";
+// import { addTransactions } from "data/BudgetSlice";
 import {
     useAccount,
     useAccounts,
-    useAppDispatch,
+    // useAppDispatch,
     useCategories,
     useCategoriesIncludeSystem,
 } from "data/Hooks";
 import { Account, Category, Transaction } from "models/Budget";
-import Theme from "Theme";
-import { formatCurrencyCents } from "Utils";
+// import Theme from "Theme";
+// import { formatCurrencyCents } from "Utils";
 const Item = ({
     children,
     sx,
@@ -63,7 +73,7 @@ const TransactionRow = ({
     const categoriesIncSystem = useCategoriesIncludeSystem();
 
     // data model stuff
-    const dispatch = useAppDispatch();
+    // const dispatch = useAppDispatch();
 
     const accounts = useAccounts() as Account[];
 
@@ -73,7 +83,7 @@ const TransactionRow = ({
     const [selectedAccount, setSelectedAccount] = useState<Account | null>(
         account ?? null,
     );
-    const [accountNameInput, setAccountNameInput] = useState("");
+    // const [accountNameInput, setAccountNameInput] = useState("");
     const [timestamp, setTimestamp] = useState(
         dayjs(transaction.timestamp) ?? dayjs().startOf("day"),
     );
@@ -81,23 +91,23 @@ const TransactionRow = ({
         categoriesIncSystem.find(({ id }) => id === transaction.categoryID) ??
             null,
     );
-    const [categoryNameInput, setCategoryNameInput] = useState("");
+    // const [categoryNameInput, setCategoryNameInput] = useState("");
     const [note, setNote] = useState(transaction.note ?? "");
     const [amount, setAmount] = useState(transaction.amount ?? 0);
 
-    const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
-    const [hadTimestampInteraction, setHadTimestampInteraction] =
-        useState(false);
-    const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
-    const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
-    const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
-    const [hadAddButtonInteraction, setHadAddButtonInteraction] =
-        useState(false);
+    // const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
+    // const [hadTimestampInteraction, setHadTimestampInteraction] =
+    //     useState(false);
+    // const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
+    // const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
+    // const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
+    // const [hadAddButtonInteraction, setHadAddButtonInteraction] =
+    //     useState(false);
 
-    const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
-        useState(false);
-    const [isCategoryAutocompleteOpen, setIsCategoryAutocompleteOpen] =
-        useState(false);
+    // const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
+    //     useState(false);
+    // const [isCategoryAutocompleteOpen, setIsCategoryAutocompleteOpen] =
+    //     useState(false);
 
     // useEffect(() => {
     //     handleClose();
@@ -105,52 +115,52 @@ const TransactionRow = ({
 
     let columnIndex = 0;
 
-    const hadInteraction = () => {
-        return (
-            hadAccountInteraction ||
-            hadTimestampInteraction ||
-            hadCategoryInteraction ||
-            hadNoteInteraction ||
-            hadAmountInteraction ||
-            hadAddButtonInteraction
-        );
-    };
+    // const hadInteraction = () => {
+    //     return (
+    //         hadAccountInteraction ||
+    //         hadTimestampInteraction ||
+    //         hadCategoryInteraction ||
+    //         hadNoteInteraction ||
+    //         hadAmountInteraction ||
+    //         hadAddButtonInteraction
+    //     );
+    // };
 
-    const isAccountError = (didInteractionJustNow: boolean) =>
-        (didInteractionJustNow || hadInteraction()) && !selectedAccount;
-    const isTimestampError = () => false;
-    const isCategoryError = (didInteractionJustNow: boolean) =>
-        (didInteractionJustNow || hadInteraction()) && !selectedCategory;
-    const isNoteError = () => false;
-    const isAmountError = () => false;
+    // const isAccountError = (didInteractionJustNow: boolean) =>
+    //     (didInteractionJustNow || hadInteraction()) && !selectedAccount;
+    // const isTimestampError = () => false;
+    // const isCategoryError = (didInteractionJustNow: boolean) =>
+    //     (didInteractionJustNow || hadInteraction()) && !selectedCategory;
+    // const isNoteError = () => false;
+    // const isAmountError = () => false;
 
-    const isInErrorState = (didInteractionJustNow: boolean) => {
-        return (
-            isAccountError(didInteractionJustNow) ||
-            isTimestampError() ||
-            isCategoryError(didInteractionJustNow) ||
-            isNoteError() ||
-            isAmountError()
-        );
-    };
+    // const isInErrorState = (didInteractionJustNow: boolean) => {
+    //     return (
+    //         isAccountError(didInteractionJustNow) ||
+    //         isTimestampError() ||
+    //         isCategoryError(didInteractionJustNow) ||
+    //         isNoteError() ||
+    //         isAmountError()
+    //     );
+    // };
 
-    const resetFormValues = () => {
-        setSelectedAccount(account ?? null);
-        setAccountNameInput("");
-        setTimestamp(dayjs().startOf("day"));
-        setSelectedCategory(null);
-        setCategoryNameInput("");
-        setNote("");
-        setAmount(0);
+    // const resetFormValues = () => {
+    //     setSelectedAccount(account ?? null);
+    //     setAccountNameInput("");
+    //     setTimestamp(dayjs().startOf("day"));
+    //     setSelectedCategory(null);
+    //     setCategoryNameInput("");
+    //     setNote("");
+    //     setAmount(0);
 
-        // interactions
-        setHadAccountInteraction(false);
-        setHadTimestampInteraction(false);
-        setHadCategoryInteraction(false);
-        setHadNoteInteraction(false);
-        setHadAmountInteraction(false);
-        setHadAddButtonInteraction(false);
-    };
+    //     // interactions
+    //     setHadAccountInteraction(false);
+    //     setHadTimestampInteraction(false);
+    //     setHadCategoryInteraction(false);
+    //     setHadNoteInteraction(false);
+    //     setHadAmountInteraction(false);
+    //     setHadAddButtonInteraction(false);
+    // };
 
     // const handleAddButtonClick = () => {
     //     // checkError();
@@ -207,49 +217,13 @@ const TransactionRow = ({
                         width: columnRatios[columnIndex++],
                     }}
                 >
-                    {isEditing ? (
-                        <SolidAutocomplete
-                            fullWidth
-                            open={isAccountAutocompleteOpen}
-                            onOpen={() => {
-                                setIsAccountAutocompleteOpen(true);
-                            }}
-                            onClose={() => {
-                                setIsAccountAutocompleteOpen(false);
-                            }}
-                            value={selectedAccount}
-                            setValue={(value) => {
-                                setHadAccountInteraction(true);
-                                setSelectedAccount(value);
-                            }}
-                            inputValue={accountNameInput}
-                            setInputValue={(value) => {
-                                setHadAccountInteraction(true);
-                                setAccountNameInput(value);
-                            }}
-                            options={accounts}
-                            getOptionLabel={(o) => o.name}
-                            renderInput={(params) => (
-                                <TextField
-                                    required
-                                    error={isAccountError(false)}
-                                    sx={{
-                                        height: 1,
-                                    }}
-                                    {...params}
-                                />
-                            )}
-                            sx={{
-                                height: 1,
-                                "& .MuiInputBase-root": {
-                                    flexWrap: "nowrap",
-                                    height: 1,
-                                },
-                            }}
-                        />
-                    ) : (
-                        <Typography noWrap>{account.name}</Typography>
-                    )}
+                    <AccountItem
+                        isEditing={isEditing}
+                        currentValue={account}
+                        selectedValue={selectedAccount}
+                        setSelectedValue={setSelectedAccount}
+                        options={accounts}
+                    />
                 </Item>
             )}
             <Item
@@ -258,34 +232,12 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <DatePicker
-                        inputFormat="YYYY-MM-DD"
-                        value={timestamp}
-                        onChange={(value) => {
-                            setHadTimestampInteraction(true);
-                            setTimestamp(value ?? dayjs());
-                        }}
-                        renderInput={(params) => (
-                            <TextField
-                                error={isTimestampError()}
-                                sx={{
-                                    height: 1,
-                                    "& .MuiInputBase-root": {
-                                        // flexWrap: "nowrap",
-                                        height: 1,
-                                    },
-                                }}
-                                {...params}
-                            />
-                        )}
-                        // sx={{ height: 1 }}
-                    />
-                ) : (
-                    <Typography noWrap>
-                        {dayjs(transaction.timestamp).format("YYYY-MM-DD")}
-                    </Typography>
-                )}
+                <DateItem
+                    isEditing={isEditing}
+                    currentValue={dayjs(transaction.timestamp)}
+                    selectedValue={timestamp}
+                    setSelectedValue={setTimestamp}
+                />
             </Item>
             <Item
                 sx={{
@@ -293,55 +245,17 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <SolidAutocomplete
-                        fullWidth
-                        open={isCategoryAutocompleteOpen}
-                        onOpen={() => {
-                            setIsCategoryAutocompleteOpen(true);
-                        }}
-                        onClose={() => {
-                            setIsCategoryAutocompleteOpen(false);
-                        }}
-                        value={selectedCategory}
-                        setValue={(value) => {
-                            setHadCategoryInteraction(true);
-                            setSelectedCategory(value);
-                        }}
-                        inputValue={categoryNameInput}
-                        setInputValue={(value) => {
-                            setHadCategoryInteraction(true);
-                            setCategoryNameInput(value);
-                        }}
-                        options={categories}
-                        getOptionLabel={(c) => c.name}
-                        // eslint-disable-next-line sonarjs/no-identical-functions
-                        renderInput={(params) => (
-                            <TextField
-                                error={isCategoryError(false)}
-                                sx={{
-                                    height: 1,
-                                }}
-                                {...params}
-                            />
-                        )}
-                        sx={{
-                            height: 1,
-                            "& .MuiInputBase-root": {
-                                flexWrap: "nowrap",
-                                height: 1,
-                            },
-                        }}
-                    />
-                ) : (
-                    <Typography noWrap>
-                        {
-                            categoriesIncSystem.find(
-                                ({ id }) => id === transaction.categoryID,
-                            )?.name
-                        }
-                    </Typography>
-                )}
+                <CategoryItem
+                    isEditing={isEditing}
+                    currentValue={
+                        categoriesIncSystem.find(
+                            ({ id }) => id === transaction.categoryID,
+                        ) ?? null
+                    }
+                    selectedValue={selectedCategory}
+                    setSelectedValue={setSelectedCategory}
+                    options={categories}
+                />
             </Item>
             <Item
                 sx={{
@@ -349,21 +263,12 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <SolidTextField
-                        fullWidth
-                        error={isNoteError()}
-                        value={note}
-                        onChange={(e) => {
-                            setHadNoteInteraction(true);
-                            setNote(e.target.value);
-                        }}
-                        sx={{ height: 1 }}
-                        inputBaseSx={{ height: 1 }}
-                    />
-                ) : (
-                    <Typography noWrap>{transaction.note}</Typography>
-                )}
+                <NoteItem
+                    isEditing={isEditing}
+                    currentValue={transaction.note ?? ""}
+                    selectedValue={note}
+                    setSelectedValue={setNote}
+                />
             </Item>
             <Item
                 sx={{
@@ -372,28 +277,12 @@ const TransactionRow = ({
                     width: columnRatios[columnIndex++],
                 }}
             >
-                {isEditing ? (
-                    <SolidNumericTextField
-                        fullWidth
-                        error={isAmountError()}
-                        value={amount}
-                        setValue={(value) => {
-                            setHadAmountInteraction(true);
-                            setAmount(value);
-                        }}
-                        sx={{ height: 1 }}
-                        inputBaseSx={{ height: 1 }}
-                    />
-                ) : (
-                    <Typography
-                        noWrap
-                        sx={{
-                            textAlign: "right",
-                        }}
-                    >
-                        {formatCurrencyCents(transaction.amount, { sign: "$" })}
-                    </Typography>
-                )}
+                <AmountItem
+                    isEditing={isEditing}
+                    currentValue={transaction.amount}
+                    selectedValue={amount}
+                    setSelectedValue={setAmount}
+                />
             </Item>
         </Box>
     );
