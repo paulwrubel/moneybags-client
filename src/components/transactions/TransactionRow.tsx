@@ -20,11 +20,11 @@ import {
     DateItem,
     NoteItem,
 } from "components/transactions/TransactionRowItems";
-// import { addTransactions } from "data/BudgetSlice";
+import { updateTransactions } from "data/BudgetSlice";
 import {
     useAccount,
     useAccounts,
-    // useAppDispatch,
+    useAppDispatch,
     useCategories,
     useCategoriesIncludeSystem,
 } from "data/Hooks";
@@ -75,7 +75,7 @@ const TransactionRow = ({
     const categoriesIncSystem = useCategoriesIncludeSystem();
 
     // data model stuff
-    // const dispatch = useAppDispatch();
+    const dispatch = useAppDispatch();
 
     const accounts = useAccounts() as Account[];
     const categories = useCategories() as Category[];
@@ -85,16 +85,14 @@ const TransactionRow = ({
         account ?? null,
     );
     // const [accountNameInput, setAccountNameInput] = useState("");
-    const [timestamp, setTimestamp] = useState(
-        dayjs(transaction.timestamp) ?? dayjs().startOf("day"),
-    );
+    const [timestamp, setTimestamp] = useState(dayjs(transaction.timestamp));
     const [selectedCategory, setSelectedCategory] = useState<Category | null>(
         categoriesIncSystem.find(({ id }) => id === transaction.categoryID) ??
             null,
     );
     // const [categoryNameInput, setCategoryNameInput] = useState("");
     const [note, setNote] = useState(transaction.note ?? "");
-    const [amount, setAmount] = useState(transaction.amount ?? 0);
+    const [amount, setAmount] = useState(transaction.amount);
 
     // const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
     // const [hadTimestampInteraction, setHadTimestampInteraction] =
@@ -192,6 +190,21 @@ const TransactionRow = ({
     //     setIsAddingTransaction(false);
     // };
 
+    const submitTransactionChange = () => {
+        dispatch(
+            updateTransactions([
+                {
+                    id: transaction.id,
+                    accountID: selectedAccount?.id ?? transaction.accountID,
+                    timestamp: timestamp.startOf("day").valueOf(),
+                    categoryID: selectedCategory?.id ?? transaction.accountID,
+                    note: note ?? transaction.note,
+                    amount: amount,
+                },
+            ]),
+        );
+    };
+
     const bgColor = (() => {
         if (isSelected || isEditing) {
             return index % 2 === 0 ? "primary.light" : "primary.lighter";
@@ -220,6 +233,7 @@ const TransactionRow = ({
                 >
                     <AccountItem
                         isEditing={isEditing}
+                        submit={submitTransactionChange}
                         currentValue={account}
                         selectedValue={selectedAccount}
                         setSelectedValue={setSelectedAccount}

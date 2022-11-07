@@ -13,12 +13,14 @@ import { formatCurrencyCents } from "Utils";
 
 export const AccountItem = ({
     isEditing,
+    submit,
     currentValue,
     selectedValue,
     setSelectedValue,
     options,
 }: {
     isEditing: boolean;
+    submit: () => void;
     currentValue: Account | null;
     selectedValue: Account | null;
     setSelectedValue: (value: Account | null) => void;
@@ -36,6 +38,13 @@ export const AccountItem = ({
             }}
             onClose={() => {
                 setIsAutocompleteOpen(false);
+            }}
+            onKeyDown={(event) => {
+                console.log(event.key);
+                if (event.key === "Enter" && selectedValue) {
+                    console.log(selectedValue);
+                    submit();
+                }
             }}
             value={selectedValue}
             setValue={setSelectedValue}

@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import dayjs from "dayjs";
 import { v4 as uuid } from "uuid";
 
-import { Account, Budget, Category } from "models/Budget";
+import { Account, Budget, Category, Transaction } from "models/Budget";
 
 const initialState: Budget | null = null;
 
@@ -259,28 +259,6 @@ export const budgetSlice = createSlice({
                 }
                 // then, create the new transactions
                 state.transactions = state.transactions.concat(action.payload);
-
-                // if (action.payload.idsCallback) {
-                //     action.payload.idsCallback(
-                //         action.payload.transactions.map((t) => t.id),
-                //     );
-                // }
-
-                //     id: action.payload.id,
-                //     accountID: action.payload.accountID,
-                //     categoryID: action.payload.categoryID,
-                //     timestamp: action.payload.timestamp,
-                //     note: action.payload.note,
-                //     amount: action.payload.amount,
-                // });
-                // state.transactions.push({
-                //     id: action.payload.id,
-                //     accountID: action.payload.accountID,
-                //     categoryID: action.payload.categoryID,
-                //     timestamp: action.payload.timestamp,
-                //     note: action.payload.note,
-                //     amount: action.payload.amount,
-                // });
             },
             prepare: (
                 transactionsInfo: {
@@ -301,6 +279,19 @@ export const budgetSlice = createSlice({
                     amount: tInfo.amount,
                 })),
             }),
+        },
+        updateTransactions: (
+            state: Budget | null,
+            action: PayloadAction<Transaction[]>,
+        ) => {
+            console.log(action.payload);
+            if (!state || !state.transactions) {
+                return;
+            }
+            state.transactions = state.transactions.filter(
+                (t1) => !action.payload.find((t2) => t1.id === t2.id),
+            );
+            state.transactions = state.transactions.concat(action.payload);
         },
         removeTransactions: (
             state: Budget | null,
@@ -334,6 +325,7 @@ export const {
     updateAccount,
     removeAccount,
     addTransactions,
+    updateTransactions,
     removeTransactions,
 } = budgetSlice.actions;
 
