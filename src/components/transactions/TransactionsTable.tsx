@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 
-import { Box, Collapse } from "@mui/material";
+import { Box } from "@mui/material";
 
-import AddTransactionRow from "components/transactions/AddTransactionRow";
+// import AddTransactionRow from "components/transactions/AddTransactionRow";
 import TransactionsLabelsRow from "components/transactions/TransactionsLabelsRow";
 import TransactionsList from "components/transactions/TransactionsList";
 import { Account, Transaction } from "models/Budget";
@@ -10,8 +10,10 @@ import { Account, Transaction } from "models/Budget";
 const TransactionsTable = forwardRef<
     React.Ref<unknown>,
     {
-        isAddingTransaction: boolean;
-        setIsAddingTransaction: (isAddingTransaction: boolean) => void;
+        // isAddingTransaction: boolean;
+        // setIsAddingTransaction: (isAddingTransaction: boolean) => void;
+        transientTransactionID: string | null;
+        setTransientTransactionID: (id: string | null) => void;
         account?: Account;
         transactions: Transaction[];
         onRowClick: (
@@ -26,8 +28,10 @@ const TransactionsTable = forwardRef<
 >(
     (
         {
-            isAddingTransaction,
-            setIsAddingTransaction,
+            // isAddingTransaction,
+            // setIsAddingTransaction,
+            // transientTransactionID,
+            // setTransientTransactionID,
             account,
             transactions,
             onRowClick,
@@ -59,14 +63,14 @@ const TransactionsTable = forwardRef<
                     // styleHeight={labelsHeight}
                 />
                 {/* {isAddingTransaction && ( */}
-                <Collapse in={isAddingTransaction} sx={{ flex: "0 0 auto" }}>
+                {/* <Collapse in={isAddingTransaction} sx={{ flex: "0 0 auto" }}>
                     <AddTransactionRow
                         account={account}
                         columnRatios={columnRatios}
                         isAddingTransaction={isAddingTransaction}
                         setIsAddingTransaction={setIsAddingTransaction}
                     />
-                </Collapse>
+                </Collapse> */}
                 {/* )} */}
                 {/* <ClickAwayListener
                 onClickAway={() => {
