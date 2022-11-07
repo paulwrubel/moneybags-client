@@ -4,7 +4,12 @@ import AddCircleOutlineSharpIcon from "@mui/icons-material/AddCircleOutlineSharp
 import EditSharpIcon from "@mui/icons-material/EditSharp";
 import { Box, Button, Paper, SxProps } from "@mui/material";
 
+// import dayjs from "dayjs";
+// import { v4 as uuid } from "uuid";
+
 import EditTransactionsPopper from "components/transactions/EditTransactionsPopper";
+// import { addTransactions } from "data/BudgetSlice";
+// import { useAppDispatch } from "data/Hooks";
 import { Transaction } from "models/Budget";
 
 const Item = ({
@@ -20,11 +25,15 @@ const Item = ({
 const TransactionsHeader = ({
     selectedTransactions,
     setSelectedTransactions,
-    setIsAddingTransaction,
-}: {
+    handleAddTransaction,
+}: // setTransientTransactionID,
+{
     selectedTransactions: Transaction[];
     setSelectedTransactions: (arg0: Transaction[]) => void;
-    setIsAddingTransaction: React.Dispatch<React.SetStateAction<boolean>>;
+    handleAddTransaction: (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => void;
+    // setTransientTransactionID: (t: string | null) => void;
 }) => {
     const [isEditTransactionsPopperOpen, setIsEditTransactionsPopperOpen] =
         useState(false);
@@ -55,9 +64,7 @@ const TransactionsHeader = ({
                 <Item sx={{}}>
                     <Button
                         // variant="outlined"
-                        onClick={() => {
-                            setIsAddingTransaction(true);
-                        }}
+                        onClick={handleAddTransaction}
                         size="small"
                         startIcon={<AddCircleOutlineSharpIcon />}
                         sx={{

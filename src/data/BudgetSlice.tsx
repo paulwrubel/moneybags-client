@@ -259,6 +259,13 @@ export const budgetSlice = createSlice({
                 }
                 // then, create the new transactions
                 state.transactions = state.transactions.concat(action.payload);
+
+                // if (action.payload.idsCallback) {
+                //     action.payload.idsCallback(
+                //         action.payload.transactions.map((t) => t.id),
+                //     );
+                // }
+
                 //     id: action.payload.id,
                 //     accountID: action.payload.accountID,
                 //     categoryID: action.payload.categoryID,
@@ -277,26 +284,23 @@ export const budgetSlice = createSlice({
             },
             prepare: (
                 transactionsInfo: {
+                    id?: string;
                     accountID?: string;
                     timestamp: number;
                     categoryID?: string;
                     note?: string;
                     amount: number;
                 }[],
-            ) => {
-                return {
-                    payload: transactionsInfo.map((tInfo) => {
-                        return {
-                            id: uuid(),
-                            accountID: tInfo.accountID,
-                            categoryID: tInfo.categoryID,
-                            timestamp: tInfo.timestamp,
-                            note: tInfo.note,
-                            amount: tInfo.amount,
-                        };
-                    }),
-                };
-            },
+            ) => ({
+                payload: transactionsInfo.map((tInfo) => ({
+                    id: tInfo.id ?? uuid(),
+                    accountID: tInfo.accountID,
+                    categoryID: tInfo.categoryID,
+                    timestamp: tInfo.timestamp,
+                    note: tInfo.note,
+                    amount: tInfo.amount,
+                })),
+            }),
         },
         removeTransactions: (
             state: Budget | null,

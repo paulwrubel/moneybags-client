@@ -2,41 +2,71 @@ import { useMemo, useState } from "react";
 
 import { Box, ClickAwayListener } from "@mui/material";
 
+import dayjs from "dayjs";
 import { Navigate, useParams } from "react-router-dom";
+import { v4 as uuid } from "uuid";
 
 // import AddTransactionRow from "components/transactions/AddTransactionRow";
 import TransactionsHeader from "components/transactions/TransactionsHeader";
 // import TransactionsLabelsRow from "components/transactions/TransactionsLabelsRow";
 // import TransactionsList from "components/transactions/TransactionsList";
 import TransactionsTable from "components/transactions/TransactionsTable";
-import { useAccount, useTransactions } from "data/Hooks";
+import { addTransactions } from "data/BudgetSlice";
+import { useAccount, useAppDispatch, useTransactions } from "data/Hooks";
 import { Transaction } from "models/Budget";
-
 const TransactionsPanel = () => {
+    const dispatch = useAppDispatch();
+
     const accountID = useParams()?.accountID ?? "";
 
     const account = useAccount(accountID);
+
+    // const [isAddingTransaction, setIsAddingTransaction] = useState(false);
+
     const allTransactions = useTransactions();
-    const transactions = useMemo(() => {
-        const transactionsPreSort = account
-            ? allTransactions.filter((t) => t.accountID === account.id)
-            : allTransactions;
+    const transactions = useMemo(
+        () =>
+            account
+                ? allTransactions.filter((t) => t.accountID === account.id)
+                : allTransactions,
+        [allTransactions, account, accountID],
+    );
 
-        // console.log(transactionsPreSort);
+    const [transientTransactionID, setTransientTransactionID] = useState<
+        string | null
+    >(null);
+    const transientTransaction =
+        transactions.find((t) => transientTransactionID === t.id) ?? null;
 
-        return transactionsPreSort
-            .slice()
-            .sort((a, b) => b.timestamp - a.timestamp);
-    }, [allTransactions, account, accountID]);
+    const [transactionIDBeingEdited, setTransactionIDBeingEdited] = useState<
+        string | null
+    >(transientTransaction?.id ?? null);
+    const transactionBeingEdited =
+        transactions.find((t) => transactionIDBeingEdited === t.id) ?? null;
+    if (transactionBeingEdited) {
+        console.log(transactionBeingEdited);
+        console.log(transactionBeingEdited.id);
+    }
 
-    const [isAddingTransaction, setIsAddingTransaction] = useState(false);
     const [selectedTransactions, setSelectedTransactions] = useState<
         Transaction[]
-    >([]);
-    const [transactionBeingEdited, setTransactionBeingEdited] =
-        useState<Transaction | null>(null);
+    >(transientTransaction ? [transientTransaction] : []);
     const [lastSelectedIndex, setLastSelectedIndex] = useState<number | null>(
         null,
+    );
+
+    const sortedTransactions = useMemo(
+        () =>
+            transactions.slice().sort((a, b) => {
+                if (a.id === transientTransaction?.id) {
+                    return -1;
+                } else if (b.id === transientTransaction?.id) {
+                    return 1;
+                } else {
+                    return b.timestamp - a.timestamp;
+                }
+            }),
+        [transactions, transientTransaction],
     );
 
     if (accountID && !account) {
@@ -46,6 +76,7 @@ const TransactionsPanel = () => {
     const isSelected = (t: Transaction) =>
         selectedTransactions.some((a) => t.id === a.id);
     const isEditing = (t: Transaction) => transactionBeingEdited?.id === t.id;
+    // const isTransient = (t: Transaction) => transientTransaction?.id === t.id;
 
     // const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
     //     const selected = isSelected(t);
@@ -62,6 +93,26 @@ const TransactionsPanel = () => {
         a.filter((e: T, i: number) => {
             return a.indexOf(e) == i;
         });
+
+    const handleAddTransactionOnClick = (
+        event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    ) => {
+        event.stopPropagation();
+
+        const newTransactionID = uuid();
+        dispatch(
+            addTransactions([
+                {
+                    id: newTransactionID,
+                    accountID: account?.id ?? undefined,
+                    timestamp: dayjs().startOf("day").valueOf(),
+                    amount: 0,
+                },
+            ]),
+        );
+        setTransientTransactionID(newTransactionID);
+        setTransactionIDBeingEdited(newTransactionID);
+    };
 
     const onRowClick = (
         t: Transaction,
@@ -90,20 +141,20 @@ const TransactionsPanel = () => {
                 setSelectedTransactions(
                     selectedTransactions.filter((a) => a.id !== t.id),
                 );
-                setTransactionBeingEdited(null);
+                setTransactionIDBeingEdited(null);
                 setLastSelectedIndex(
                     transactions.findIndex((a) => a.id === t.id),
                 );
             } else {
                 if (selectedTransactions.length == 1) {
-                    setTransactionBeingEdited(t);
+                    setTransactionIDBeingEdited(t.id);
                     setSelectedTransactions([]);
                     setLastSelectedIndex(
                         transactions.findIndex((a) => a.id === t.id),
                     );
                 } else {
                     setSelectedTransactions([t]);
-                    setTransactionBeingEdited(null);
+                    setTransactionIDBeingEdited(null);
                     setLastSelectedIndex(
                         transactions.findIndex((a) => a.id === t.id),
                     );
@@ -112,14 +163,14 @@ const TransactionsPanel = () => {
         } else {
             if (isCtrlHeld) {
                 setSelectedTransactions([t, ...selectedTransactions]);
-                setTransactionBeingEdited(null);
+                setTransactionIDBeingEdited(null);
                 setLastSelectedIndex(
                     transactions.findIndex((a) => a.id === t.id),
                 );
             } else {
                 if (!currentlyEditing) {
                     setSelectedTransactions([t]);
-                    setTransactionBeingEdited(null);
+                    setTransactionIDBeingEdited(null);
                     setLastSelectedIndex(
                         transactions.findIndex((a) => a.id === t.id),
                     );
@@ -141,21 +192,25 @@ const TransactionsPanel = () => {
             <TransactionsHeader
                 selectedTransactions={selectedTransactions}
                 setSelectedTransactions={setSelectedTransactions}
-                setIsAddingTransaction={setIsAddingTransaction}
+                handleAddTransaction={handleAddTransactionOnClick}
+                // setTransientTransactionID={setTransientTransactionID}
+                // setTransactionBeingEdited={setTransactionBeingEdited}
                 // styleHeight={headerHeight}
             />
             <ClickAwayListener
                 onClickAway={() => {
                     console.log("clicked away from trxs");
                     setSelectedTransactions([]);
-                    setTransactionBeingEdited(null);
+                    setTransactionIDBeingEdited(null);
                 }}
             >
                 <TransactionsTable
-                    isAddingTransaction={isAddingTransaction}
-                    setIsAddingTransaction={setIsAddingTransaction}
+                    // isAddingTransaction={isAddingTransaction}
+                    // setIsAddingTransaction={setIsAddingTransaction}
+                    transientTransactionID={transientTransactionID}
+                    setTransientTransactionID={setTransientTransactionID}
                     account={account}
-                    transactions={transactions}
+                    transactions={sortedTransactions}
                     onRowClick={onRowClick}
                     isSelected={isSelected}
                     isEditing={isEditing}
