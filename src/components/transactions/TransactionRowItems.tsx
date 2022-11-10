@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
@@ -65,7 +65,12 @@ export const AccountItem = ({
                 height: 1,
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
+                    borderRadius: 0,
+                    p: "0px",
                     height: 1,
+                    "& .MuiInputBase-input": {
+                        p: "2px",
+                    },
                 },
             }}
         />
@@ -223,5 +228,45 @@ export const AmountItem = ({
         >
             {formatCurrencyCents(currentValue, { sign: "$" })}
         </Typography>
+    );
+};
+
+export const SaveButtonItem = ({ onClick }: { onClick: () => void }) => {
+    return (
+        <Button
+            variant="outlined"
+            onClick={onClick}
+            size="small"
+            // startIcon={<AddCircleOutlineSharpIcon />}
+            // sx={{
+            //     textTransform: "none",
+            //     color: "black",
+            //     ":hover": {
+            //         backgroundColor: "primary.main",
+            //     },
+            // }}
+        >
+            Save
+        </Button>
+    );
+};
+
+export const CancelButtonItem = ({ onClick }: { onClick: () => void }) => {
+    return (
+        <Button
+            variant="outlined"
+            onClick={onClick}
+            size="small"
+            // startIcon={<AddCircleOutlineSharpIcon />}
+            // sx={{
+            //     textTransform: "none",
+            //     color: "black",
+            //     ":hover": {
+            //         backgroundColor: "primary.main",
+            //     },
+            // }}
+        >
+            Cancel
+        </Button>
     );
 };

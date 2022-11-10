@@ -27,7 +27,7 @@
         "no-empty-function": "warn",
         "@typescript-eslint/no-empty-function": ["warn"],
         "react/prop-types": ["off"],
-        "sonarjs/cognitive-complexity": ["error", 12],
+        "sonarjs/cognitive-complexity": ["warn", 15],
         "sort-imports": [
             "error",
             {

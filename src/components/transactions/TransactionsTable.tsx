@@ -24,6 +24,7 @@ const TransactionsTable = forwardRef<
         ) => void;
         isSelected: (t: Transaction) => boolean;
         isEditing: (t: Transaction) => boolean;
+        setOnListInteraction: (onListInteraction: () => void) => void;
     }
 >(
     (
@@ -37,6 +38,7 @@ const TransactionsTable = forwardRef<
             onRowClick,
             isSelected,
             isEditing,
+            setOnListInteraction,
         },
         ref,
     ) => {
@@ -82,6 +84,7 @@ const TransactionsTable = forwardRef<
                 {/* <div> */}
                 <TransactionsList
                     onRowClick={onRowClick}
+                    setOnListInteraction={setOnListInteraction}
                     // selectedTransactions={selectedTransactions}
                     // setSelectedTransactions={setSelectedTransactions}
                     isSelected={isSelected}

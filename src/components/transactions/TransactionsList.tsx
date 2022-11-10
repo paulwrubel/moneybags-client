@@ -1,9 +1,9 @@
-import { forwardRef } from "react";
+import { createRef, forwardRef, useEffect } from "react";
 
 import { Box, ButtonBase } from "@mui/material";
 
 import AutoSizer from "react-virtualized-auto-sizer";
-import { FixedSizeList } from "react-window";
+import { VariableSizeList } from "react-window";
 
 import TransactionRow from "components/transactions/TransactionRow";
 // import { useTransactions } from "data/Hooks";
@@ -17,6 +17,7 @@ const TransactionsList = forwardRef<
             isShiftClicked: boolean,
             isCtrlClicked: boolean,
         ) => void;
+        setOnListInteraction: (onListInteraction: () => void) => void;
         // selectedTransactions: Transaction[];
         // setSelectedTransactions: (arg0: Transaction[]) => void;
         isSelected: (t: Transaction) => boolean;
@@ -30,6 +31,7 @@ const TransactionsList = forwardRef<
     (
         {
             onRowClick,
+            setOnListInteraction,
             isSelected,
             // setIsSelected,
             isEditing,
@@ -39,6 +41,17 @@ const TransactionsList = forwardRef<
         },
         ref,
     ) => {
+        const getItemSize = (index: number) =>
+            isEditing(transactions[index]) ? 64 : 32;
+
+        const listRef = createRef<VariableSizeList>();
+
+        useEffect(() => {
+            setOnListInteraction(() => {
+                listRef.current?.resetAfterIndex(0, true);
+            });
+        });
+
         return (
             <Box
                 ref={ref}
@@ -49,9 +62,11 @@ const TransactionsList = forwardRef<
             >
                 <AutoSizer>
                     {({ width, height }) => (
-                        <FixedSizeList
+                        <VariableSizeList
+                            ref={listRef}
                             itemCount={transactions.length}
-                            itemSize={32}
+                            // estimatedItemSize={32}
+                            itemSize={getItemSize}
                             width={width}
                             height={height}
                         >
@@ -59,6 +74,7 @@ const TransactionsList = forwardRef<
                                 const transaction = transactions[index];
                                 const selected = isSelected(transaction);
                                 const editing = isEditing(transaction);
+                                const isExpanded = editing;
                                 return (
                                     <ButtonBase
                                         component={Box}
@@ -79,6 +95,11 @@ const TransactionsList = forwardRef<
                                                 e.shiftKey,
                                                 e.ctrlKey,
                                             );
+                                            // console.log(listRef.current);
+                                            // listRef.current?.resetAfterIndex(
+                                            //     0,
+                                            //     true,
+                                            // );
 
                                             // setIsSelected(transaction, !selected);
                                         }}
@@ -87,6 +108,7 @@ const TransactionsList = forwardRef<
                                         <TransactionRow
                                             isSelected={selected}
                                             isEditing={editing}
+                                            isExpanded={isExpanded}
                                             showAccount={!account}
                                             columnRatios={columnRatios}
                                             index={index}
@@ -95,7 +117,7 @@ const TransactionsList = forwardRef<
                                     </ButtonBase>
                                 );
                             }}
-                        </FixedSizeList>
+                        </VariableSizeList>
                     )}
                 </AutoSizer>
             </Box>

@@ -16,9 +16,11 @@ import dayjs from "dayjs";
 import {
     AccountItem,
     AmountItem,
+    CancelButtonItem,
     CategoryItem,
     DateItem,
     NoteItem,
+    SaveButtonItem,
 } from "components/transactions/TransactionRowItems";
 import { updateTransactions } from "data/BudgetSlice";
 import {
@@ -57,6 +59,7 @@ const Item = ({
 const TransactionRow = ({
     isSelected,
     isEditing,
+    isExpanded,
     showAccount,
     index,
     transaction,
@@ -64,6 +67,7 @@ const TransactionRow = ({
 }: {
     isSelected: boolean;
     isEditing: boolean;
+    isExpanded: boolean;
     showAccount?: boolean;
     index: number;
     transaction: Transaction;
@@ -94,211 +98,156 @@ const TransactionRow = ({
     const [note, setNote] = useState(transaction.note ?? "");
     const [amount, setAmount] = useState(transaction.amount);
 
-    // const [hadAccountInteraction, setHadAccountInteraction] = useState(false);
-    // const [hadTimestampInteraction, setHadTimestampInteraction] =
-    //     useState(false);
-    // const [hadCategoryInteraction, setHadCategoryInteraction] = useState(false);
-    // const [hadNoteInteraction, setHadNoteInteraction] = useState(false);
-    // const [hadAmountInteraction, setHadAmountInteraction] = useState(false);
-    // const [hadAddButtonInteraction, setHadAddButtonInteraction] =
-    //     useState(false);
-
-    // const [isAccountAutocompleteOpen, setIsAccountAutocompleteOpen] =
-    //     useState(false);
-    // const [isCategoryAutocompleteOpen, setIsCategoryAutocompleteOpen] =
-    //     useState(false);
-
-    // useEffect(() => {
-    //     handleClose();
-    // }, [account]);
-
     let columnIndex = 0;
 
-    // const hadInteraction = () => {
-    //     return (
-    //         hadAccountInteraction ||
-    //         hadTimestampInteraction ||
-    //         hadCategoryInteraction ||
-    //         hadNoteInteraction ||
-    //         hadAmountInteraction ||
-    //         hadAddButtonInteraction
-    //     );
-    // };
-
-    // const isAccountError = (didInteractionJustNow: boolean) =>
-    //     (didInteractionJustNow || hadInteraction()) && !selectedAccount;
-    // const isTimestampError = () => false;
-    // const isCategoryError = (didInteractionJustNow: boolean) =>
-    //     (didInteractionJustNow || hadInteraction()) && !selectedCategory;
-    // const isNoteError = () => false;
-    // const isAmountError = () => false;
-
-    // const isInErrorState = (didInteractionJustNow: boolean) => {
-    //     return (
-    //         isAccountError(didInteractionJustNow) ||
-    //         isTimestampError() ||
-    //         isCategoryError(didInteractionJustNow) ||
-    //         isNoteError() ||
-    //         isAmountError()
-    //     );
-    // };
-
-    // const resetFormValues = () => {
-    //     setSelectedAccount(account ?? null);
-    //     setAccountNameInput("");
-    //     setTimestamp(dayjs().startOf("day"));
-    //     setSelectedCategory(null);
-    //     setCategoryNameInput("");
-    //     setNote("");
-    //     setAmount(0);
-
-    //     // interactions
-    //     setHadAccountInteraction(false);
-    //     setHadTimestampInteraction(false);
-    //     setHadCategoryInteraction(false);
-    //     setHadNoteInteraction(false);
-    //     setHadAmountInteraction(false);
-    //     setHadAddButtonInteraction(false);
-    // };
-
-    // const handleAddButtonClick = () => {
-    //     // checkError();
-    //     setHadAddButtonInteraction(true);
-    //     if (!isInErrorState(true)) {
-    //         dispatch(
-    //             addTransactions([
-    //                 {
-    //                     accountID: (selectedAccount as Account).id,
-    //                     timestamp: timestamp.startOf("day").valueOf(),
-    //                     categoryID: (selectedCategory as Category).id,
-    //                     note: note,
-    //                     amount: amount,
-    //                 },
-    //             ]),
-    //         );
-    //         resetFormValues();
-    //         close();
-    //     }
-    // };
-
-    // const handleClose = () => {
-    //     resetFormValues();
-    //     close();
-    // };
-
-    // const close = () => {
-    //     setIsAddingTransaction(false);
-    // };
-
     const submitTransactionChange = () => {
-        dispatch(
-            updateTransactions([
-                {
-                    id: transaction.id,
-                    accountID: selectedAccount?.id ?? transaction.accountID,
-                    timestamp: timestamp.startOf("day").valueOf(),
-                    categoryID: selectedCategory?.id ?? transaction.accountID,
-                    note: note ?? transaction.note,
-                    amount: amount,
-                },
-            ]),
-        );
+        const updatedTransaction = {
+            id: transaction.id,
+            accountID: selectedAccount?.id ?? transaction.accountID,
+            timestamp: timestamp.startOf("day").valueOf(),
+            categoryID: selectedCategory?.id ?? transaction.accountID,
+            note: note ?? transaction.note,
+            amount: amount,
+        };
+        dispatch(updateTransactions([updatedTransaction]));
     };
 
-    const bgColor = (() => {
-        if (isSelected || isEditing) {
-            return index % 2 === 0 ? "primary.light" : "primary.lighter";
-        }
-        return index % 2 === 0 ? "neutral.light" : "white";
-    })();
+    const bgColor =
+        isSelected || isEditing
+            ? index % 2 === 0
+                ? "primary.light"
+                : "primary.lighter"
+            : index % 2 === 0
+            ? "neutral.light"
+            : "white";
 
     return (
         <Box
             sx={{
                 display: "flex",
-                flexDirection: "row",
-                alignItems: "center",
+                flexDirection: "column",
                 width: 1,
-                height: "32px",
-                boxSizing: "border-box",
+                height: `${isExpanded ? 64 : 32}px`,
                 backgroundColor: bgColor,
+                boxSizing: "border-box",
             }}
         >
-            {showAccount && (
+            <Box
+                sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    width: 1,
+                    height: `${32}px`,
+                    boxSizing: "border-box",
+                }}
+            >
+                {showAccount && (
+                    <Item
+                        sx={{
+                            display: "flex",
+                            width: columnRatios[columnIndex++],
+                        }}
+                    >
+                        <AccountItem
+                            isEditing={isEditing}
+                            submit={submitTransactionChange}
+                            currentValue={account}
+                            selectedValue={selectedAccount}
+                            setSelectedValue={setSelectedAccount}
+                            options={accounts}
+                        />
+                    </Item>
+                )}
                 <Item
                     sx={{
                         display: "flex",
                         width: columnRatios[columnIndex++],
                     }}
                 >
-                    <AccountItem
+                    <DateItem
                         isEditing={isEditing}
-                        submit={submitTransactionChange}
-                        currentValue={account}
-                        selectedValue={selectedAccount}
-                        setSelectedValue={setSelectedAccount}
-                        options={accounts}
+                        currentValue={dayjs(transaction.timestamp)}
+                        selectedValue={timestamp}
+                        setSelectedValue={setTimestamp}
                     />
                 </Item>
+                <Item
+                    sx={{
+                        display: "flex",
+                        width: columnRatios[columnIndex++],
+                    }}
+                >
+                    <CategoryItem
+                        isEditing={isEditing}
+                        currentValue={
+                            categoriesIncSystem.find(
+                                ({ id }) => id === transaction.categoryID,
+                            ) ?? null
+                        }
+                        selectedValue={selectedCategory}
+                        setSelectedValue={setSelectedCategory}
+                        options={categories}
+                    />
+                </Item>
+                <Item
+                    sx={{
+                        display: "flex",
+                        width: columnRatios[columnIndex++],
+                    }}
+                >
+                    <NoteItem
+                        isEditing={isEditing}
+                        currentValue={transaction.note ?? ""}
+                        selectedValue={note}
+                        setSelectedValue={setNote}
+                    />
+                </Item>
+                <Item
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row-reverse",
+                        width: columnRatios[columnIndex++],
+                    }}
+                >
+                    <AmountItem
+                        isEditing={isEditing}
+                        currentValue={transaction.amount}
+                        selectedValue={amount}
+                        setSelectedValue={setAmount}
+                    />
+                </Item>
+            </Box>
+            {isExpanded && (
+                <Box
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row-reverse",
+                        alignItems: "center",
+                        width: 1,
+                        height: `${32}px`,
+                        boxSizing: "border-box",
+                    }}
+                >
+                    <Item>
+                        <SaveButtonItem
+                            onClick={() => {
+                                console.log(
+                                    "you clicked the save button, dawg! Nice job!",
+                                );
+                            }}
+                        />
+                    </Item>
+                    <Item>
+                        <CancelButtonItem
+                            onClick={() => {
+                                console.log(
+                                    "you clicked the cancel button, dawg! That's an okay choice, too!",
+                                );
+                            }}
+                        />
+                    </Item>
+                </Box>
             )}
-            <Item
-                sx={{
-                    display: "flex",
-                    width: columnRatios[columnIndex++],
-                }}
-            >
-                <DateItem
-                    isEditing={isEditing}
-                    currentValue={dayjs(transaction.timestamp)}
-                    selectedValue={timestamp}
-                    setSelectedValue={setTimestamp}
-                />
-            </Item>
-            <Item
-                sx={{
-                    display: "flex",
-                    width: columnRatios[columnIndex++],
-                }}
-            >
-                <CategoryItem
-                    isEditing={isEditing}
-                    currentValue={
-                        categoriesIncSystem.find(
-                            ({ id }) => id === transaction.categoryID,
-                        ) ?? null
-                    }
-                    selectedValue={selectedCategory}
-                    setSelectedValue={setSelectedCategory}
-                    options={categories}
-                />
-            </Item>
-            <Item
-                sx={{
-                    display: "flex",
-                    width: columnRatios[columnIndex++],
-                }}
-            >
-                <NoteItem
-                    isEditing={isEditing}
-                    currentValue={transaction.note ?? ""}
-                    selectedValue={note}
-                    setSelectedValue={setNote}
-                />
-            </Item>
-            <Item
-                sx={{
-                    display: "flex",
-                    flexDirection: "row-reverse",
-                    width: columnRatios[columnIndex++],
-                }}
-            >
-                <AmountItem
-                    isEditing={isEditing}
-                    currentValue={transaction.amount}
-                    selectedValue={amount}
-                    setSelectedValue={setAmount}
-                />
-            </Item>
         </Box>
     );
 };
