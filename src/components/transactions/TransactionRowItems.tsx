@@ -30,6 +30,9 @@ export const AccountItem = ({
     return isEditing ? (
         <SolidAutocomplete
             fullWidth
+            // disableClearableForReal={true}
+            forcePopupIcon={false}
+            // popupIcon={}
             open={isAutocompleteOpen}
             onOpen={() => {
                 setIsAutocompleteOpen(true);
@@ -49,7 +52,7 @@ export const AccountItem = ({
             inputValue={inputValue}
             setInputValue={setInputValue}
             options={options}
-            getOptionLabel={(a) => a.name}
+            getOptionLabel={(a) => (a as Account).name}
             renderInput={(params) => (
                 <TextField
                     required
@@ -62,9 +65,10 @@ export const AccountItem = ({
             sx={{
                 height: 1,
                 backgroundColor: "white",
+                borderRadius: "0.3rem",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
-                    borderRadius: 0,
+                    borderRadius: "0.3rem",
                     p: "0px",
                     height: 1,
                     "& .MuiInputBase-input": {
@@ -73,9 +77,19 @@ export const AccountItem = ({
                 },
             }}
         />
+    ) : currentValue ? (
+        <Typography noWrap>{currentValue?.name}</Typography>
     ) : (
-        <Typography noWrap>
-            {currentValue?.name ?? "__ACOUNT_NEEDED__"}
+        <Typography
+            noWrap
+            sx={{
+                px: 1,
+                color: "white",
+                backgroundColor: "error.dark",
+                borderRadius: "0.4rem",
+            }}
+        >
+            {"NO ACCOUNT"}
         </Typography>
     );
 };
@@ -91,8 +105,17 @@ export const DateItem = ({
     selectedValue: dayjs.Dayjs;
     setSelectedValue: (value: dayjs.Dayjs) => void;
 }) => {
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
     return isEditing ? (
         <DatePicker
+            open={isDatePickerOpen}
+            onOpen={() => {
+                setIsDatePickerOpen(true);
+            }}
+            onClose={() => {
+                setIsDatePickerOpen(false);
+            }}
             inputFormat="YYYY-MM-DD"
             value={selectedValue}
             onChange={(value) => {
@@ -103,10 +126,11 @@ export const DateItem = ({
                     sx={{
                         height: 1,
                         backgroundColor: "white",
+                        borderRadius: "0.3rem",
                         "& .MuiInputBase-root": {
                             // flexWrap: "nowrap",
                             height: 1,
-                            borderRadius: 0,
+                            borderRadius: "0.3rem",
                             p: "0px",
                             "& .MuiInputBase-input": {
                                 p: "2px",
@@ -142,6 +166,7 @@ export const CategoryItem = ({
     return isEditing ? (
         <SolidAutocomplete
             fullWidth
+            forcePopupIcon={false}
             open={isAutocompleteOpen}
             onOpen={() => {
                 setIsAutocompleteOpen(true);
@@ -167,10 +192,11 @@ export const CategoryItem = ({
             sx={{
                 height: 1,
                 backgroundColor: "white",
+                borderRadius: "0.3rem",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
                     height: 1,
-                    borderRadius: 0,
+                    borderRadius: "0.3rem",
                     p: "0px",
                     "& .MuiInputBase-input": {
                         p: "2px",
@@ -178,9 +204,19 @@ export const CategoryItem = ({
                 },
             }}
         />
+    ) : currentValue ? (
+        <Typography noWrap>{currentValue?.name}</Typography>
     ) : (
-        <Typography noWrap>
-            {currentValue?.name ?? "__CATEGORY_NEEDED__"}
+        <Typography
+            noWrap
+            sx={{
+                px: 1,
+                color: "white",
+                backgroundColor: "error.dark",
+                borderRadius: "0.4rem",
+            }}
+        >
+            {"NO CATEGORY"}
         </Typography>
     );
 };
@@ -203,11 +239,11 @@ export const NoteItem = ({
             onChange={(e) => {
                 setSelectedValue(e.target.value);
             }}
-            sx={{ height: 1, backgroundColor: "white" }}
+            sx={{ height: 1, backgroundColor: "white", borderRadius: "0.3rem" }}
             inputBaseSx={{
                 height: 1,
                 flexWrap: "nowrap",
-                borderRadius: 0,
+                borderRadius: "0.3rem",
                 p: "0px",
                 "& .MuiInputBase-input": {
                     p: "2px",
@@ -235,11 +271,11 @@ export const AmountItem = ({
             fullWidth
             value={selectedValue}
             setValue={setSelectedValue}
-            sx={{ height: 1, backgroundColor: "white" }}
+            sx={{ height: 1, backgroundColor: "white", borderRadius: "0.3rem" }}
             inputBaseSx={{
                 height: 1,
                 flexWrap: "nowrap",
-                borderRadius: 0,
+                borderRadius: "0.3rem",
                 p: "0px",
                 "& .MuiInputBase-input": {
                     p: "2px",
