@@ -21,8 +21,8 @@ export interface Account {
 export interface Transaction {
     id: string;
     accountID?: string;
-    categoryID?: string;
     timestamp: number;
+    categoryID?: string;
     note?: string;
     amount: number;
 }

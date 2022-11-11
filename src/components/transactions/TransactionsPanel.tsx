@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Box, ClickAwayListener } from "@mui/material";
 
@@ -17,9 +17,12 @@ import { Transaction } from "models/Budget";
 const TransactionsPanel = () => {
     const dispatch = useAppDispatch();
 
-    const accountID = useParams()?.accountID ?? "";
+    const params = useParams();
+    const accountID = params?.accountID ?? "";
+    // console.log("did rerender: " + accountID);
 
-    const account = useAccount(accountID);
+    const account = useAccount(params?.accountID ?? "");
+    // console.log("did rerender 2: " + account);
 
     // const [isAddingTransaction, setIsAddingTransaction] = useState(false);
 
@@ -27,10 +30,13 @@ const TransactionsPanel = () => {
     const transactions = useMemo(
         () =>
             account
-                ? allTransactions.filter((t) => t.accountID === account.id)
+                ? allTransactions.filter(
+                      (t) => t.accountID && t.accountID === account.id,
+                  )
                 : allTransactions,
         [allTransactions, account, accountID],
     );
+    // console.log("did rerender 3: " + transactions.length);
 
     const [transientTransactionID, setTransientTransactionID] = useState<
         string | null
@@ -66,28 +72,30 @@ const TransactionsPanel = () => {
                     return b.timestamp - a.timestamp;
                 }
             }),
-        [transactions, transientTransaction],
+        [transactions, transientTransaction, transactionBeingEdited],
     );
 
     if (accountID && !account) {
         return <Navigate to="../../accounts" />;
     }
 
+    const [onListInteraction, setOnListInteraction] = useState<() => void>();
+
+    useEffect(() => {
+        if (onListInteraction) {
+            console.log("running onListInteraction()");
+            onListInteraction();
+        }
+    }, [
+        sortedTransactions,
+        lastSelectedIndex,
+        selectedTransactions,
+        lastSelectedIndex,
+    ]);
+
     const isSelected = (t: Transaction) =>
         selectedTransactions.some((a) => t.id === a.id);
     const isEditing = (t: Transaction) => transactionBeingEdited?.id === t.id;
-    // const isTransient = (t: Transaction) => transientTransaction?.id === t.id;
-
-    // const setIsSelected = (t: Transaction, shouldBeSelected: boolean) => {
-    //     const selected = isSelected(t);
-    //     if (shouldBeSelected && !selected) {
-    //         setSelectedTransactions([t, ...selectedTransactions]);
-    //     } else if (!shouldBeSelected && selected) {
-    //         setSelectedTransactions(
-    //             selectedTransactions.filter((a) => t.id !== a.id),
-    //         );
-    //     }
-    // };
 
     const uniq = <T,>(a: Array<T>) =>
         a.filter((e: T, i: number) => {
@@ -125,8 +133,8 @@ const TransactionsPanel = () => {
         const currentlyEditing = isEditing(t);
 
         if (isShiftHeld) {
-            const curIndex = transactions.findIndex((a) => a.id === t.id);
-            const transactionsToSelect = transactions.slice(
+            const curIndex = sortedTransactions.findIndex((a) => a.id === t.id);
+            const transactionsToSelect = sortedTransactions.slice(
                 Math.min(curIndex, lastSelectedIndex ?? curIndex),
                 Math.max(curIndex, lastSelectedIndex ?? curIndex) + 1,
             );
@@ -143,20 +151,20 @@ const TransactionsPanel = () => {
                 );
                 setTransactionIDBeingEdited(null);
                 setLastSelectedIndex(
-                    transactions.findIndex((a) => a.id === t.id),
+                    sortedTransactions.findIndex((a) => a.id === t.id),
                 );
             } else {
                 if (selectedTransactions.length == 1) {
                     setTransactionIDBeingEdited(t.id);
                     setSelectedTransactions([]);
                     setLastSelectedIndex(
-                        transactions.findIndex((a) => a.id === t.id),
+                        sortedTransactions.findIndex((a) => a.id === t.id),
                     );
                 } else {
                     setSelectedTransactions([t]);
                     setTransactionIDBeingEdited(null);
                     setLastSelectedIndex(
-                        transactions.findIndex((a) => a.id === t.id),
+                        sortedTransactions.findIndex((a) => a.id === t.id),
                     );
                 }
             }
@@ -165,14 +173,14 @@ const TransactionsPanel = () => {
                 setSelectedTransactions([t, ...selectedTransactions]);
                 setTransactionIDBeingEdited(null);
                 setLastSelectedIndex(
-                    transactions.findIndex((a) => a.id === t.id),
+                    sortedTransactions.findIndex((a) => a.id === t.id),
                 );
             } else {
                 if (!currentlyEditing) {
                     setSelectedTransactions([t]);
                     setTransactionIDBeingEdited(null);
                     setLastSelectedIndex(
-                        transactions.findIndex((a) => a.id === t.id),
+                        sortedTransactions.findIndex((a) => a.id === t.id),
                     );
                 }
             }
@@ -214,6 +222,20 @@ const TransactionsPanel = () => {
                     onRowClick={onRowClick}
                     isSelected={isSelected}
                     isEditing={isEditing}
+                    clearTransactionState={(t: Transaction) => {
+                        setSelectedTransactions(
+                            selectedTransactions.filter((t2) => {
+                                t2.id !== t.id;
+                            }),
+                        );
+                        if (transactionBeingEdited?.id === t.id) {
+                            setTransactionIDBeingEdited(null);
+                        }
+                        if (transientTransaction?.id === t.id) {
+                            setTransientTransactionID(null);
+                        }
+                    }}
+                    setOnListInteraction={setOnListInteraction}
                 />
             </ClickAwayListener>
         </Box>

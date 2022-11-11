@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { TextField, Typography } from "@mui/material";
+import { Button, TextField, Typography } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 import dayjs from "dayjs";
@@ -37,6 +37,13 @@ export const AccountItem = ({
             onClose={() => {
                 setIsAutocompleteOpen(false);
             }}
+            // onKeyDown={(event) => {
+            //     console.log(event.key);
+            //     if (event.key === "Enter" && selectedValue) {
+            //         console.log(selectedValue);
+            //         submit();
+            //     }
+            // }}
             value={selectedValue}
             setValue={setSelectedValue}
             inputValue={inputValue}
@@ -54,9 +61,15 @@ export const AccountItem = ({
             )}
             sx={{
                 height: 1,
+                backgroundColor: "white",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
+                    borderRadius: 0,
+                    p: "0px",
                     height: 1,
+                    "& .MuiInputBase-input": {
+                        p: "2px",
+                    },
                 },
             }}
         />
@@ -89,9 +102,15 @@ export const DateItem = ({
                 <TextField
                     sx={{
                         height: 1,
+                        backgroundColor: "white",
                         "& .MuiInputBase-root": {
                             // flexWrap: "nowrap",
                             height: 1,
+                            borderRadius: 0,
+                            p: "0px",
+                            "& .MuiInputBase-input": {
+                                p: "2px",
+                            },
                         },
                     }}
                     {...params}
@@ -147,9 +166,15 @@ export const CategoryItem = ({
             )}
             sx={{
                 height: 1,
+                backgroundColor: "white",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
                     height: 1,
+                    borderRadius: 0,
+                    p: "0px",
+                    "& .MuiInputBase-input": {
+                        p: "2px",
+                    },
                 },
             }}
         />
@@ -178,8 +203,16 @@ export const NoteItem = ({
             onChange={(e) => {
                 setSelectedValue(e.target.value);
             }}
-            sx={{ height: 1 }}
-            inputBaseSx={{ height: 1 }}
+            sx={{ height: 1, backgroundColor: "white" }}
+            inputBaseSx={{
+                height: 1,
+                flexWrap: "nowrap",
+                borderRadius: 0,
+                p: "0px",
+                "& .MuiInputBase-input": {
+                    p: "2px",
+                },
+            }}
         />
     ) : (
         <Typography noWrap>{currentValue}</Typography>
@@ -202,8 +235,16 @@ export const AmountItem = ({
             fullWidth
             value={selectedValue}
             setValue={setSelectedValue}
-            sx={{ height: 1 }}
-            inputBaseSx={{ height: 1 }}
+            sx={{ height: 1, backgroundColor: "white" }}
+            inputBaseSx={{
+                height: 1,
+                flexWrap: "nowrap",
+                borderRadius: 0,
+                p: "0px",
+                "& .MuiInputBase-input": {
+                    p: "2px",
+                },
+            }}
         />
     ) : (
         <Typography
@@ -214,5 +255,31 @@ export const AmountItem = ({
         >
             {formatCurrencyCents(currentValue, { sign: "$" })}
         </Typography>
+    );
+};
+
+export const SaveButtonItem = ({ onClick }: { onClick: () => void }) => {
+    return (
+        <Button
+            variant="outlined"
+            onClick={onClick}
+            size="small"
+            sx={{ color: "black", borderColor: "black" }}
+        >
+            Save
+        </Button>
+    );
+};
+
+export const CancelButtonItem = ({ onClick }: { onClick: () => void }) => {
+    return (
+        <Button
+            variant="outlined"
+            onClick={onClick}
+            size="small"
+            sx={{ color: "black", borderColor: "black" }}
+        >
+            Cancel
+        </Button>
     );
 };
