@@ -222,6 +222,19 @@ const TransactionsPanel = () => {
                     onRowClick={onRowClick}
                     isSelected={isSelected}
                     isEditing={isEditing}
+                    clearTransactionState={(t: Transaction) => {
+                        setSelectedTransactions(
+                            selectedTransactions.filter((t2) => {
+                                t2.id !== t.id;
+                            }),
+                        );
+                        if (transactionBeingEdited?.id === t.id) {
+                            setTransactionIDBeingEdited(null);
+                        }
+                        if (transientTransaction?.id === t.id) {
+                            setTransientTransactionID(null);
+                        }
+                    }}
                     setOnListInteraction={setOnListInteraction}
                 />
             </ClickAwayListener>

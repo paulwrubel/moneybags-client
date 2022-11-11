@@ -60,6 +60,7 @@ const TransactionRow = ({
     isSelected,
     isEditing,
     isExpanded,
+    clearTransactionState,
     showAccount,
     index,
     transaction,
@@ -68,6 +69,7 @@ const TransactionRow = ({
     isSelected: boolean;
     isEditing: boolean;
     isExpanded: boolean;
+    clearTransactionState: () => void;
     showAccount?: boolean;
     index: number;
     transaction: Transaction;
@@ -99,6 +101,14 @@ const TransactionRow = ({
     const [amount, setAmount] = useState(transaction.amount);
 
     let columnIndex = 0;
+
+    const handleSave = () => {
+        submitTransactionChange();
+        clearTransactionState();
+    };
+    const handleCancel = () => {
+        clearTransactionState();
+    };
 
     const submitTransactionChange = () => {
         const updatedTransaction = {
@@ -150,7 +160,6 @@ const TransactionRow = ({
                     >
                         <AccountItem
                             isEditing={isEditing}
-                            submit={submitTransactionChange}
                             currentValue={account}
                             selectedValue={selectedAccount}
                             setSelectedValue={setSelectedAccount}
@@ -229,22 +238,10 @@ const TransactionRow = ({
                     }}
                 >
                     <Item>
-                        <SaveButtonItem
-                            onClick={() => {
-                                console.log(
-                                    "you clicked the save button, dawg! Nice job!",
-                                );
-                            }}
-                        />
+                        <SaveButtonItem onClick={handleSave} />
                     </Item>
                     <Item>
-                        <CancelButtonItem
-                            onClick={() => {
-                                console.log(
-                                    "you clicked the cancel button, dawg! That's an okay choice, too!",
-                                );
-                            }}
-                        />
+                        <CancelButtonItem onClick={handleCancel} />
                     </Item>
                 </Box>
             )}

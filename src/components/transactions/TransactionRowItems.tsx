@@ -13,14 +13,12 @@ import { formatCurrencyCents } from "Utils";
 
 export const AccountItem = ({
     isEditing,
-    submit,
     currentValue,
     selectedValue,
     setSelectedValue,
     options,
 }: {
     isEditing: boolean;
-    submit: () => void;
     currentValue: Account | null;
     selectedValue: Account | null;
     setSelectedValue: (value: Account | null) => void;
@@ -39,13 +37,13 @@ export const AccountItem = ({
             onClose={() => {
                 setIsAutocompleteOpen(false);
             }}
-            onKeyDown={(event) => {
-                console.log(event.key);
-                if (event.key === "Enter" && selectedValue) {
-                    console.log(selectedValue);
-                    submit();
-                }
-            }}
+            // onKeyDown={(event) => {
+            //     console.log(event.key);
+            //     if (event.key === "Enter" && selectedValue) {
+            //         console.log(selectedValue);
+            //         submit();
+            //     }
+            // }}
             value={selectedValue}
             setValue={setSelectedValue}
             inputValue={inputValue}
@@ -63,6 +61,7 @@ export const AccountItem = ({
             )}
             sx={{
                 height: 1,
+                backgroundColor: "white",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
                     borderRadius: 0,
@@ -103,9 +102,15 @@ export const DateItem = ({
                 <TextField
                     sx={{
                         height: 1,
+                        backgroundColor: "white",
                         "& .MuiInputBase-root": {
                             // flexWrap: "nowrap",
                             height: 1,
+                            borderRadius: 0,
+                            p: "0px",
+                            "& .MuiInputBase-input": {
+                                p: "2px",
+                            },
                         },
                     }}
                     {...params}
@@ -161,9 +166,15 @@ export const CategoryItem = ({
             )}
             sx={{
                 height: 1,
+                backgroundColor: "white",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
                     height: 1,
+                    borderRadius: 0,
+                    p: "0px",
+                    "& .MuiInputBase-input": {
+                        p: "2px",
+                    },
                 },
             }}
         />
@@ -192,8 +203,16 @@ export const NoteItem = ({
             onChange={(e) => {
                 setSelectedValue(e.target.value);
             }}
-            sx={{ height: 1 }}
-            inputBaseSx={{ height: 1 }}
+            sx={{ height: 1, backgroundColor: "white" }}
+            inputBaseSx={{
+                height: 1,
+                flexWrap: "nowrap",
+                borderRadius: 0,
+                p: "0px",
+                "& .MuiInputBase-input": {
+                    p: "2px",
+                },
+            }}
         />
     ) : (
         <Typography noWrap>{currentValue}</Typography>
@@ -216,8 +235,16 @@ export const AmountItem = ({
             fullWidth
             value={selectedValue}
             setValue={setSelectedValue}
-            sx={{ height: 1 }}
-            inputBaseSx={{ height: 1 }}
+            sx={{ height: 1, backgroundColor: "white" }}
+            inputBaseSx={{
+                height: 1,
+                flexWrap: "nowrap",
+                borderRadius: 0,
+                p: "0px",
+                "& .MuiInputBase-input": {
+                    p: "2px",
+                },
+            }}
         />
     ) : (
         <Typography
@@ -237,14 +264,7 @@ export const SaveButtonItem = ({ onClick }: { onClick: () => void }) => {
             variant="outlined"
             onClick={onClick}
             size="small"
-            // startIcon={<AddCircleOutlineSharpIcon />}
-            // sx={{
-            //     textTransform: "none",
-            //     color: "black",
-            //     ":hover": {
-            //         backgroundColor: "primary.main",
-            //     },
-            // }}
+            sx={{ color: "black", borderColor: "black" }}
         >
             Save
         </Button>
@@ -257,14 +277,7 @@ export const CancelButtonItem = ({ onClick }: { onClick: () => void }) => {
             variant="outlined"
             onClick={onClick}
             size="small"
-            // startIcon={<AddCircleOutlineSharpIcon />}
-            // sx={{
-            //     textTransform: "none",
-            //     color: "black",
-            //     ":hover": {
-            //         backgroundColor: "primary.main",
-            //     },
-            // }}
+            sx={{ color: "black", borderColor: "black" }}
         >
             Cancel
         </Button>

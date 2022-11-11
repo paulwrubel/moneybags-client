@@ -24,6 +24,7 @@ const TransactionsTable = forwardRef<
         ) => void;
         isSelected: (t: Transaction) => boolean;
         isEditing: (t: Transaction) => boolean;
+        clearTransactionState: (t: Transaction) => void;
         setOnListInteraction: (onListInteraction: () => void) => void;
     }
 >(
@@ -38,6 +39,7 @@ const TransactionsTable = forwardRef<
             onRowClick,
             isSelected,
             isEditing,
+            clearTransactionState,
             setOnListInteraction,
         },
         ref,
@@ -88,8 +90,8 @@ const TransactionsTable = forwardRef<
                     // selectedTransactions={selectedTransactions}
                     // setSelectedTransactions={setSelectedTransactions}
                     isSelected={isSelected}
-                    // setIsSelected={setIsSelected}
                     isEditing={isEditing}
+                    clearTransactionState={clearTransactionState}
                     account={account}
                     transactions={transactions}
                     columnRatios={columnRatios}
