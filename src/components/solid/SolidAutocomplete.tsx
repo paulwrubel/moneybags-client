@@ -1,10 +1,26 @@
+import { AutocompleteValue } from "@mui/base";
 import Autocomplete, {
     // AutocompleteChangeDetails,
     // AutocompleteChangeReason,
     // AutocompleteInputChangeReason,
     AutocompleteProps,
     AutocompleteRenderInputParams,
+    // AutocompleteValue,
 } from "@mui/material/Autocomplete";
+
+type SolidAutocompleteValue<T> = AutocompleteValue<
+    T,
+    undefined,
+    undefined,
+    undefined
+>;
+
+type AdditionalAutocompleteProps<T> = AutocompleteProps<
+    T,
+    undefined,
+    undefined,
+    undefined
+>;
 
 const SolidAutocomplete = <T,>({
     value,
@@ -14,19 +30,21 @@ const SolidAutocomplete = <T,>({
     options,
     getOptionLabel,
     renderInput,
+    disableClearableForReal,
     ...autocompleteProps
 }: {
-    value: T | null;
-    setValue: (arg0: T | null) => void;
+    value: SolidAutocompleteValue<T>;
+    setValue: (arg0: SolidAutocompleteValue<T>) => void;
     inputValue: string;
     setInputValue: (arg0: string) => void;
     options: T[];
     getOptionLabel: (option: T) => string;
     renderInput: (params: AutocompleteRenderInputParams) => React.ReactNode;
-} & AutocompleteProps<T, undefined, undefined, undefined>) => {
+    disableClearableForReal?: boolean;
+} & AdditionalAutocompleteProps<T>) => {
     const handleChange = (
         event: React.SyntheticEvent<Element, Event>,
-        value: T | null,
+        value: SolidAutocompleteValue<T>,
         // reason: AutocompleteChangeReason,
         // details?: AutocompleteChangeDetails<T> | undefined,
     ) => {
@@ -54,6 +72,7 @@ const SolidAutocomplete = <T,>({
             options={options}
             getOptionLabel={getOptionLabel}
             renderInput={renderInput}
+            disableClearable={disableClearableForReal}
             {...autocompleteProps}
         />
     );
