@@ -80,7 +80,11 @@ const TransactionsLabelsRow = ({
                 </Item>
                 <Divider orientation="vertical" flexItem />
                 <Item sx={{ width: columnRatios[columnIndex++] }}>
-                    <Typography sx={{ textAlign: "right" }}>Amount</Typography>
+                    <Typography sx={{ textAlign: "right" }}>Outflow</Typography>
+                </Item>
+                <Divider orientation="vertical" flexItem />
+                <Item sx={{ width: columnRatios[columnIndex++] }}>
+                    <Typography sx={{ textAlign: "right" }}>Inflow</Typography>
                 </Item>
             </Box>
         </Paper>

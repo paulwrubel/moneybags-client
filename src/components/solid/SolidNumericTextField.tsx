@@ -6,22 +6,27 @@ import { SystemStyleObject } from "@mui/system";
 import SolidTextField from "components/solid/SolidTextField";
 import { formatCurrencyCents, getSelectionText } from "Utils";
 
-function SolidNumericTextField({
+function SolidNumericTextField<T extends number | (number | null)>({
     value,
     setValue,
     inputBaseSx,
     ...textFieldProps
 }: {
-    value: number;
-    setValue: (arg0: number) => void;
+    value: T;
+    setValue: (newValue: T) => void;
     inputBaseSx?: SystemStyleObject;
 } & TextFieldProps) {
-    const [valueInput, setValueInput] = useState(
-        formatCurrencyCents(value, { sign: "" }),
-    );
+    const getDisplayFromValue = (v: T) => {
+        if (!v) {
+            return "";
+        }
+        return formatCurrencyCents(v, { sign: "" });
+    };
+
+    const [valueInput, setValueInput] = useState(getDisplayFromValue(value));
 
     useEffect(() => {
-        setValueInput(formatCurrencyCents(value, { sign: "" }));
+        setValueInput(getDisplayFromValue(value));
     }, [value]);
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -35,39 +40,12 @@ function SolidNumericTextField({
     const handleBeforeInput = (
         event: React.SyntheticEvent<HTMLInputElement> & InputEvent,
     ) => {
-        // console.log("the event: " + event.data);
-        // console.log("inputType: " + event.inputType);
-        // console.log("+ test: " + /[+\-*/]/.test("+"));
-        // console.log("- test: " + /[+\-*/]/.test("-"));
-        // console.log("* test: " + /[+\-*/]/.test("*"));
-        // console.log("/ test: " + /[+\-*/]/.test("/"));
         if (/[+\-*/]/.test(event.data ?? "")) {
-            // console.log(event.data);
-            // event.preventDefault();
-
             const selection = window.getSelection() ?? document.getSelection();
             const selectionText = getSelectionText();
 
-            // console.log(selection);
             if (selection) {
                 console.log(selection.type);
-                // eslint-disable-next-line no-debugger
-                // debugger;
-                // console.log(
-                //     "has removeAllRanges?: ",
-                //     !!selection.removeAllRanges,
-                // );
-                // console.log("has empty?: ", !!selection.empty);
-                // console.log("has collapeToEnd?: ", !!selection.collapseToEnd);
-                // console.log("1 the selection: " + selection.toString());
-                // console.log("2 the selection TEXT: " + selectionText);
-                // selection.selectAllChildren(event.currentTarget);
-                // console.log("2 the selection: " + selection.toString());
-                // event.target?.select();
-                // console.log("3 the selection: " + selection.toString());
-                // selection.removeAllRanges();
-                // selection.empty();
-                // selection.collapseToEnd();
                 if (selectionText === valueInput) {
                     event.preventDefault();
                     setValueInput(valueInput + event.data);
@@ -94,11 +72,15 @@ function SolidNumericTextField({
 
     const handleBlur = () => {
         // console.log("blurring!");
-        let valueString = valueInput.replaceAll(",", "");
-        valueString = valueString.replaceAll(/[^-()\d+*/.]/g, "");
+        const valueString = valueInput
+            .replaceAll(",", "")
+            .replaceAll(/[^-()\d+*/.]/g, "")
+            .trim();
 
+        const valueIsEmpty = valueString === "";
+        let newValue;
         try {
-            value = Function(`
+            newValue = Function(`
             "use strict";
             return (
                 ${valueString}
@@ -106,17 +88,19 @@ function SolidNumericTextField({
         `)();
         } catch (error) {
             if (error instanceof SyntaxError) {
-                value = 0;
+                newValue = 0;
             } else {
                 console.error(error);
             }
         }
-        if (isNaN(value) || !isFinite(value)) {
-            value = 0;
+        if (!valueIsEmpty) {
+            if (isNaN(newValue) || !isFinite(newValue)) {
+                newValue = 0;
+            }
+            newValue = Math.round(newValue * 100);
         }
-        value = Math.round(value * 100);
-        setValue(value);
-        setValueInput(formatCurrencyCents(value, { sign: "" }));
+        setValue(newValue);
+        setValueInput(getDisplayFromValue(newValue));
     };
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {

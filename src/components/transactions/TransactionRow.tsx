@@ -220,9 +220,37 @@ const TransactionRow = ({
                 >
                     <AmountItem
                         isEditing={isEditing}
-                        currentValue={transaction.amount}
-                        selectedValue={amount}
-                        setSelectedValue={setAmount}
+                        currentValue={Math.abs(Math.min(transaction.amount, 0))}
+                        selectedValue={(() => {
+                            const t = Math.abs(Math.min(amount, 0));
+                            console.log(`Outflow selectedValue rerender: ${t}`);
+                            return t;
+                        })()}
+                        setSelectedValue={(outflow) => {
+                            if (outflow) {
+                                console.log(`Setting amount to ${-outflow}`);
+                                setAmount(-outflow);
+                            }
+                        }}
+                    />
+                </Item>
+                <Item
+                    sx={{
+                        display: "flex",
+                        flexDirection: "row-reverse",
+                        width: columnRatios[columnIndex++],
+                    }}
+                >
+                    <AmountItem
+                        isEditing={isEditing}
+                        currentValue={Math.abs(Math.max(transaction.amount, 0))}
+                        selectedValue={Math.abs(Math.max(amount, 0))}
+                        setSelectedValue={(inflow) => {
+                            if (inflow) {
+                                console.log(`Setting amount to ${inflow}`);
+                                setAmount(inflow);
+                            }
+                        }}
                     />
                 </Item>
             </Box>
