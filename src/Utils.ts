@@ -1,12 +1,12 @@
 // eslint-disable-next-line import/no-unresolved
-import { CsvError, parse } from "csv-parse/browser/esm/sync";
+import { CsvError, parse } from "csv-parse/browser/esm";
 
 const CurrencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
 });
 
-function formatCurrencyCents(
+export function formatCurrencyCents(
     value: number,
     { sign = "$" }: { sign: string } = { sign: "$" },
 ): string {
@@ -17,15 +17,15 @@ function formatCurrencyCents(
     return formatted;
 }
 
-function isError(error: unknown): error is Error {
+export function isError(error: unknown): error is Error {
     return error instanceof Error;
 }
 
-function def<T>(value: T | undefined, def: T): T {
+export function def<T>(value: T | undefined, def: T): T {
     return value === undefined ? def : value;
 }
 
-function getSelectionText(): string {
+export function getSelectionText(): string {
     if (window.getSelection) {
         try {
             const activeElement = document.activeElement;
@@ -56,27 +56,30 @@ function getSelectionText(): string {
     }
 }
 
-function parseYNABBudgetFileString(input: string): string {
-    const trimmedInput = input.replaceAll("\ufeff", "").trim();
-    console.log(trimmedInput);
-    console.log(trimmedInput.split("\n")[1]);
-    let res = "fukk u";
-    try {
-        res = parse(trimmedInput, { relax_quotes: false });
-        console.log(res);
-    } catch (e) {
-        const csve = e as CsvError;
-        console.error(csve);
-    }
-    return res as string;
-
-    // return "";
+export async function parseYNABBudgetFileStringAsync(
+    input: string,
+): Promise<number[][]> {
+    return new Promise((resolve, reject) => {
+        parse(
+            input.replaceAll("\ufeff", "").trim(),
+            {},
+            (err?: CsvError, records?: number[][]) => {
+                if (err) {
+                    reject(err);
+                } else if (records) {
+                    resolve(records);
+                } else {
+                    reject(Error("no results returned from csv-parse"));
+                }
+            },
+        );
+    });
 }
 
-export {
-    formatCurrencyCents,
-    isError,
-    def,
-    getSelectionText,
-    parseYNABBudgetFileString,
-};
+// export {
+//     formatCurrencyCents,
+//     isError,
+//     def,
+//     getSelectionText,
+//     parseYNABBudgetFileStringAsync,
+// };

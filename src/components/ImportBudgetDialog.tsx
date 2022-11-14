@@ -17,7 +17,7 @@ import { v4 as uuid } from "uuid";
 
 import { useAppDispatch, useBudgetHeaders } from "data/Hooks";
 import { addBudgetHeader } from "data/MetadataSlice";
-import { parseYNABBudgetFileString } from "Utils";
+import { parseYNABBudgetFileStringAsync } from "Utils";
 
 const ImportBudgetDialog = ({
     isOpen,
@@ -59,9 +59,12 @@ const ImportBudgetDialog = ({
                     if (entry.name.includes("Budget")) {
                         entry.async("string").then(
                             (content) => {
-                                const csv = parseYNABBudgetFileString(content);
                                 console.log(content);
-                                console.log(csv);
+                                parseYNABBudgetFileStringAsync(content).then(
+                                    (csv) => {
+                                        console.log(csv);
+                                    },
+                                );
                             },
                             (e) => {
                                 console.error(e);
