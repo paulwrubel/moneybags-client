@@ -1,5 +1,7 @@
+/* eslint-disable import/exports-last */
 // eslint-disable-next-line import/no-unresolved
 import { CsvError, parse } from "csv-parse/browser/esm";
+import dayjs, { Dayjs } from "dayjs";
 
 const CurrencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
@@ -56,20 +58,112 @@ export function getSelectionText(): string {
     }
 }
 
+type YNABBudgetRecord = {
+    month: string;
+    categoryGroupAndCategory: string;
+    categoryGroup: string;
+    category: string;
+    budgeted: number;
+    activity: number;
+    available: number;
+};
+
 export async function parseYNABBudgetFileStringAsync(
     input: string,
-): Promise<number[][]> {
+): Promise<YNABBudgetRecord[]> {
     return new Promise((resolve, reject) => {
         parse(
             input.replaceAll("\ufeff", "").trim(),
-            {},
-            (err?: CsvError, records?: number[][]) => {
+            {
+                columns: [
+                    "month",
+                    "categoryGroupAndCategory",
+                    "categoryGroup",
+                    "category",
+                    "budgeted",
+                    "activity",
+                    "available",
+                ],
+                cast: (value, { column }) => {
+                    if (
+                        column === "budgeted" ||
+                        column === "activity" ||
+                        column === "available"
+                    ) {
+                        return Math.round(parseFloat(value) * 100);
+                    } else {
+                        return value;
+                    }
+                },
+                from: 2,
+            },
+            (err?: CsvError, records?: YNABBudgetRecord[]) => {
                 if (err) {
                     reject(err);
                 } else if (records) {
                     resolve(records);
                 } else {
-                    reject(Error("no results returned from csv-parse"));
+                    reject(Error("no budget results returned from csv-parse"));
+                }
+            },
+        );
+    });
+}
+
+type YNABTransactionRecord = {
+    account: string;
+    flag: string;
+    date: Dayjs;
+    payee: string;
+    categoryGroupAndCategory: string;
+    categoryGroup: string;
+    category: string;
+    memo: string;
+    outflow: number;
+    inflow: number;
+    cleared: "Uncleared" | "Cleared" | "Reconciled";
+};
+
+export async function parseYNABTransactionsFileStringAsync(
+    input: string,
+): Promise<YNABTransactionRecord[]> {
+    return new Promise((resolve, reject) => {
+        parse(
+            input.replaceAll("\ufeff", "").trim(),
+            {
+                columns: [
+                    "account",
+                    "flag",
+                    "date",
+                    "payee",
+                    "categoryGroupAndCategory",
+                    "categoryGroup",
+                    "category",
+                    "memo",
+                    "outflow",
+                    "inflow",
+                    "cleared",
+                ],
+                cast: (value, { column }) => {
+                    if (column === "outflow" || column === "inflow") {
+                        return Math.round(parseFloat(value) * 100);
+                    } else if (column === "date") {
+                        return dayjs(value, "YYYY-MM-DD");
+                    } else {
+                        return value;
+                    }
+                },
+                from: 2,
+            },
+            (err?: CsvError, records?: YNABTransactionRecord[]) => {
+                if (err) {
+                    reject(err);
+                } else if (records) {
+                    resolve(records);
+                } else {
+                    reject(
+                        Error("no transaction results returned from csv-parse"),
+                    );
                 }
             },
         );

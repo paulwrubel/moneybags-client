@@ -17,7 +17,10 @@ import { v4 as uuid } from "uuid";
 
 import { useAppDispatch, useBudgetHeaders } from "data/Hooks";
 import { addBudgetHeader } from "data/MetadataSlice";
-import { parseYNABBudgetFileStringAsync } from "Utils";
+import {
+    parseYNABBudgetFileStringAsync,
+    parseYNABTransactionsFileStringAsync,
+} from "Utils";
 
 const ImportBudgetDialog = ({
     isOpen,
@@ -56,24 +59,35 @@ const ImportBudgetDialog = ({
             JSZip.loadAsync(selectedFile).then((zip) => {
                 zip.forEach((relPath, entry) => {
                     console.log(entry.name);
-                    if (entry.name.includes("Budget")) {
-                        entry.async("string").then(
-                            (content) => {
-                                console.log(content);
+                    entry.async("string").then(
+                        (content) => {
+                            console.log(content);
+                            if (entry.name.includes("Budget")) {
                                 parseYNABBudgetFileStringAsync(content).then(
-                                    (csv) => {
-                                        console.log(csv);
+                                    (records) => {
+                                        console.log(records);
                                     },
                                     (e) => {
                                         console.error(e);
                                     },
                                 );
-                            },
-                            (e) => {
-                                console.error(e);
-                            },
-                        );
-                    }
+                            } else if (entry.name.includes("Register")) {
+                                parseYNABTransactionsFileStringAsync(
+                                    content,
+                                ).then(
+                                    (records) => {
+                                        console.log(records);
+                                    },
+                                    (e) => {
+                                        console.error(e);
+                                    },
+                                );
+                            }
+                        },
+                        (e) => {
+                            console.error(e);
+                        },
+                    );
                 });
                 // console.log(zip.files);
             });
