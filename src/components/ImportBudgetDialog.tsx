@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 
 import {
     Button,
@@ -6,16 +6,20 @@ import {
     DialogActions,
     DialogContent,
     DialogTitle,
+    Input,
+    InputLabel,
     TextField,
 } from "@mui/material";
 
+import JSZip from "jszip";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
 import { useAppDispatch, useBudgetHeaders } from "data/Hooks";
 import { addBudgetHeader } from "data/MetadataSlice";
+import { parseYNABBudgetFileString } from "Utils";
 
-const NewBudgetDialog = ({
+const ImportBudgetDialog = ({
     isOpen,
     handleClose,
 }: {
@@ -25,6 +29,7 @@ const NewBudgetDialog = ({
     const navigate = useNavigate();
 
     const [budgetName, setBudgetName] = useState("");
+    const [selectedFile, setSelectedFile] = useState<File>();
     const dispatch = useAppDispatch();
     const budgetHeaders = useBudgetHeaders();
 
@@ -37,6 +42,36 @@ const NewBudgetDialog = ({
         event: React.ChangeEvent<HTMLInputElement>,
     ) => {
         setBudgetName(event.target.value);
+    };
+
+    const handleFileInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        if (event.target.files) {
+            setSelectedFile(event.target.files[0]);
+        }
+    };
+
+    const handleTest = () => {
+        console.log(selectedFile);
+        if (selectedFile) {
+            JSZip.loadAsync(selectedFile).then((zip) => {
+                zip.forEach((relPath, entry) => {
+                    console.log(entry.name);
+                    if (entry.name.includes("Budget")) {
+                        entry.async("string").then(
+                            (content) => {
+                                const csv = parseYNABBudgetFileString(content);
+                                console.log(content);
+                                console.log(csv);
+                            },
+                            (e) => {
+                                console.error(e);
+                            },
+                        );
+                    }
+                });
+                // console.log(zip.files);
+            });
+        }
     };
 
     const handleInternalClose = () => {
@@ -59,26 +94,34 @@ const NewBudgetDialog = ({
 
     return (
         <Dialog open={isOpen} onClose={handleInternalClose}>
-            <DialogTitle>Create a New Budget</DialogTitle>
+            <DialogTitle>Import Budget From a File</DialogTitle>
             <DialogContent>
-                {/* <Typography>or import from a file instead</Typography> */}
-                <TextField
+                <Input
+                    type="file"
+                    onChange={handleFileInputChange}
+                    // sx={{ display: "none" }}
+                />
+                {/* <InputLabel htmlFor="import-budget-file-button">
+                    Weesnaw
+                </InputLabel> */}
+                {/* <TextField
                     fullWidth
                     margin="dense"
                     label="Name"
                     value={budgetName}
                     onChange={handleBudgetNameChange}
                     sx={{ textAlign: "left" }}
-                />
+                /> */}
             </DialogContent>
             <DialogActions>
+                <Button onClick={handleTest}>Test</Button>
                 <Button onClick={handleInternalClose}>Cancel</Button>
                 <Button disabled={!isValid} onClick={handleAddBudget}>
-                    Create Budget
+                    Import Budget
                 </Button>
             </DialogActions>
         </Dialog>
     );
 };
 
-export default NewBudgetDialog;
+export default ImportBudgetDialog;

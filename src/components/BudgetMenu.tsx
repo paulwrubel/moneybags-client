@@ -5,15 +5,22 @@ import { Divider, Menu, MenuItem, Typography } from "@mui/material";
 
 import { Link } from "react-router-dom";
 
+import ImportBudgetDialog from "components/ImportBudgetDialog";
 import NewBudgetDialog from "components/NewBudgetDialog";
 import { useBudgetHeaders } from "data/Hooks";
 
-const BudgetMenu: React.FC<{
+const BudgetMenu = ({
+    anchorElement,
+    isOpen,
+    setIsOpen,
+}: {
     anchorElement: HTMLElement | null;
     isOpen: boolean;
     setIsOpen: (isOpen: boolean) => void;
-}> = ({ anchorElement, isOpen, setIsOpen }) => {
+}) => {
     const [isCreateBudgetDialogOpen, setIsCreateBudgetDialogOpen] =
+        useState(false);
+    const [isImportBudgetDialogOpen, setIsImportBudgetDialogOpen] =
         useState(false);
 
     const budgetHeaders = useBudgetHeaders();
@@ -60,14 +67,29 @@ const BudgetMenu: React.FC<{
                         setIsOpen(false);
                     }}
                 >
-                    <AddCircleOutlineSharpIcon />
+                    <AddCircleOutlineSharpIcon sx={{ pr: "4px" }} />
                     <Typography>New Budget</Typography>
+                </MenuItem>
+                <MenuItem
+                    onClick={() => {
+                        setIsImportBudgetDialogOpen(true);
+                        setIsOpen(false);
+                    }}
+                >
+                    <AddCircleOutlineSharpIcon sx={{ pr: "4px" }} />
+                    <Typography>Import Budget</Typography>
                 </MenuItem>
             </Menu>
             <NewBudgetDialog
                 isOpen={isCreateBudgetDialogOpen}
                 handleClose={() => {
                     setIsCreateBudgetDialogOpen(false);
+                }}
+            />
+            <ImportBudgetDialog
+                isOpen={isImportBudgetDialogOpen}
+                handleClose={() => {
+                    setIsImportBudgetDialogOpen(false);
                 }}
             />
         </>

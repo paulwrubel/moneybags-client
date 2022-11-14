@@ -1,3 +1,6 @@
+// eslint-disable-next-line import/no-unresolved
+import { CsvError, parse } from "csv-parse/browser/esm/sync";
+
 const CurrencyFormatter = new Intl.NumberFormat("en-US", {
     style: "currency",
     currency: "USD",
@@ -53,4 +56,27 @@ function getSelectionText(): string {
     }
 }
 
-export { formatCurrencyCents, isError, def, getSelectionText };
+function parseYNABBudgetFileString(input: string): string {
+    const trimmedInput = input.replaceAll("\ufeff", "").trim();
+    console.log(trimmedInput);
+    console.log(trimmedInput.split("\n")[1]);
+    let res = "fukk u";
+    try {
+        res = parse(trimmedInput, { relax_quotes: false });
+        console.log(res);
+    } catch (e) {
+        const csve = e as CsvError;
+        console.error(csve);
+    }
+    return res as string;
+
+    // return "";
+}
+
+export {
+    formatCurrencyCents,
+    isError,
+    def,
+    getSelectionText,
+    parseYNABBudgetFileString,
+};
