@@ -64,6 +64,9 @@ const ImportBudgetDialog = ({
                                     (csv) => {
                                         console.log(csv);
                                     },
+                                    (e) => {
+                                        console.error(e);
+                                    },
                                 );
                             },
                             (e) => {
