@@ -47,8 +47,8 @@ const TransactionsTable = forwardRef<
         const showAllTransactions = !account;
 
         const columnRatios = showAllTransactions
-            ? [0.18, 0.1, 0.2, 0.35, 0.17]
-            : [0.1, 0.2, 0.53, 0.17];
+            ? [0.18, 0.1, 0.2, 0.35, 0.085, 0.085]
+            : [0.1, 0.2, 0.53, 0.085, 0.085];
 
         return (
             <Box

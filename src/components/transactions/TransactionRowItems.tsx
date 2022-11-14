@@ -263,8 +263,8 @@ export const AmountItem = ({
 }: {
     isEditing: boolean;
     currentValue: number;
-    selectedValue: number;
-    setSelectedValue: (value: number) => void;
+    selectedValue: number | null;
+    setSelectedValue: (value: number | null) => void;
 }) => {
     return isEditing ? (
         <SolidNumericTextField
@@ -289,7 +289,9 @@ export const AmountItem = ({
                 textAlign: "right",
             }}
         >
-            {formatCurrencyCents(currentValue, { sign: "$" })}
+            {currentValue === 0
+                ? ""
+                : formatCurrencyCents(currentValue, { sign: "$" })}
         </Typography>
     );
 };
