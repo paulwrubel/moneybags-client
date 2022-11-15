@@ -231,6 +231,7 @@ export async function parseYNABTransactionsFileStringAsync(
     });
 }
 
+// eslint-disable-next-line sonarjs/cognitive-complexity
 export function createBudgetFromYNABData(
     header: BudgetHeader,
     ynabBudget: YNABBudgetRecord[],
