@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import {
     Button,
@@ -9,17 +9,24 @@ import {
     Input,
     InputLabel,
     TextField,
+    Typography,
 } from "@mui/material";
 
+import dayjs from "dayjs";
 import JSZip from "jszip";
 import { useNavigate } from "react-router-dom";
 import { v4 as uuid } from "uuid";
 
+import { setBudget } from "data/BudgetSlice";
+import { saveLock, saveUnlock, setActiveBudgetID } from "data/CoreSlice";
 import { useAppDispatch, useBudgetHeaders } from "data/Hooks";
 import { addBudgetHeader } from "data/MetadataSlice";
+import { Budget } from "models/Budget";
 import {
+    createBudgetFromYNABData,
     parseYNABBudgetFileStringAsync,
     parseYNABTransactionsFileStringAsync,
+    parseYNABZipFile,
 } from "Utils";
 
 const ImportBudgetDialog = ({
@@ -33,8 +40,30 @@ const ImportBudgetDialog = ({
 
     const [budgetName, setBudgetName] = useState("");
     const [selectedFile, setSelectedFile] = useState<File>();
+    const [isImporting, setIsImporting] = useState(false);
+    const [importedBudget, setImportedBudget] = useState<Budget | null>(null);
     const dispatch = useAppDispatch();
     const budgetHeaders = useBudgetHeaders();
+
+    useEffect(() => {
+        if (importedBudget) {
+            setIsImporting(false);
+            console.log(importedBudget);
+
+            dispatch(saveLock());
+            dispatch(
+                addBudgetHeader({
+                    id: importedBudget.id,
+                    name: importedBudget.name,
+                }),
+            );
+            dispatch(setBudget(importedBudget));
+            dispatch(setActiveBudgetID(importedBudget.id));
+            dispatch(saveUnlock());
+            navigate(`/${importedBudget.id}`);
+            handleInternalClose();
+        }
+    }, [importedBudget]);
 
     const isValid =
         budgetName.length > 0 &&
@@ -53,63 +82,37 @@ const ImportBudgetDialog = ({
         }
     };
 
-    const handleTest = () => {
-        console.log(selectedFile);
-        if (selectedFile) {
-            JSZip.loadAsync(selectedFile).then((zip) => {
-                zip.forEach((relPath, entry) => {
-                    console.log(entry.name);
-                    entry.async("string").then(
-                        (content) => {
-                            console.log(content);
-                            if (entry.name.includes("Budget")) {
-                                parseYNABBudgetFileStringAsync(content).then(
-                                    (records) => {
-                                        console.log(records);
-                                    },
-                                    (e) => {
-                                        console.error(e);
-                                    },
-                                );
-                            } else if (entry.name.includes("Register")) {
-                                parseYNABTransactionsFileStringAsync(
-                                    content,
-                                ).then(
-                                    (records) => {
-                                        console.log(records);
-                                    },
-                                    (e) => {
-                                        console.error(e);
-                                    },
-                                );
-                            }
-                        },
-                        (e) => {
-                            console.error(e);
-                        },
-                    );
-                });
-                // console.log(zip.files);
-            });
-        }
-    };
-
     const handleInternalClose = () => {
         setBudgetName("");
         handleClose();
     };
 
     const handleAddBudget = () => {
-        // console.log(`Adding budget ${budgetName}`);
-        const budgetID = uuid();
-        dispatch(
-            addBudgetHeader({
-                id: budgetID,
-                name: budgetName,
-            }),
-        );
-        navigate(`/${budgetID}`);
-        handleInternalClose();
+        const id = uuid();
+        const currentTime = dayjs().valueOf();
+        const header = {
+            id: id,
+            name: budgetName,
+            createdAt: currentTime,
+            modifiedAt: currentTime,
+            accessedAt: currentTime,
+        };
+        if (selectedFile) {
+            setIsImporting(true);
+            parseYNABZipFile(selectedFile)
+                .then(({ budgetRecords, transactionsRecords }) => {
+                    const budget = createBudgetFromYNABData(
+                        header,
+                        budgetRecords,
+                        transactionsRecords,
+                    );
+                    setImportedBudget(budget);
+                    // console.log(budget);
+                })
+                .catch((e) => {
+                    console.error(e);
+                });
+        }
     };
 
     return (
@@ -124,17 +127,17 @@ const ImportBudgetDialog = ({
                 {/* <InputLabel htmlFor="import-budget-file-button">
                     Weesnaw
                 </InputLabel> */}
-                {/* <TextField
+                <TextField
                     fullWidth
                     margin="dense"
-                    label="Name"
+                    label="Budget Name"
                     value={budgetName}
                     onChange={handleBudgetNameChange}
                     sx={{ textAlign: "left" }}
-                /> */}
+                />
+                {isImporting && <Typography>IMPORTING BUDGET</Typography>}
             </DialogContent>
             <DialogActions>
-                <Button onClick={handleTest}>Test</Button>
                 <Button onClick={handleInternalClose}>Cancel</Button>
                 <Button disabled={!isValid} onClick={handleAddBudget}>
                     Import Budget
