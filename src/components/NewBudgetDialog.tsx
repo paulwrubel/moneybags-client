@@ -15,10 +15,13 @@ import { v4 as uuid } from "uuid";
 import { useAppDispatch, useBudgetHeaders } from "data/Hooks";
 import { addBudgetHeader } from "data/MetadataSlice";
 
-const NewBudgetDialog: React.FC<{
+const NewBudgetDialog = ({
+    isOpen,
+    handleClose,
+}: {
     isOpen: boolean;
     handleClose: () => void;
-}> = ({ isOpen, handleClose }) => {
+}) => {
     const navigate = useNavigate();
 
     const [budgetName, setBudgetName] = useState("");
@@ -58,6 +61,7 @@ const NewBudgetDialog: React.FC<{
         <Dialog open={isOpen} onClose={handleInternalClose}>
             <DialogTitle>Create a New Budget</DialogTitle>
             <DialogContent>
+                {/* <Typography>or import from a file instead</Typography> */}
                 <TextField
                     fullWidth
                     margin="dense"

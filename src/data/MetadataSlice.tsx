@@ -32,13 +32,14 @@ export const metadataSlice = createSlice({
                 if (!id) {
                     id = uuid();
                 }
+                const currentTime = dayjs().valueOf();
                 return {
                     payload: {
                         id: id,
                         name: name,
-                        createdAt: dayjs().valueOf(),
-                        modifiedAt: dayjs().valueOf(),
-                        accessedAt: dayjs().valueOf(),
+                        createdAt: currentTime,
+                        modifiedAt: currentTime,
+                        accessedAt: currentTime,
                     },
                 };
             },
