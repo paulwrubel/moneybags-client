@@ -1,3 +1,4 @@
+/* eslint-disable sonarjs/no-duplicate-string */
 import { useState } from "react";
 
 import { Button, TextField, Typography } from "@mui/material";
@@ -149,23 +150,30 @@ export const DateItem = ({
 
 export const CategoryItem = ({
     isEditing,
+    isOffBudgetAccount,
     currentValue,
     selectedValue,
     setSelectedValue,
     options,
 }: {
     isEditing: boolean;
+    isOffBudgetAccount: boolean;
     currentValue: Category | null;
     selectedValue: Category | null;
     setSelectedValue: (value: Category | null) => void;
     options: Category[];
 }) => {
+    const offBudgetMessage = "Category not needed";
+
     const [isAutocompleteOpen, setIsAutocompleteOpen] = useState(false);
-    const [inputValue, setInputValue] = useState("");
+    const [inputValue, setInputValue] = useState(
+        isOffBudgetAccount ? offBudgetMessage : "",
+    );
 
     return isEditing ? (
         <SolidAutocomplete
             fullWidth
+            disabled={isOffBudgetAccount}
             forcePopupIcon={false}
             open={isAutocompleteOpen}
             onOpen={() => {
@@ -176,7 +184,7 @@ export const CategoryItem = ({
             }}
             value={selectedValue}
             setValue={setSelectedValue}
-            inputValue={inputValue}
+            inputValue={isOffBudgetAccount ? offBudgetMessage : inputValue}
             setInputValue={setInputValue}
             options={options}
             getOptionLabel={(c) => c.name}
@@ -190,8 +198,10 @@ export const CategoryItem = ({
                 />
             )}
             sx={{
+                color: isOffBudgetAccount ? "dimgrey" : "black",
+                fontStyle: isOffBudgetAccount ? "italic" : "normal",
                 height: 1,
-                backgroundColor: "white",
+                backgroundColor: isOffBudgetAccount ? "#e0e0e0" : "white",
                 borderRadius: "0.3rem",
                 "& .MuiInputBase-root": {
                     flexWrap: "nowrap",
@@ -206,6 +216,17 @@ export const CategoryItem = ({
         />
     ) : currentValue ? (
         <Typography noWrap>{currentValue?.name}</Typography>
+    ) : isOffBudgetAccount ? (
+        <Typography
+            noWrap
+            sx={{
+                pr: 1,
+                color: "dimgrey",
+                fontStyle: "italic",
+            }}
+        >
+            {offBudgetMessage}
+        </Typography>
     ) : (
         <Typography
             noWrap

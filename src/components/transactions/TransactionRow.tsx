@@ -62,6 +62,7 @@ const TransactionRow = ({
     isExpanded,
     clearTransactionState,
     showAccount,
+    showCategory,
     index,
     transaction,
     columnRatios,
@@ -71,9 +72,11 @@ const TransactionRow = ({
     isExpanded: boolean;
     clearTransactionState: () => void;
     showAccount?: boolean;
+    showCategory?: boolean;
     index: number;
     transaction: Transaction;
     columnRatios: number[];
+    // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
     const account = transaction.accountID
         ? (useAccount(transaction.accountID) as Account)
@@ -180,24 +183,29 @@ const TransactionRow = ({
                         setSelectedValue={setTimestamp}
                     />
                 </Item>
-                <Item
-                    sx={{
-                        display: "flex",
-                        width: columnRatios[columnIndex++],
-                    }}
-                >
-                    <CategoryItem
-                        isEditing={isEditing}
-                        currentValue={
-                            categoriesIncSystem.find(
-                                ({ id }) => id === transaction.categoryID,
-                            ) ?? null
-                        }
-                        selectedValue={selectedCategory}
-                        setSelectedValue={setSelectedCategory}
-                        options={categories}
-                    />
-                </Item>
+                {showCategory && (
+                    <Item
+                        sx={{
+                            display: "flex",
+                            width: columnRatios[columnIndex++],
+                        }}
+                    >
+                        <CategoryItem
+                            isEditing={isEditing}
+                            isOffBudgetAccount={
+                                selectedAccount?.isOffBudget ?? false
+                            }
+                            currentValue={
+                                categoriesIncSystem.find(
+                                    ({ id }) => id === transaction.categoryID,
+                                ) ?? null
+                            }
+                            selectedValue={selectedCategory}
+                            setSelectedValue={setSelectedCategory}
+                            options={categories}
+                        />
+                    </Item>
+                )}
                 <Item
                     sx={{
                         display: "flex",

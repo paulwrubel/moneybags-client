@@ -48,6 +48,8 @@ const TransactionsTable = forwardRef<
 
         const columnRatios = showAllTransactions
             ? [0.18, 0.1, 0.2, 0.35, 0.085, 0.085]
+            : account.isOffBudget
+            ? [0.15, 0.65, 0.1, 0.1]
             : [0.1, 0.2, 0.53, 0.085, 0.085];
 
         return (
@@ -63,27 +65,10 @@ const TransactionsTable = forwardRef<
             >
                 <TransactionsLabelsRow
                     all={showAllTransactions}
+                    isOnBudget={!account?.isOffBudget ?? true}
                     columnRatios={columnRatios}
                     // styleHeight={labelsHeight}
                 />
-                {/* {isAddingTransaction && ( */}
-                {/* <Collapse in={isAddingTransaction} sx={{ flex: "0 0 auto" }}>
-                    <AddTransactionRow
-                        account={account}
-                        columnRatios={columnRatios}
-                        isAddingTransaction={isAddingTransaction}
-                        setIsAddingTransaction={setIsAddingTransaction}
-                    />
-                </Collapse> */}
-                {/* )} */}
-                {/* <ClickAwayListener
-                onClickAway={() => {
-                    console.log("clicked away from trxs");
-                    setSelectedTransactions([]);
-                    setTransactionBeingEdited(null);
-                }}
-            > */}
-                {/* <div> */}
                 <TransactionsList
                     onRowClick={onRowClick}
                     setOnListInteraction={setOnListInteraction}
@@ -97,8 +82,6 @@ const TransactionsTable = forwardRef<
                     columnRatios={columnRatios}
                     // styleTop={headerHeight + labelsHeight}
                 />
-                {/* </div> */}
-                {/* </ClickAwayListener> */}
             </Box>
         );
     },

@@ -115,6 +115,9 @@ const TransactionsList = forwardRef<
                                                 );
                                             }}
                                             showAccount={!account}
+                                            showCategory={
+                                                !account?.isOffBudget ?? true
+                                            }
                                             columnRatios={columnRatios}
                                             index={index}
                                             transaction={transaction}
