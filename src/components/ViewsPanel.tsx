@@ -30,7 +30,12 @@ const ViewsPanel = () => {
             <Paper
                 square
                 elevation={0}
-                sx={{ height: 1, bgcolor: "primary.light" }}
+                sx={{
+                    height: 1,
+                    maxHeight: "100vh",
+                    bgcolor: "primary.light",
+                    overflow: "auto",
+                }}
             >
                 <Box
                     sx={{
