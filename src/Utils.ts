@@ -311,7 +311,7 @@ export function createBudgetFromYNABData(
         transactions.push({
             id: uuid(),
             accountID: account?.id,
-            timestamp: 5,
+            timestamp: dayjs(trx.date, "YYYY-MM-DD").startOf("day").valueOf(),
             categoryID: category?.id,
             note: trx.memo,
             amount: trx.outflow === 0 ? trx.inflow : -trx.outflow,
