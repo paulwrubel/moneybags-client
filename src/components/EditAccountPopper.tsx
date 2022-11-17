@@ -4,7 +4,7 @@
 import { useState } from "react";
 
 import DeleteIcon from "@mui/icons-material/Delete";
-import { Box, Button, Paper } from "@mui/material";
+import { Box, Button, Checkbox, FormControlLabel, Paper } from "@mui/material";
 
 import SolidPopper from "components/solid/SolidPopper";
 import SolidTextField from "components/solid/SolidTextField";
@@ -33,6 +33,9 @@ const EditAccountPopper = ({
     const dispatch = useAppDispatch();
 
     const [accountName, setAccountName] = useState(account.name);
+    const [isOffBudget, setIsOffBudget] = useState(
+        account.isOffBudget ?? false,
+    );
 
     const handleDeleteButtonClick = () => {
         dispatch(removeAccount(account.id));
@@ -44,6 +47,7 @@ const EditAccountPopper = ({
             updateAccount({
                 id: account.id,
                 name: accountName,
+                isOffBudget: isOffBudget,
             }),
         );
         close();
@@ -63,6 +67,7 @@ const EditAccountPopper = ({
                         flexDirection: "column",
                         justifyContent: "space-between",
                         alignItems: "stretch",
+                        p: 1,
                     }}
                 >
                     <Item>
@@ -74,6 +79,22 @@ const EditAccountPopper = ({
                                 setAccountName(e.target.value);
                             }}
                             sx={{ width: 1 }}
+                        />
+                    </Item>
+                    <Item>
+                        <FormControlLabel
+                            control={
+                                <Checkbox
+                                    checked={isOffBudget}
+                                    onChange={(event) => {
+                                        setIsOffBudget(event.target.checked);
+                                    }}
+                                    size="small"
+                                    sx={{ p: 0, px: 0.5 }}
+                                />
+                            }
+                            label="Off Budget"
+                            sx={{ m: 0 }}
                         />
                     </Item>
                     <Item>

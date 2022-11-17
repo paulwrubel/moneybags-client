@@ -62,6 +62,7 @@ const TransactionRow = ({
     isExpanded,
     clearTransactionState,
     showAccount,
+    showCategory,
     index,
     transaction,
     columnRatios,
@@ -71,9 +72,11 @@ const TransactionRow = ({
     isExpanded: boolean;
     clearTransactionState: () => void;
     showAccount?: boolean;
+    showCategory?: boolean;
     index: number;
     transaction: Transaction;
     columnRatios: number[];
+    // eslint-disable-next-line sonarjs/cognitive-complexity
 }) => {
     const account = transaction.accountID
         ? (useAccount(transaction.accountID) as Account)
@@ -180,24 +183,29 @@ const TransactionRow = ({
                         setSelectedValue={setTimestamp}
                     />
                 </Item>
-                <Item
-                    sx={{
-                        display: "flex",
-                        width: columnRatios[columnIndex++],
-                    }}
-                >
-                    <CategoryItem
-                        isEditing={isEditing}
-                        currentValue={
-                            categoriesIncSystem.find(
-                                ({ id }) => id === transaction.categoryID,
-                            ) ?? null
-                        }
-                        selectedValue={selectedCategory}
-                        setSelectedValue={setSelectedCategory}
-                        options={categories}
-                    />
-                </Item>
+                {showCategory && (
+                    <Item
+                        sx={{
+                            display: "flex",
+                            width: columnRatios[columnIndex++],
+                        }}
+                    >
+                        <CategoryItem
+                            isEditing={isEditing}
+                            isOffBudgetAccount={
+                                selectedAccount?.isOffBudget ?? false
+                            }
+                            currentValue={
+                                categoriesIncSystem.find(
+                                    ({ id }) => id === transaction.categoryID,
+                                ) ?? null
+                            }
+                            selectedValue={selectedCategory}
+                            setSelectedValue={setSelectedCategory}
+                            options={categories}
+                        />
+                    </Item>
+                )}
                 <Item
                     sx={{
                         display: "flex",
@@ -221,14 +229,9 @@ const TransactionRow = ({
                     <AmountItem
                         isEditing={isEditing}
                         currentValue={Math.abs(Math.min(transaction.amount, 0))}
-                        selectedValue={(() => {
-                            const t = Math.abs(Math.min(amount, 0));
-                            console.log(`Outflow selectedValue rerender: ${t}`);
-                            return t;
-                        })()}
+                        selectedValue={Math.abs(Math.min(amount, 0))}
                         setSelectedValue={(outflow) => {
                             if (outflow) {
-                                console.log(`Setting amount to ${-outflow}`);
                                 setAmount(-outflow);
                             }
                         }}
@@ -247,7 +250,6 @@ const TransactionRow = ({
                         selectedValue={Math.abs(Math.max(amount, 0))}
                         setSelectedValue={(inflow) => {
                             if (inflow) {
-                                console.log(`Setting amount to ${inflow}`);
                                 setAmount(inflow);
                             }
                         }}

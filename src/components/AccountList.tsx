@@ -1,7 +1,8 @@
-import { Box, SxProps } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 
 import AccountRow from "components/AccountRow";
-import { useAccountIDs } from "data/Hooks";
+import { useAccounts } from "data/Hooks";
+import { Account } from "models/Budget";
 
 const Item = ({
     children,
@@ -13,16 +14,41 @@ const Item = ({
     return <Box sx={{ m: 0, ...sx }}>{children}</Box>;
 };
 
+const GroupLabelItem = ({ label }: { label: string }) => (
+    <Box
+        sx={{
+            my: 2,
+            width: 1,
+            display: "flex",
+            justifyContent: "space-evenly",
+        }}
+    >
+        <Typography sx={{ fontWeight: "bold" }}>{label}</Typography>
+    </Box>
+);
+
+const AccountRowMapFunc = (account: Account) => (
+    <Item key={account.id}>
+        <AccountRow account={account} />
+    </Item>
+);
+
 const AccountList: React.FC = () => {
-    const accountIDs = useAccountIDs();
+    const accounts = useAccounts();
+
+    const onBudgetAccounts = accounts.filter((a) => !a.isOffBudget);
+    const offBudgetAccounts = accounts.filter((a) => a.isOffBudget);
 
     return (
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {accountIDs.map((id) => (
-                <Item key={id}>
-                    <AccountRow id={id} />
-                </Item>
-            ))}
+            {onBudgetAccounts.length > 0 && (
+                <GroupLabelItem label="On Budget" />
+            )}
+            {onBudgetAccounts.map(AccountRowMapFunc)}
+            {offBudgetAccounts.length > 0 && (
+                <GroupLabelItem label="Off Budget" />
+            )}
+            {offBudgetAccounts.map(AccountRowMapFunc)}
         </Box>
     );
 };

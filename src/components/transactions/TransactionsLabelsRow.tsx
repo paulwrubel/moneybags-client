@@ -26,10 +26,12 @@ const Item = ({
 
 const TransactionsLabelsRow = ({
     all,
+    isOnBudget,
     columnRatios,
 }: // styleHeight,
 {
     all: boolean;
+    isOnBudget: boolean;
     columnRatios: number[];
     // styleHeight: number;
 }) => {
@@ -66,14 +68,16 @@ const TransactionsLabelsRow = ({
                     <Typography>Date</Typography>
                 </Item>
                 <Divider orientation="vertical" flexItem />
-                <Item
-                    sx={{
-                        width: columnRatios[columnIndex++],
-                        // maxWidth: columnRatios[columnIndex++],
-                    }}
-                >
-                    <Typography>Category</Typography>
-                </Item>
+                {isOnBudget && (
+                    <Item
+                        sx={{
+                            width: columnRatios[columnIndex++],
+                            // maxWidth: columnRatios[columnIndex++],
+                        }}
+                    >
+                        <Typography>Category</Typography>
+                    </Item>
+                )}
                 <Divider orientation="vertical" flexItem />
                 <Item sx={{ width: columnRatios[columnIndex++] }}>
                     <Typography>Note</Typography>

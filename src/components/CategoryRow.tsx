@@ -136,6 +136,7 @@ const CategoryRow = ({ category: { id, name } }: { category: Category }) => {
                             }}
                         >
                             <ButtonBase
+                                component="span"
                                 onClick={() => {
                                     setIsInCategoryNameEditMode(true);
                                 }}

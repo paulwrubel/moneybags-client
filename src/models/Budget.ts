@@ -16,6 +16,7 @@ export interface CategoryGroup {
 export interface Account {
     id: string;
     name: string;
+    isOffBudget?: boolean;
 }
 
 export interface Transaction {

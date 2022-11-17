@@ -7,8 +7,8 @@ import { Link, Navigate, useMatch } from "react-router-dom";
 
 import EditAccountPopper from "components/EditAccountPopper";
 import SolidSelectable from "components/solid/SolidSelectable";
-import { useAccount, useTransactionsByAccountID } from "data/Hooks";
-// import { Account } from "models/Budget";
+import { useTransactionsByAccountID } from "data/Hooks";
+import { Account } from "models/Budget";
 import { formatCurrencyCents } from "Utils";
 
 const Item = ({
@@ -21,16 +21,14 @@ const Item = ({
     return <Box sx={{ mx: 1, ...sx }}>{children}</Box>;
 };
 
-const AccountRow = ({ id }: { id: string }) => {
-    const account = useAccount(id);
-
+const AccountRow = ({ account }: { account?: Account }) => {
     if (!account) {
         return <Navigate to="../accounts" />;
     }
 
     const match = useMatch("/:budgetID/accounts/:accountID");
 
-    const transactions = useTransactionsByAccountID(id);
+    const transactions = useTransactionsByAccountID(account.id);
     const [balance, setBalance] = useState(0);
 
     const [isEditAccountPopperOpen, setIsEditAccountPopperOpen] =
@@ -46,7 +44,7 @@ const AccountRow = ({ id }: { id: string }) => {
         setBalance(accBalance);
     });
 
-    const isSelected = match?.params.accountID === id;
+    const isSelected = match?.params.accountID === account.id;
 
     return (
         <>
@@ -58,7 +56,7 @@ const AccountRow = ({ id }: { id: string }) => {
             >
                 <Button
                     disableRipple
-                    to={`../accounts/${id}`}
+                    to={`../accounts/${account.id}`}
                     component={Link}
                     sx={{
                         p: 1,

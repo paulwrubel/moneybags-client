@@ -1,10 +1,12 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import { Box, Paper, Typography } from "@mui/material";
 
-import { extend as dayjsExtend } from "dayjs";
+import dayjs, { extend as dayjsExtend } from "dayjs";
 import IsBetween from "dayjs/plugin/isBetween";
+import IsSameOrBefore from "dayjs/plugin/isSameOrBefore";
 
 import {
+    useAccounts,
     useSelectedMonth,
     useTotalActivityByMonth,
     useTotalAllocated,
@@ -17,20 +19,43 @@ import { formatCurrencyCents } from "Utils";
 
 const ContextPanel: React.FC = () => {
     dayjsExtend(IsBetween);
+    dayjsExtend(IsSameOrBefore);
+
+    const accounts = useAccounts();
 
     const selectedMonth = useSelectedMonth();
     // const categories = useCategories();
     const transactions = useTransactions();
 
     const totalBalance = useTotalBalanceByMonth(selectedMonth);
-    const totalActivity = useTotalActivityByMonth(selectedMonth);
+    const totalActivityThisMonth = useTotalActivityByMonth(selectedMonth);
     const totalAllocated = useTotalAllocated();
     const totalAllocatedThisMonth = useTotalAllocatedByMonth(selectedMonth);
     const totalAllocatedSoFar = useTotalAllocatedSoFar(selectedMonth);
 
-    const totalUnallocated =
-        (transactions.reduce((total, { amount }) => total + amount, 0) ?? 0) -
-        totalAllocated;
+    const today = dayjs().startOf("day");
+    const transactionsTotal =
+        transactions
+            .filter(
+                (t) =>
+                    !accounts.find((a) => a.id === t.accountID)?.isOffBudget &&
+                    dayjs(t.timestamp).isSameOrBefore(today),
+            )
+            .reduce((total, { amount }) => total + amount, 0) ?? 0;
+    const totalUnallocated = transactionsTotal - totalAllocated;
+    console.log(`total unallocated: ${formatCurrencyCents(totalUnallocated)}`);
+    console.log("=");
+    console.log(
+        `transactions total: ${formatCurrencyCents(transactionsTotal)}`,
+    );
+    console.log("-");
+    console.log(`total allocated: ${formatCurrencyCents(totalAllocated)}`);
+    console.log("--- ALSO ---");
+    console.log(
+        `total activity this month: ${formatCurrencyCents(
+            totalActivityThisMonth,
+        )}`,
+    );
 
     const totalAllocatedInFuture = totalAllocated - totalAllocatedSoFar;
 
@@ -130,7 +155,7 @@ const ContextPanel: React.FC = () => {
                         >
                             <Typography>Total Activity</Typography>
                             <Typography>
-                                {formatCurrencyCents(totalActivity)}
+                                {formatCurrencyCents(totalActivityThisMonth)}
                             </Typography>
                         </Box>
                         <Box

@@ -75,10 +75,6 @@ const TransactionsPanel = () => {
         [transactions, transientTransaction, transactionBeingEdited],
     );
 
-    if (accountID && !account) {
-        return <Navigate to="../../accounts" />;
-    }
-
     const [onListInteraction, setOnListInteraction] = useState<() => void>();
 
     useEffect(() => {
@@ -92,6 +88,10 @@ const TransactionsPanel = () => {
         selectedTransactions,
         lastSelectedIndex,
     ]);
+
+    if (accountID && !account) {
+        return <Navigate to="../../accounts" />;
+    }
 
     const isSelected = (t: Transaction) =>
         selectedTransactions.some((a) => t.id === a.id);
@@ -208,8 +208,12 @@ const TransactionsPanel = () => {
             <ClickAwayListener
                 onClickAway={() => {
                     console.log("clicked away from trxs");
-                    setSelectedTransactions([]);
-                    setTransactionIDBeingEdited(null);
+                    if (selectedTransactions.length > 0) {
+                        setSelectedTransactions([]);
+                    }
+                    if (transactionBeingEdited) {
+                        setTransactionIDBeingEdited(null);
+                    }
                 }}
             >
                 <TransactionsTable
