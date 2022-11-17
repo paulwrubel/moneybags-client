@@ -7,7 +7,7 @@ import { Link, Navigate, useMatch } from "react-router-dom";
 
 import EditAccountPopper from "components/EditAccountPopper";
 import SolidSelectable from "components/solid/SolidSelectable";
-import { useAccount, useTransactionsByAccountID } from "data/Hooks";
+import { useTransactionsByAccountID } from "data/Hooks";
 import { Account } from "models/Budget";
 import { formatCurrencyCents } from "Utils";
 
